@@ -121,12 +121,12 @@ class Header extends Component {
                                                 <nav>
                                                     <ul className="sigma-main-menu">
                                                         <li className="menu-item menu-item-has-children">
-                                                            <Link to="#">
+                                                            <Link to="/">
                                                                 Home
                         </Link>
                                                             <ul className="sub-menu">
                                                                 <li className="menu-item">
-                                                                    <Link to="/">Home 1</Link>
+                                                                    <Link to="/home-one">Home 1</Link>
                                                                 </li>
                                                                 <li className="menu-item">
                                                                     <Link to="/home-two">Home 2</Link>

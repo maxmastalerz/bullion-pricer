@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import Preloader from './components/layouts/Preloader';
 // Pages
 import Home from './components/pages/Home';
+import Homeone from './components/pages/Homeone';
 import Hometwo from './components/pages/Hometwo';
 import Homethree from './components/pages/Homethree';
 import Homefour from './components/pages/Homefour';
@@ -41,7 +42,8 @@ function App() {
       <>
         <Preloader />
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Home} /> {/* New home adapted from /shop-left */}
+          <Route exact path="/home-one" component={Homeone} /> {/* The original home for the theme */}
           <Route exact path="/home-two" component={Hometwo} />
           <Route exact path="/home-three" component={Homethree} />
           <Route exact path="/home-four" component={Homefour} />

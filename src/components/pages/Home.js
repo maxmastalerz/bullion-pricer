@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import MetaTags from "react-meta-tags";
 import Header from '../layouts/Header';
-import Footer from '../layouts/Footer';
-import Newsletter from '../layouts/Newsletter';
+import Breadcrumb from '../layouts/Breadcrumbs';
+import Instafeeds from '../layouts/Instafeeds';
+import Footer from '../layouts/Footerthree';
 import Content from '../sections/home/Content';
 
 class Home extends Component {
@@ -10,15 +11,16 @@ class Home extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Homepage</title>
+                    <title>Laramiss | Shop Left</title>
                     <meta
                         name="description"
                         content="#"
                     />
                 </MetaTags>
-                <Newsletter/>
                 <Header/>
+                <Breadcrumb breadcrumb={{pagename:'Shop Left'}}/>
                 <Content/>
+                <Instafeeds/>
                 <Footer/>
             </Fragment>
         );
