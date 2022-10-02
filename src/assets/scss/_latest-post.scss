@@ -10,8 +10,8 @@
 				height: 220px;
 			}
 		}
-		.post-desc {
-			background-color: $white;
+		.post-desc {	
+			background-color: #353530;
 			padding: 40px 35px;
 			@media #{$lg} {
 				padding: 35px 25px;
@@ -45,8 +45,9 @@
 						font-size: 12px;
 					}
 					a {
-						font-weight: 500;
-						color: $text-color;
+						font-weight: 500;	
+						color: #a3a3a3;
+						
 						i {
 							margin-right: 10px;
 						}
@@ -73,5 +74,29 @@
 				}
 			}
 		}
+	}
+}
+
+	
+.section-fw {	
+	width: 100%;	
+	padding: 0 75px;	
+}
+
+@media #{$lg} {
+	.section-fw {	
+		padding: 0 60px;	
+	}
+}
+
+@media #{$md} {
+	.section-fw {			
+		padding: 0 50px;
+	}
+}
+
+@media #{$sm} {
+	.section-fw {	
+		padding: 0 20px;	
 	}
 }

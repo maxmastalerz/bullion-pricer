@@ -1,8 +1,8 @@
 /*=======  News   =======*/
 .post-box {
 	.post-desc {
-		padding: 50px;
-		background-color: $white;
+		padding: 50px;	
+		background-color: #353530;
 		@media #{$lsm} {
 			padding: 40px 30px;
 		}
@@ -23,7 +23,8 @@
 			color: $white;
 			background-color: $primary-color;
 			&:hover {
-				background-color: $black;
+				background-color: $black;	
+				color: #1c1b19;
 			}
 		}
 		h2 {
@@ -65,7 +66,8 @@
 					margin-bottom: 5px;
 				}
 				a {
-					color: $text-color;
+					color: #a3a3a3;
+
 					&:hover {
 						color: $primary-color;
 					}
@@ -77,14 +79,20 @@
 		}
 		.post-footer {
 			margin-top: 35px;
+			display: -webkit-box;
+			display: -ms-flexbox;
 			display: flex;
+			-webkit-box-pack: justify;
+			-ms-flex-pack: justify;
 			justify-content: space-between;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
 			align-items: center;
 			.author {
-				font-family: $oldstan;
+				font-family: $prata;
 				letter-spacing: -1px;
 				a {
-					color: $text-color;
+					color: #a3a3a3;
 				}
 				img {
 					margin-right: 15px;
@@ -93,7 +101,7 @@
 			.read-more {
 				a {
 					font-size: 14px;
-					color: $text-color;
+					color: #a3a3a3;
 					font-family: $roboto;
 					i {
 						margin-right: 5px;
@@ -117,7 +125,8 @@
 				background-color: $primary-color;
 				color: $white;
 				line-height: 80px;
-				text-align: center;
+				text-align: center;	
+				-webkit-transform: translate(-50%, -50%);
 				transform: translate(-50%, -50%);
 				@media #{$sm} {
 					height: 50px;
@@ -125,8 +134,8 @@
 					line-height: 50px;
 					font-size: 14px;
 				}
-				&:hover {
-					background-color: $black;
+				&:hover {	
+					background-color: #d2ae49;
 				}
 			}
 		}
@@ -170,8 +179,7 @@
 		@media #{$xsm} {
 			padding: 40px 15px;
 		}
-		&::before,
-		&::after {
+		&::before, &::after {
 			position: absolute;
 			left: 0;
 			top: 0;
@@ -244,8 +252,8 @@
 
 /*=======  News Details  =======*/
 .news-details-box {
-	padding: 40px;
-	background-color: $white;
+	padding: 40px;	
+	background-color: #353530;
 	font-family: $roboto;
 	@media #{$sm} {
 		padding: 30px;
@@ -263,14 +271,15 @@
 			color: $white;
 			background-color: $primary-color;
 			&:hover {
-				background-color: $black;
+				background-color: $black;	
+				color: #1c1b19;
 			}
 		}
 		.title,
 		.subtitle {
 			margin-bottom: 30px;
 			letter-spacing: -1px;
-			font-family: $oldstan;
+			font-family: $prata;
 		}
 		h2.title {
 			font-size: 36px;
@@ -326,8 +335,8 @@
 					margin-right: 15px;
 					margin-bottom: 5px;
 				}
-				a {
-					color: $text-color;
+				a {	
+					color: #a3a3a3;
 					font-size: 14px;
 					&:hover {
 						color: $primary-color;
@@ -358,7 +367,8 @@
 					@media #{$sm} {
 						left: 0;
 					}
-					top: 50%;
+					top: 50%;	
+					-webkit-transform: translateY(-50%);
 					transform: translateY(-50%);
 					content: '\f00c';
 					font-family: 'Font Awesome 5 Pro';
@@ -370,12 +380,12 @@
 		blockquote {
 			position: relative;
 			padding: 45px 55px;
-			background-color: $primary-color;
-			border-radius: 10px;
+			background-color: $primary-color;	
+			border-radius: 0;
 			z-index: 1;
 			font-size: 28px;
-			font-family: $oldstan;
-			font-weight: 700;
+			font-family: $prata;	
+			font-weight: 400;
 			line-height: 1.5;
 			color: $white;
 			text-align: center;
@@ -441,8 +451,8 @@
 						padding: 10px 20px;
 						display: block;
 						background-color: $main-bg;
-						text-transform: uppercase;
-						color: $text-color;
+						text-transform: uppercase;	
+						color: #a3a3a3;
 						&:hover {
 							background-color: $primary-color;
 							color: $white;
@@ -463,14 +473,15 @@
 		}
 
 		.post-nav {
-			padding: 50px 0;
-			border-top: 1px solid #eaeaea;
-			border-bottom: 2px solid #eaeaea;
+			padding: 50px 0;	
+			border-top: 1px solid #40403b;	
+			border-bottom: 2px solid #40403b;
 			position: relative;
 			span.icon {
 				position: absolute;
 				left: 50%;
-				top: 50%;
+				top: 50%;	
+				-webkit-transform: translate(-50%, -50%);
 				transform: translate(-50%, -50%);
 				@media #{$sm} {
 					display: none;
@@ -488,7 +499,7 @@
 					color: $heading-color;
 					font-size: 28px;
 					letter-spacing: -1px;
-					font-family: $oldstan;
+					font-family: $prata;
 					@media #{$lg} {
 						font-size: 22px;
 					}
@@ -518,8 +529,10 @@
 			}
 			.desc {
 				font-size: 14px;
-				padding: 40px;
-				box-shadow: 0px 8px 16px 0px rgba(93, 93, 93, 0.06);
+				padding: 40px;	
+				-webkit-box-shadow: 0px 8px 16px 0px rgba(93, 93, 93, 0.06);
+				box-shadow: 0px 8px 16px 0px rgba(93, 93, 93, 0.06);	
+				-webkit-transition: 0.3s;
 				transition: 0.3s;
 				@media #{$lg} {
 					padding: 30px;
@@ -532,8 +545,8 @@
 				}
 				.date {
 					display: inline-block;
-					margin-bottom: 10px;
-					color: $text-color;
+					margin-bottom: 10px;	
+					color: #a3a3a3;
 					i {
 						margin-right: 5px;
 					}
@@ -557,20 +570,26 @@
 
 			&:hover {
 				.desc {
-					background-color: $main-bg;
+					background-color: $main-bg;	
+					-webkit-box-shadow: none;
 					box-shadow: none;
 				}
 			}
 		}
 
 		.author-info-box {
-			padding: 40px;
-			display: grid;
+			padding: 40px;	
+			display: -ms-grid;
+			display: grid;	
+			-ms-grid-rows: 1fr;
 			grid-template-rows: 1fr;
+			-ms-grid-columns: 180px 1fr;
 			grid-template-columns: 180px 1fr;
 			background-color: $main-bg;
 			grid-column-gap: 35px;
-			font-size: 14px;
+			font-size: 14px;	
+			-webkit-box-align: center;
+			-ms-flex-align: center;
 			align-items: center;
 			@media #{$lg} {
 				padding: 30px;
@@ -626,7 +645,7 @@
 				&:not(:first-child) {
 					padding-top: 45px;
 					margin-top: 30px;
-					border-top: 1px solid #eaeaea;
+					border-top: 1px solid #40403b;
 					.comment-img {
 						top: 30px;
 					}
@@ -662,14 +681,15 @@
 						.reply-link {
 							position: absolute;
 							right: 0;
-							top: 50%;
+							top: 50%;	
+							-webkit-transform: translateY(-50%);
 							transform: translateY(-50%);
 							padding: 10px 20px;
 							display: inline-block;
 							font-size: 14px;
 							font-weight: 700;
-							z-index: 2;
-							color: $text-color;
+							z-index: 2;	
+							color: #a3a3a3;
 							i {
 								margin-right: 5px;
 							}
@@ -686,7 +706,7 @@
 					li:first-child {
 						padding-top: 45px;
 						margin-top: 30px;
-						border-top: 1px solid #eaeaea;
+						border-top: 1px solid #40403b;
 						.comment-img {
 							top: 30px;
 						}
@@ -709,7 +729,8 @@
 				padding-top: 25px;
 			}
 
-			.main-btn {
+			.main-btn {	
+				-webkit-box-shadow: none;
 				box-shadow: none;
 				@media #{$xsm} {
 					padding: 0px 30px;
@@ -726,21 +747,27 @@
 	ul li {
 		display: inline-block;
 		margin: 0 5px;
-		@media #{$xsm} {
-			margin-bottom: 8px;
+		@media #{$xsm} {	
+			margin: 0;
 		}
 		a {
 			height: 50px;
 			width: 50px;
-			line-height: 50px;
-			color: $text-color;
+			line-height: 50px;	
+			color: #a3a3a3;
 			font-weight: 700;
-			font-family: $roboto;
-			background-color: $white;
+			font-family: $roboto;	
+			background-color: #353530;
 			color: $black;
 			&:hover {
 				background-color: $primary-color;
 				color: $white;
+			}
+
+			@media #{$xsm} {
+				width: 38px;
+				height: 38px;
+				line-height: 42px;
 			}
 		}
 		&.active {
@@ -755,14 +782,14 @@
 /*=======  Sidebars  =======*/
 .sidebar {
 	@media #{$md} {
-		margin-top: 80px;
+		margin-bottom: 80px;
 	}
 	@media #{$sm} {
-		margin-top: 80px;
+		margin-bottom: 80px;
 	}
 	.widget {
-		padding: 40px;
-		background-color: $white;
+		padding: 40px;	
+		background-color: #353530;
 		@media #{$lg} {
 			padding: 40px 20px;
 		}
@@ -836,21 +863,27 @@
 					color: $white;
 					@include transition(0.3s);
 					&:hover {
-						background-color: $black;
+						background-color: $white;
+						color: #1c1b19;
 						color: $white;
 					}
 				}
 			}
 		}
 		&.popular-feeds {
-			.single-popular-feed {
-				display: grid;
-				grid-template-rows: 1fr;
+			.single-popular-feed {	
+				display: -ms-grid;
+				display: grid;	
+				-ms-grid-rows: 1fr;
+				grid-template-rows: 1fr;	
+				-ms-grid-columns: 80px 1fr;
 				grid-template-columns: 80px 1fr;
 				grid-column-gap: 15px;
 				margin-bottom: 30px;
-				padding-bottom: 30px;
-				border-bottom: 1px solid #e1e6ff;
+				padding-bottom: 30px;	
+				border-bottom: 1px solid #40403b;	
+				-webkit-box-align: center;	
+				-ms-flex-align: center;
 				align-items: center;
 				&:last-child {
 					margin-bottom: 0;
@@ -858,8 +891,8 @@
 					border: none;
 				}
 				.feed-desc {
-					h6 {
-						font-size: 18px;
+					h6 {	
+						font-size: 16px;
 						margin-bottom: 10px;
 					}
 					.time {
@@ -884,8 +917,8 @@
 					background-color: $main-bg;
 					display: block;
 					position: relative;
-					line-height: 50px;
-					color: $text-color;
+					line-height: 50px;	
+					color: #a3a3a3;
 					@include transition(0.3s);
 					span {
 						position: absolute;
@@ -894,15 +927,16 @@
 						width: 50px;
 						height: 50px;
 						line-height: 50px;
-						text-align: center;
-						background-color: #eaeaea;
+						text-align: center;	
+						background-color: #272626;
 						@include transition(0.3s);
 					}
 					&:hover {
 						background-color: $primary-color;
 						color: $white;
-						span {
-							background-color: #947f58;
+						span {	
+							background-color: #26323c;	
+							color: #fff;
 						}
 					}
 				}
@@ -922,12 +956,13 @@
 					height: 40px;
 					width: 40px;
 					line-height: 40px;
-					font-size: 14px;
-					color: $text-color;
+					font-size: 14px;	
+					color: #a3a3a3;
 					background-color: $main-bg;
 					text-align: center;
 					&:hover {
-						background-color: $primary-color;
+						background-color: $primary-color;	
+						color: #fff;
 					}
 				}
 			}
@@ -936,8 +971,8 @@
 			.twitter-looop .single-twitter {
 				margin-bottom: 30px;
 				padding-bottom: 30px;
-				font-size: 12px;
-				border-bottom: 1px solid #e1e6ff;
+				font-size: 12px;	
+				border-bottom: 1px solid #40403b;
 				padding-left: 35px;
 				position: relative;
 				&::before {
@@ -977,10 +1012,10 @@
 				margin-right: 5px;
 				margin-bottom: 10px;
 				a {
-					font-size: 12px;
-					color: $text-color;
+					font-size: 12px;	
+					color: #ffffff;
 					padding: 10px 20px;
-					background-color: #f4f4f4;
+					background-color: #272626;
 					@media #{$lg} {
 						padding: 10px 15px;
 					}
@@ -989,13 +1024,62 @@
 					}
 					&:hover {
 						background-color: $primary-color;
+						color: #fff;
 					}
 				}
+			}
+		}
+		&.instagram-feed-widget, &.banner-ad-widget {
+			ul li img, img {
+				width: 100%;	
+				height: 100%;	
+				object-position: center;	
+				object-fit: cover;
 			}
 		}
 		&.banner-ad-widget {
 			padding: 0;
 			border: none;
+			
+			.ad-banner-content {
+				padding: 30px 50px;
+				background-color: #353530;
+				
+				.icon {
+					padding: 20px 0;
+					text-align: center;
+					font-size: 40px;
+					color: #fff;
+				}
+
+				.Phone-box{	
+					h4 {
+						color: #fff;
+						font-weight: 600;
+					}
+					hr {
+						background-color: #40403b;
+						width: 100%;
+						height: 1px;
+						margin: 12px 0;
+						border-top: 0;
+					}
+				}
+			}
+
 		}
 	}
 }
+
+@media #{$md} {
+	.column-reverse {
+		flex-direction: column-reverse;	
+	}
+}
+
+@media #{$sm} {
+	.column-reverse {
+		flex-direction: column-reverse;	
+	}
+}
+

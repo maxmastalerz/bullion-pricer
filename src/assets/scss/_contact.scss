@@ -1,18 +1,21 @@
 /*=======  CONTACT   =======*/
 .contact-part {
-	/*=======  CONTACT Info box =======*/
 	.contact-info {
 		.info-box {
 			padding: 50px 45px;
-			background-color: $white;
+			background-color: #353530;	
+			display: -ms-grid;
 			display: grid;
-			grid-template-rows: 1fr;
+			-ms-grid-rows: 1fr;
+			grid-template-rows: 1fr;	
+			-ms-grid-columns: 40px 1fr;
 			grid-template-columns: 40px 1fr;
 			margin-bottom: 30px;
 			grid-column-gap: 30px;
 
 			@media #{$lg} {
-				padding: 50px 30px;
+				padding: 50px 30px;	
+				-ms-grid-columns: 30px 1fr;
 				grid-template-columns: 30px 1fr;
 			}
 			@media #{$sm} {
@@ -40,8 +43,8 @@
 		width: 100%;
 	}
 
-	.contact-form {
-		background-color: $white;
+	.contact-form {	
+		background-color: #353530;
 		padding: 100px;
 		@media #{$md} {
 			padding: 50px;
@@ -49,7 +52,8 @@
 		@media #{$sm} {
 			padding: 50px;
 		}
-		.main-btn.btn-filled {
+		.main-btn.btn-filled {	
+			-webkit-box-shadow: none;
 			box-shadow: none;
 		}
 	}

@@ -1,4 +1,4 @@
-/*=======  Jewelry Gird  =======*/
+/*=======  Jewelries Gird  =======*/
 .room-gird-loop {
 	.room-box {
 		.room-img-wrap {
@@ -15,29 +15,32 @@
 		}
 		&:hover {
 			.room-img {
+				-webkit-transform: scale(1.1);
 				transform: scale(1.1);
 			}
 		}
-		.room-desc {
-			background-color: $white;
+		.room-desc {	
+			background-color: #353530;
 			font-size: 14px;
-			text-align: center;
-			padding: 50px 35px 30px;
+			text-align: center;	
+			padding: 30px 35px;
 			position: relative;
-			@media #{$lg} {
-				padding: 50px 25px 30px;
+			@media #{$lg} {	
+				padding: 30px 25px;
 			}
-			@media #{$lsm} {
-				padding: 50px 20px 30px;
+			@media #{$lsm} {	
+				padding: 30px 20px;
 			}
-			.icons {
-				background-color: $white;
+			.icons {	
+				background-color: #353530;
 				padding: 15px;
 				position: absolute;
 				left: 25px;
 				right: 25px;
-				top: 0;
-				transform: translateY(-50%);
+				top: 0;	
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);	
+				-webkit-box-shadow: 0px 8px 16px 0px rgba(138, 138, 138, 0.04);
 				box-shadow: 0px 8px 16px 0px rgba(138, 138, 138, 0.04);
 
 				@media #{$lsm} {
@@ -95,8 +98,8 @@
 		}
 	}
 }
-
-/*=======  Jewelry List  =======*/
+	
+/*=======  Jewelries List  =======*/
 .room-list-loop {
 	.room-box {
 		.room-img-wrap {
@@ -109,7 +112,7 @@
 				min-height: 350px;
 			}
 
-			@media #{$xsm} {
+			@media #{$sm} {
 				min-height: 250px;
 			}
 
@@ -123,13 +126,14 @@
 		}
 
 		&:hover {
-			.room-img {
+			.room-img {	
+				-webkit-transform: scale(1.1);
 				transform: scale(1.1);
 			}
 		}
 
-		.room-desc {
-			background-color: $white;
+		.room-desc {	
+			background-color: #353530;
 			font-size: 14px;
 			padding: 50px 20px 50px 40px;
 			position: relative;
@@ -146,9 +150,10 @@
 				padding: 50px 25px;
 			}
 
-			.icons {
-				background-color: $white;
-				padding: 15px;
+			.icons {	
+				background-color: #353530;
+				padding: 15px;	
+				-webkit-box-shadow: 0px 8px 16px 0px rgba(138, 138, 138, 0.04);
 				box-shadow: 0px 8px 16px 0px rgba(138, 138, 138, 0.04);
 				display: inline-block;
 				margin-bottom: 25px;
@@ -190,7 +195,8 @@
 					content: '';
 					left: 50%;
 					top: 0;
-					height: 2px;
+					height: 2px;	
+					-webkit-transform: translateX(-50%);
 					transform: translateX(-50%);
 					width: 60px;
 					background-color: #efefef;
@@ -214,11 +220,11 @@
 	}
 }
 
-/*=======  Jewelry Slider  =======*/
+/*=======  Jewelries Slider  =======*/
 .room-slider {
 	position: relative;
-	z-index: 1;
-	/*=======  Jewelry Slider One  =======*/
+	z-index: 1;	
+	/*=======  Jewelries Slider One  =======*/
 	.rooms-slider-one {
 		&.row {
 			margin-left: -20px;
@@ -249,8 +255,8 @@
 		@media #{$sm} {
 			margin-bottom: 100px;
 		}
-		.room-content-box {
-			background-color: $heading-color;
+		.room-content-box {	
+			background-color: #353530;
 			color: #d4d4d4;
 			font-size: 14px;
 			padding: 60px 50px;
@@ -303,7 +309,8 @@
 				margin-bottom: 20px;
 				&,
 				a {
-					color: $white;
+					color: $white;	
+					white-space: nowrap;
 				}
 			}
 			.icon {
@@ -344,13 +351,13 @@
 			}
 		}
 	}
-
-	/*=======  Jewelry Slider Two  =======*/
+	
+	/*=======  Jewelries Slider Two  =======*/
 	.rooms-slider-two {
 		.single-rooms-box {
 			position: relative;
-			margin-bottom: 130px;
-			margin-top: 25px;
+			margin-bottom: 130px;	
+			margin-top: 0px;
 
 			.room-img {
 				overflow: hidden;
@@ -371,21 +378,26 @@
 				}
 			}
 			&:hover {
-				.img {
+				.img {	
+					-webkit-transform: scale(1.1);
 					transform: scale(1.1);
 				}
 			}
-			.icons {
-				background-color: $white;
+			.icons {	
+				background-color: #353530;
 				padding: 15px;
 				position: absolute;
 				top: -25px;
-				left: 50%;
-				transform: translateX(-50%);
+				left: 50%;	
+				-webkit-transform: translateX(-50%);
+				transform: translateX(-50%);	
+				-webkit-box-shadow: 0px 8px 16px 0px rgba(138, 138, 138, 0.04);
 				box-shadow: 0px 8px 16px 0px rgba(138, 138, 138, 0.04);
 				visibility: visible;
 				opacity: 0;
-				@include transition(0.3s);
+				@include transition(0.3s);	
+				width: -webkit-max-content;	
+				width: -moz-max-content;
 				width: max-content;
 				li {
 					display: inline-block;
@@ -400,10 +412,11 @@
 				position: absolute;
 				left: 40px;
 				right: 40px;
-				bottom: -115px;
-				background-color: $white;
-				padding: 40px;
-				box-shadow: 0px 8px 16px 0px rgba(138, 138, 138, 0.04);
+				bottom: -115px;	
+				background-color: #353530;
+				padding: 40px;	
+				-webkit-box-shadow: 0px 3px 8px 0px #40403ba8;	
+				box-shadow: 0px 3px 8px 0px #40403ba8;
 				font-size: 14px;
 				visibility: visible;
 				opacity: 0;
@@ -476,14 +489,15 @@
 			text-align: center;
 			line-height: 80px;
 			font-size: 20px;
-			color: $black;
-			background: $white;
+			color: $black;	
+			background-color: #353530;
 			cursor: pointer;
 			@include transition(0.3s);
 			position: absolute;
 			top: 40%;
 			z-index: 2;
-			left: 22%;
+			left: 22%;	
+			-webkit-transform: translateY(-50%);
 			transform: translateY(-50%);
 
 			@media #{$lg} {
@@ -519,26 +533,32 @@
 					right: 2%;
 				}
 			}
-			&:hover,
-			&.next-arrow {
+			&:hover, &.next-arrow {
 				background-color: $primary-color;
-				color: $white;
+				color: $white;	
+				-webkit-box-shadow: 0px 14px 24px 0px rgba(190, 173, 142, 0.3);
 				box-shadow: 0px 14px 24px 0px rgba(190, 173, 142, 0.3);
 			}
 		}
 	}
 }
 
-/*=======  Jewelry Details  =======*/
+/*=======  Jewelries Details  =======*/
 .room-details {
 	.deatils-box {
 		font-family: $roboto;
-		.title-wrap {
-			display: flex;
-			justify-content: space-between;
+		.title-wrap {	
+			display: -webkit-box;	
+			display: -ms-flexbox;
+			display: flex;	
+			-webkit-box-pack: justify;	
+			-ms-flex-pack: justify;
+			justify-content: space-between;	
+			-webkit-box-align: center;	
+			-ms-flex-align: center;
 			align-items: center;
-			padding: 40px 50px;
-			background-color: $white;
+			padding: 40px 50px;	
+			background-color: #353530;
 			margin-right: 40px;
 
 			@media #{$lg} {
@@ -584,7 +604,7 @@
 				font-size: 40px;
 				color: $primary-color;
 				font-weight: 700;
-				font-family: $archivo;
+				font-family: $rubik;
 				@media #{$lg} {
 					font-size: 35px;
 				}
@@ -619,7 +639,7 @@
 		}
 
 		.room-fearures {
-			background-color: $white;
+			background-color: #353530;
 			padding: 50px 50px 30px;
 
 			@media #{$lg} {
@@ -648,14 +668,15 @@
 						position: absolute;
 						left: 0;
 						top: 50%;
+						-webkit-transform: translateY(-50%);
 						transform: translateY(-50%);
 					}
 				}
 			}
 		}
 
-		.room-rules {
-			background-color: $white;
+		.room-rules {	
+			background-color: #353530;
 			padding: 50px 50px 30px;
 
 			@media #{$lg} {
@@ -675,6 +696,7 @@
 						position: absolute;
 						left: 0;
 						top: 50%;
+						-webkit-transform: translateY(-50%);
 						transform: translateY(-50%);
 						color: $primary-color;
 						font-family: 'Font Awesome 5 Pro';
@@ -685,8 +707,8 @@
 			}
 		}
 
-		.cancellation-box {
-			background-color: $white;
+		.cancellation-box {	
+			background-color: #353530;
 			padding: 50px;
 
 			@media #{$lg} {
@@ -704,8 +726,8 @@
 
 		.room-map {
 			width: 100%;
-			height: 390px;
-			background-color: $white;
+			height: 390px;	
+			background-color: #353530;
 			@media #{$xsm} {
 				height: 320px;
 			}
@@ -721,8 +743,8 @@
 			}
 		}
 	}
-	.room-booking-form {
-		background-color: $white;
+	.room-booking-form {	
+		background-color: #353530;
 		padding: 40px;
 		@media #{$md} {
 			margin-top: 30px;
@@ -737,14 +759,15 @@
 		}
 		.main-btn {
 			height: 60px;
-			line-height: 60px;
+			line-height: 60px;	
+			-webkit-box-shadow: none;
 			box-shadow: none;
 			width: 100%;
 			padding: 0;
 		}
 		.title {
 			font-weight: 700;
-			font-family: $archivo;
+			font-family: $rubik;
 			margin-bottom: 30px;
 			padding-left: 60px;
 			position: relative;
@@ -757,7 +780,8 @@
 			&::before {
 				position: absolute;
 				left: 0;
-				top: 50%;
+				top: 50%;	
+				-webkit-transform: translateY(-50%);
 				transform: translateY(-50%);
 				width: 40px;
 				height: 2px;

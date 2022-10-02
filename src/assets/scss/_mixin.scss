@@ -1,16 +1,10 @@
 @mixin transition($time) {
 	-webkit-transition: all $time ease-out 0s;
-	-moz-transition: all $time ease-out 0s;
-	-ms-transition: all $time ease-out 0s;
-	-o-transition: all $time ease-out 0s;
 	transition: all $time ease-out 0s;
 }
 
 @mixin transform($value) {
 	-webkit-transform: $value;
-	-moz-transform: $value;
-	-ms-transform: $value;
-	-o-transform: $value;
 	transform: $value;
 }
 
@@ -23,7 +17,6 @@
 
 @mixin box-sizing($value) {
 	-webkit-box-sizing: $value;
-	-moz-box-sizing: $value;
 	box-sizing: $value;
 }
 

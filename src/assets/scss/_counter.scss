@@ -10,6 +10,13 @@
 			img {
 				max-width: 100px;
 			}
+
+			i {
+				font-size: 70px;	
+				font-weight: 400;	
+				line-height: 1;	
+				color: #fcd462;
+			}
 		}
 		&,
 		h4 {
@@ -37,11 +44,13 @@
 			}
 		}
 
-		&.counter-box-two {
-			background-color: $white;
+		&.counter-box-two {	
+			background-color: #353530;
 			padding: 30px 40px 30px 120px;
 			position: relative;
 			margin-bottom: 30px;
+			font-weight: 400;	
+			color: #a3a3a3;
 
 			@media #{$lg} {
 				padding: 30px 20px 30px 115px;
@@ -51,10 +60,11 @@
 				padding: 110px 25px 30px;
 			}
 
-			&,
+			
 			h4 {
-				font-weight: 400;
-				color: $text-color;
+				color: $heading-color;
+				letter-spacing: -1px;
+				font-family: $prata;
 			}
 
 			.icon {
@@ -75,11 +85,6 @@
 				}
 			}
 
-			h4 {
-				color: $heading-color;
-				letter-spacing: -1px;
-				font-family: $oldstan;
-			}
 		}
 	}
 }

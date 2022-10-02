@@ -1,5 +1,8 @@
 /*=======  BANNER CSS  =======*/
 .banner-area {
+	cursor: none;	
+	overflow: hidden;
+
 	.banner-content {
 		span.promo-tag {
 			font-size: 14px;
@@ -16,8 +19,8 @@
 				letter-spacing: 1px;
 			}
 		}
-		.title {
-			font-size: 120px;
+		.title {	
+			font-size: 100px;
 			line-height: 1.1;
 			font-weight: 400;
 			letter-spacing: -6px;
@@ -76,23 +79,21 @@
 		.single-thumb {
 			overflow: hidden;
 			img {
+				-webkit-animation: zoomIn 15s linear infinite;
 				animation: zoomIn 15s linear infinite;
 			}
 		}
 	}
 
 	&.banner-style-one {
-		padding-top: 240px;
-		@media #{$lg} {
-			padding-top: 200px;
-		}
+		padding-top: 300px;
 		@media #{$md} {
-			padding-top: 160px;
+			padding-top: 300px;
 			padding-bottom: 120px;
 		}
 
 		@media #{$sm} {
-			padding-top: 160px;
+			padding-top: 250px;
 			padding-bottom: 100px;
 		}
 
@@ -123,8 +124,7 @@
 		}
 	}
 
-	&.banner-style-two,
-	&.banner-style-three {
+	&.banner-style-two, &.banner-style-three {
 		.single-banner {
 			height: 950px;
 			position: relative;
@@ -144,12 +144,13 @@
 				background-size: cover;
 				background-position: center;
 			}
-			.banner-overly {
-				background-color: $heading-color;
+			.banner-overly {	
+				background-color: #353530;
 				z-index: -1;
 				opacity: 0.6;
 			}
 			.banner-bg {
+				-webkit-animation: zoomIn 15s linear infinite;
 				animation: zoomIn 15s linear infinite;
 			}
 		}
@@ -166,6 +167,7 @@
 			.main-btn {
 				&.btn-filled,
 				&.btn-border:hover {
+					-webkit-box-shadow: none;
 					box-shadow: none;
 				}
 				&.btn-filled:hover,
@@ -179,9 +181,48 @@
 
 	&.banner-style-three {
 		.single-banner {
-			height: auto;
-			padding-top: 180px;
+			height: auto;	
+			padding-top: 270px;
 			padding-bottom: 125px;
+		}
+
+		.menu-btn {	
+			color: #fff;
+			font-size: 24px;
+
+			.book-arrow {
+				width: 60px;
+				height: 60px;
+				border-radius: 50%;
+				z-index: 3;
+				color: #fff;
+				background-color: #353530;
+				font-size: 18px;
+				line-height: 60px;
+				text-align: center;
+				transition: .3s;
+				margin-left: 25px;
+
+				&:hover {	
+					background-color: #fcd462;	
+					color: #fff;	
+					transform: translateX(5px);	
+				}
+			}
+		}
+
+		.call-us {	
+			color: #fff;	
+			font-size: 20px;	
+			transform: rotate(270deg);	
+			position: absolute;	
+			left: -72px;	
+			font-weight: 600;	
+			top: 50%;
+
+			span:last-child {	
+				margin-left: 35px;	
+			}
 		}
 	}
 
@@ -189,14 +230,16 @@
 		position: absolute;
 		left: 0;
 		top: 50%;
+		-webkit-transform: translateY(-50%);
 		transform: translateY(-50%);
 		height: 50px;
-		width: 50px;
-		background: $white;
+		width: 50px;	
+		background-color: #353530;
 		line-height: 50px;
 		text-align: center;
 		font-size: 17px;
 		cursor: pointer;
+		-webkit-transition: 0.3s;
 		transition: 0.3s;
 		z-index: 9;
 		&:hover {
@@ -211,7 +254,8 @@
 
 	ul.slick-dots {
 		position: absolute;
-		left: 50%;
+		left: 50%;	
+		-webkit-transform: translateX(-51%);
 		transform: translateX(-51%);
 		bottom: 30px;
 		li {
@@ -232,5 +276,80 @@
 				}
 			}
 		}
+	}
+}
+
+.vertical-text {
+	position: absolute;
+	bottom: calc(50% - 90px);
+	left: -30px;
+	transform: translateY(50%) rotate(-90deg);
+}
+
+.vertical-text.right {
+	left: auto;
+	bottom: calc(50% + 140px);
+	right: -30px;
+	transform: translateY(50%) rotate(90deg);
+}	
+
+.vertical-text ul {
+	display: flex;
+	flex-direction: row;
+	margin-right: -155px;
+}
+
+.vertical-text ul li+li {
+	margin-left: 20px;
+	padding-left: 20px;
+}
+
+.vertical-text ul li+li a::before {
+	content: '';
+	width: 10px;
+	height: 10px;
+	background-color: #fff;
+	border-radius: 50%;
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: -25px;
+	opacity: .3;
+	transform: translateY(-50%);
+}
+
+.vertical-text ul li a {
+	color: #fff;
+	position: relative;
+	font-size: 16px;
+}
+
+.vertical-text ul li a:hover {	
+	color: #fcd462;	
+}
+
+.vertical-text ul li a i {	
+	margin-right: 10px;	
+}
+
+.vertical-text span {	
+	color: #fff;	
+	font-size: 16px;	
+	font-weight: 600;	
+}	
+
+.vertical-text span+span {	
+	margin-left: 15px;	
+}
+
+@media(max-width: 1600px) {	
+	.vertical-text {	
+		left: -90px;	
+	}	
+	.vertical-text ul {	
+		margin-right: -140px;	
+	}	
+	.vertical-text.right {	
+		right: -80px;	
 	}
 }

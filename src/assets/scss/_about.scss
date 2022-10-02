@@ -3,6 +3,11 @@
 	position: relative;
 	z-index: 1;
 
+
+	&.style-2 img {
+		width: 100%;
+	}
+
 	.down-arrow-wrap {
 		padding-bottom: 125px;
 		@media #{$md} {
@@ -19,6 +24,7 @@
 			background: $primary-color;
 			border-radius: 50%;
 			color: $white;
+			-webkit-box-shadow: 0px 14px 24px 0px rgba(190, 173, 142, 0.3);
 			box-shadow: 0px 14px 24px 0px rgba(190, 173, 142, 0.3);
 			position: relative;
 			&::before {
@@ -30,6 +36,7 @@
 				width: 100%;
 				border: 1px solid #cccccc;
 				border-radius: 50%;
+				-webkit-animation: pulse-border-2 1s linear infinite;
 				animation: pulse-border-2 1s linear infinite;
 			}
 			&::after {
@@ -40,7 +47,8 @@
 				height: 100%;
 				width: 100%;
 				border: 1px solid #cccccc;
-				border-radius: 50%;
+				border-radius: 50%;	
+				-webkit-animation: pulse-border-2 1.5s linear infinite;
 				animation: pulse-border-2 1.5s linear infinite;
 			}
 		}
@@ -87,8 +95,9 @@
 		li {
 			margin-top: 15px;
 			a {
-				background: $white;
-				padding: 55px 0 45px;
+				background-color: #353530;
+				padding: 55px 0 45px;	
+				-webkit-box-shadow: 0px 14px 24px 0px rgba(184, 184, 184, 0.1);
 				box-shadow: 0px 14px 24px 0px rgba(184, 184, 184, 0.1);
 				text-align: center;
 				display: block;
@@ -207,8 +216,9 @@
 
 	.about-features-boxes {
 		.single-feature-box {
-			background-color: $white;
+			background-color: #353530;
 			padding: 50px 30px;
+			-webkit-box-shadow: 0px 8px 16px 0px rgba(34, 34, 34, 0.02);
 			box-shadow: 0px 8px 16px 0px rgba(34, 34, 34, 0.02);
 			@media #{$lg} {
 				padding: 50px 18px;
@@ -232,6 +242,7 @@
 			&.only-bg {
 				width: 100%;
 				height: 100%;
+				-webkit-box-shadow: none;
 				box-shadow: none;
 				min-height: 315px;
 				padding: 0;
@@ -239,7 +250,7 @@
 				background-position: center;
 			}
 			&.dark {
-				background-color: $heading-color;
+				background-color: #353530;
 				&,
 				h4,
 				h4 a {
@@ -263,8 +274,8 @@
 		}
 	}
 
-	.about-text-box {
-		background-color: $white;
+	.about-text-box {	
+		background-color: #353530;
 		padding: 30px;
 		margin-top: 40px;
 		@media #{$md} {

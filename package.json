@@ -2,7 +2,6 @@
   "name": "laramiss",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://metropolitanhost.com/themes/themeforest/react/laramiss",
   "main": "lib/index",
   "types": "lib/index",
   "dependencies": {

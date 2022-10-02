@@ -17,7 +17,7 @@ import './assets/css/default.css';
 import './assets/css/style.css';
 
 ReactDOM.render(
-  <BrowserRouter basename={'/themes/themeforest/react/laramiss'}>
+  <BrowserRouter>
     <App />
   </BrowserRouter>,
   document.getElementById('laramiss')

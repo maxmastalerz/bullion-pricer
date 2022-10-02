@@ -11,8 +11,8 @@
 			top: 0;
 			width: 100%;
 			height: 100%;
-			content: '';
-			background-color: $white;
+			content: '';	
+			background-color: #353530;
 			z-index: -1;
 			opacity: 0.94;
 		}
@@ -25,7 +25,8 @@
 		.section-title .title-tag {
 			color: $primary-color;
 		}
-		.main-btn.btn-filled {
+		.main-btn.btn-filled {	
+			-webkit-box-shadow: none;
 			box-shadow: none;
 			&:hover {
 				color: $white;
@@ -90,20 +91,27 @@
 	width: 100%;
 	height: 480px;
 	background-size: cover;
-	background-position: center;
+	background-position: center;	
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	align-items: center;
+	-webkit-box-align: center;	
+	-ms-flex-align: center;
+	align-items: center;	
+	-webkit-box-pack: center;	
+	-ms-flex-pack: center;
 	justify-content: center;
 	@media #{$xsm} {
 		height: 350px;
-	}
-	a.popup-video {
-		border-radius: 50%;
+	}	
+	.popup-video {
+		border-radius: 50%;	
+		-webkit-box-shadow: 0px 14px 24px 0px rgba(190, 173, 142, 0.3);
 		box-shadow: 0px 14px 24px 0px rgba(190, 173, 142, 0.3);
 		width: 60px;
 		height: 60px;
-		line-height: 65px;
-		background-color: $white;
+		line-height: 65px;	
+		background-color: #353530;
 		text-align: center;
 		font-size: 16px;
 		color: $black;
@@ -116,7 +124,8 @@
 			height: 100%;
 			width: 100%;
 			border: 1px solid #cccccc;
-			border-radius: 50%;
+			border-radius: 50%;	
+			-webkit-animation: pulse-border-2 1s linear infinite;
 			animation: pulse-border-2 1s linear infinite;
 		}
 		&::after {
@@ -127,7 +136,8 @@
 			height: 100%;
 			width: 100%;
 			border: 1px solid #cccccc;
-			border-radius: 50%;
+			border-radius: 50%;	
+			-webkit-animation: pulse-border-2 1.5s linear infinite;
 			animation: pulse-border-2 1.5s linear infinite;
 		}
 	}
@@ -136,11 +146,12 @@
 		@media #{$xsm} {
 			height: 350px;
 		}
-		a.popup-video {
+		popup-video {
 			height: 120px;
 			width: 120px;
 			line-height: 120px;
-			font-size: 20px;
+			font-size: 20px;	
+			-webkit-box-shadow: none;
 			box-shadow: none;
 			@media #{$lg} {
 				height: 100px;
@@ -168,12 +179,11 @@
 		@media #{$sm} {
 			height: 380px;
 		}
-		a.popup-video {
+		.popup-video {
 			height: auto;
 			width: auto;
 			background-color: transparent;
-			&::before,
-			&::after {
+			&::before, &::after {
 				display: none;
 			}
 			img {
@@ -197,4 +207,11 @@
 			height: 300px;
 		}
 	}
+}
+
+.intro-video.overlapped .video-wrap.video-wrap-two {	
+	position: relative;	
+	margin-top: -70px;	
+	z-index: 2;	
+	height: 500px;
 }

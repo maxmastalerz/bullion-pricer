@@ -1,25 +1,24 @@
 /*=======  Core Feature  =======*/
 .features-loop {
-	.feature-box {
-		padding: 60px 50px;
-		background-color: $white;
+	.feature-box {	
+		padding: 45px;	
 		font-size: 14px;
-		background-color: $white;
-		border: 2px solid $main-bg;
+		background-color: #353530;	
+		border: 2px solid #40403b;
 		position: relative;
 		margin-top: 30px;
 
-		@media #{$lg} {
-			padding: 50px 30px;
+		@media #{$lg} {	
+			padding: 45px 30px;
 		}
-		@media #{$md} {
-			padding: 50px;
+		@media #{$md} {	
+			padding: 45px;
 		}
 		@media #{$lsm} {
 			padding: 35px 25px;
 		}
-		@media #{$xsm} {
-			padding: 50px 30px;
+		@media #{$xsm} {	
+			padding: 45px 30px;
 		}
 
 		.icon {
@@ -28,8 +27,10 @@
 			color: $primary-color;
 			line-height: 1;
 		}
+
 		&:hover {
 			.icon i {
+				-webkit-animation: hvr-buzz-out 0.75s linear 1;
 				animation: hvr-buzz-out 0.75s linear 1;
 			}
 		}
@@ -46,9 +47,10 @@
 			position: absolute;
 			right: 0;
 			top: -10px;
-			font-size: 120px;
-			color: $main-bg;
+			font-size: 120px;	
+			color: #3d3c38;
 		}
+
 		&.with-hover-img {
 			.hover-img {
 				position: absolute;
@@ -74,15 +76,31 @@
 		/*=======  Dark Style  =======*/
 		&.dark-box {
 			background-color: #292929;
-			border: none;
+			border: none;	
+			overflow: hidden;
 
 			&,
 			h3 a {
 				color: $white;
 			}
 
+			.icon {
+				font-size: 100px;
+				color: #fcd462;
+				position: absolute;
+				right: -10px;
+				top: -10px;
+				opacity: 0.2;
+				line-height: 1;
+				margin-bottom: 0;
+			}
+
 			.count {
-				color: $heading-color;
+				font-size: 120px;
+				position: static;
+				color: #353530;
+				margin-bottom: 15px;
+				font-family: "Prata", serif;
 			}
 		}
 	}
