@@ -72,7 +72,7 @@ class Header extends Component {
     render() {
         const stickyheader = this.state.isTop ? 'sticky-active' : '';
         return (
-            <Fragment>
+            <>
                 <header className={`header-three header-absolute sticky-header sigma-header ${stickyheader}`} id="header">
                     <div className="header-top">
                         <div className="container-fluid container-custom-three">
@@ -737,7 +737,8 @@ class Header extends Component {
                         <Canvas />
                     </div >
                 </div >
-            </Fragment >
+                <div className="header-offset" />
+            </>
 
         );
     }

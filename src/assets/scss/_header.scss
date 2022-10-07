@@ -66,30 +66,7 @@ header {
 					max-width: 180px;
 				}
 			}
-			&.site-logo-text {
-				@media (max-width: 991px) {
-					.site-logo-text {	
-						margin-left: 15px;	
-					}	
-					.site-logo-text h3 {	
-						font-size: 24px;	
-					}	
-					.site-logo-text h6 {	
-						font-size: 14px;	
-					}
-				}
-				@media #{$xsm} {
-					.site-logo-text {
-						margin-left: 10px;
-					}
-					.site-logo-text h3 {
-						font-size: 22px;
-					}
-					.site-logo-text h6 {
-						font-size: 12px;
-					}
-				}
-			}
+
 			.sticky-logo {
 				display: none;
 			}
@@ -476,7 +453,7 @@ header {
 			width: 100%;
 			z-index: 99;
 			height: auto;
-			bottom: -60px;
+			bottom: -120px;
 			@media #{$tiny} {
 				position: relative;
 				bottom: 0;
@@ -503,13 +480,12 @@ header {
 
 		.header-top {
 			padding-top: 15px;
-			padding-bottom: 75px;
+			padding-bottom: 15px;
 			font-family: $roboto;
 			@media (max-width: 992px) {
-				header.header-three .header-top {
-					background-color: #1c1b19;
-				}
+				background-color: #1c1b19;
 			}
+
 			@media #{$md} {
 				padding-bottom: 60px;
 			}
@@ -818,8 +794,8 @@ header {
 		&.header-three.sticky-active {
 			background-color: transparent;
 		}
-		&.header-three.sticky-active .main-menu-area {
-			bottom: 0;
+		&.header-three .main-menu-area {
+			bottom: -60px;
 		}
 	}
 }
@@ -838,15 +814,37 @@ header {
 	}
 	&.site-logo-text .site-logo-text {
 		margin-left: 20px;
+
+		@media (max-width: 991px) {
+			margin-left: 15px;
+		}
+		@media #{$xsm} {
+			margin-left: 10px;
+		}
 	}
 	&.site-logo-text .site-logo-text h3,
 	&.site-logo-text .site-logo-text h6 {
 		color: #fcd462;
 	}
+	&.site-logo-text .site-logo-text h3 {
+		@media (max-width: 991px) {
+			font-size: 24px;
+		}
+		@media #{$xsm} {
+			font-size: 22px;
+		}
+	}
 	&.site-logo-text .site-logo-text h6 {
 		text-transform: uppercase;
 		font-family: "Rubik", sans-serif;
 		letter-spacing: 2px;
+
+		@media (max-width: 991px) {
+			font-size: 14px;
+		}
+		@media #{$xsm} {
+			font-size: 12px;
+		}
 	}
 }
 
@@ -1293,22 +1291,22 @@ padding: 0 0px 0 6px;
 .sigma-mobile-header {	
 background-color: #353530;	
 }	
-@media (max-width: 991px) {	
-header.header-three .main-menu-area,	
-.sigma-header .sigma-header-nav {	
-display: none;	
-}	
-.sigma-mobile-menu,	
-.sigma-mobile-header {	
-display: block;	
-}	
-header.header-three .header-top {	
-padding-bottom: 10px;	
-}	
-header.header-two .site-logo {	
-margin: 0;	
-}	
-}	
+@media (max-width: 991px) {
+	header.header-three .main-menu-area,	
+	.sigma-header .sigma-header-nav {	
+		display: none;
+	}	
+	.sigma-mobile-menu,	
+	.sigma-mobile-header {	
+		display: block;	
+	}	
+	header.header-three .header-top {	
+		padding-bottom: 10px;
+	}	
+	header.header-two .site-logo {	
+		margin: 0;	
+	}
+}
 @media (max-width: 767px) {	
 .sigma-header .sigma-logo {	
 text-align: left;	
@@ -1587,5 +1585,21 @@ display: none;
 				}
 			}
 		}
+	}
+}
+
+.header-offset {
+	margin-top: calc(120px + 52.4px);
+
+	@media (max-width: 991px) {
+		margin-top: calc(80px + 22.398px + 15px + 10px);
+	}
+
+	@media #{$sm} {
+		margin-top: calc(80px + 54.797px + 15px + 10px);
+	}
+
+	@media #{$tiny} {
+		margin-top: 80px;
 	}
 }

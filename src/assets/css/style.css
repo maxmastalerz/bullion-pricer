@@ -494,6 +494,10 @@ select {
   background-color: #353530 !important;
 }
 
+.pt-shop-section {
+  padding-top: 75px;
+}
+
 .section {
   position: relative;
 }
@@ -1160,28 +1164,6 @@ header .nav-container .site-logo img {
     max-width: 180px;
   }
 }
-@media (max-width: 991px) {
-  header .nav-container .site-logo.site-logo-text .site-logo-text {
-    margin-left: 15px;
-  }
-  header .nav-container .site-logo.site-logo-text .site-logo-text h3 {
-    font-size: 24px;
-  }
-  header .nav-container .site-logo.site-logo-text .site-logo-text h6 {
-    font-size: 14px;
-  }
-}
-@media (max-width: 575px) {
-  header .nav-container .site-logo.site-logo-text .site-logo-text {
-    margin-left: 10px;
-  }
-  header .nav-container .site-logo.site-logo-text .site-logo-text h3 {
-    font-size: 22px;
-  }
-  header .nav-container .site-logo.site-logo-text .site-logo-text h6 {
-    font-size: 12px;
-  }
-}
 header .nav-container .site-logo .sticky-logo {
   display: none;
 }
@@ -1547,7 +1529,7 @@ header.header-three .main-menu-area {
   width: 100%;
   z-index: 99;
   height: auto;
-  bottom: -60px;
+  bottom: -120px;
 }
 @media (max-width: 399px) {
   header.header-three .main-menu-area {
@@ -1575,11 +1557,11 @@ header.header-three .main-menu-area.sticky-header.sticky-active .nav-container .
 }
 header.header-three .header-top {
   padding-top: 15px;
-  padding-bottom: 75px;
+  padding-bottom: 15px;
   font-family: "Roboto", sans-serif;
 }
 @media (max-width: 992px) {
-  header.header-three .header-top header.header-three .header-top {
+  header.header-three .header-top {
     background-color: #1c1b19;
   }
 }
@@ -1892,8 +1874,8 @@ header.sticky-header.sticky-active.header-two .header-info .item .title {
 header.sticky-header.sticky-active.header-three.sticky-active {
   background-color: transparent;
 }
-header.sticky-header.sticky-active.header-three.sticky-active .main-menu-area {
-  bottom: 0;
+header.sticky-header.sticky-active.header-three .main-menu-area {
+  bottom: -60px;
 }
 
 .site-logo.site-logo-text a {
@@ -1910,13 +1892,43 @@ header.sticky-header.sticky-active.header-three.sticky-active .main-menu-area {
 .site-logo.site-logo-text .site-logo-text {
   margin-left: 20px;
 }
+@media (max-width: 991px) {
+  .site-logo.site-logo-text .site-logo-text {
+    margin-left: 15px;
+  }
+}
+@media (max-width: 575px) {
+  .site-logo.site-logo-text .site-logo-text {
+    margin-left: 10px;
+  }
+}
 .site-logo.site-logo-text .site-logo-text h3, .site-logo.site-logo-text .site-logo-text h6 {
   color: #fcd462;
+}
+@media (max-width: 991px) {
+  .site-logo.site-logo-text .site-logo-text h3 {
+    font-size: 24px;
+  }
+}
+@media (max-width: 575px) {
+  .site-logo.site-logo-text .site-logo-text h3 {
+    font-size: 22px;
+  }
 }
 .site-logo.site-logo-text .site-logo-text h6 {
   text-transform: uppercase;
   font-family: "Rubik", sans-serif;
   letter-spacing: 2px;
+}
+@media (max-width: 991px) {
+  .site-logo.site-logo-text .site-logo-text h6 {
+    font-size: 14px;
+  }
+}
+@media (max-width: 575px) {
+  .site-logo.site-logo-text .site-logo-text h6 {
+    font-size: 12px;
+  }
 }
 
 .inner-page.sigma-header .sigma-main-menu > .menu-item > a {
@@ -2730,6 +2742,25 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 .breadcrumb-area .breadcrumb-text .breadcrumb-nav li.active::before {
   color: #fcd462;
+}
+
+.header-offset {
+  margin-top: 172.4px;
+}
+@media (max-width: 991px) {
+  .header-offset {
+    margin-top: 127.398px;
+  }
+}
+@media (max-width: 767px) {
+  .header-offset {
+    margin-top: 159.797px;
+  }
+}
+@media (max-width: 399px) {
+  .header-offset {
+    margin-top: 80px;
+  }
 }
 
 /*=======  BANNER CSS  =======*/

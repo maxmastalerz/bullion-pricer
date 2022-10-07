@@ -27,9 +27,18 @@ const shopgridpost = [
 class Content extends Component {
     render() {
         return (
-            <section className="Shop-section pt-120 pb-120">
+            <section className="Shop-section pt-shop-section pb-120">
                 <div className="container">
                     <div className="row justify-content-center">
+                        {/* Shop Sidebar */}
+                        <div className="col-lg-4 col-md-10 col-sm-10">
+                            <Sidebar />
+                        </div>
+                        <div className="col-lg-8 col-md-10">
+                            <Sidebar />
+                        </div>
+                    </div>
+                    <div className="row justify-content-center pt-shop-section">
                         {/* Shop Sidebar */}
                         <div className="col-lg-4 col-md-10 col-sm-10">
                             <Sidebar />

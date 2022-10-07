@@ -18,7 +18,6 @@ class Home extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Shop Left'}}/>
                 <Content/>
                 <Instafeeds/>
                 <Footer/>
