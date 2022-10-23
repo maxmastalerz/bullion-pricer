@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 // Css
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap-slider/dist/css/bootstrap-slider.css"
 import '../node_modules/slick-carousel/slick/slick.css';
 import '../node_modules/slick-carousel/slick/slick-theme.css';
 import '../node_modules/animate.css/animate.css';

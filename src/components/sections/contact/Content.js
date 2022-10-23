@@ -2,14 +2,9 @@ import React from 'react';
 import Contacthelper from '../../../helper/Contacthelper';
 import ReCAPTCHA from "react-google-recaptcha";
 import { Alert } from 'react-bootstrap';
-import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
 class Content extends Contacthelper {
     render() {
-        const Map = ReactMapboxGl({
-            accessToken:
-                'pk.eyJ1IjoiYWJlZHNoIiwiYSI6ImNrNnRyZ3d4aDAyMzkzZXBoc3RsYnM0aGwifQ.yhr3W_OOI6xXElmSY8cyPg'
-        });
         return (
             <section className="contact-part pt-115 pb-115">
                 <div className="container">
@@ -51,16 +46,6 @@ class Content extends Contacthelper {
                             </div>
                         </div>
                     </div>
-                    {/* Contact Mapts */}
-                    <Map
-                        // eslint-disable-next-line react/style-prop-object
-                        style="mapbox://styles/mapbox/light-v10"
-                        className="contact-maps mb-30"
-                    >
-                        <Layer type="symbol" id="marker" layout={{ 'icon-image': 'marker-15' }}>
-                            <Feature coordinates={[-77.04, 38.907]} zoom={11.5} />
-                        </Layer>
-                    </Map>
                     {/* Contact Form */}
                     <div className="contact-form">
                         <form onSubmit={this.handleSubmit} method="GET">

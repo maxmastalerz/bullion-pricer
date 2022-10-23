@@ -435,7 +435,7 @@ header .container-fluid.container-custom-three {
 }
 
 .pt-shop-section {
-	padding-top: 75px;
+	padding-top: 40px;
 }
 
 .section {
@@ -1092,4 +1092,68 @@ header .container-fluid.container-custom-three {
       flex-wrap: wrap;
     }
   }
+}
+
+/*Custom bootstrap slider for bullion weights*/
+div.product-filter-top {
+	.slider.slider-horizontal {
+		width: calc(100% - 30px);
+		margin-left: 15px;
+	}
+
+	.slider-handle, .slider-tick.in-selection {
+		background-image: unset;
+		background-color: rgb(0,0,0);
+	}
+
+	.slider-selection.tick-slider-selection {
+		background-image: unset;
+		background-color: rgb(0,0,0);
+	}
+
+	.slider-track {
+		background-image: -webkit-linear-gradient(
+		    left,
+		    rgba(252,212,98,0) 0% 7.69%,
+		    rgba(252,212,98,0.03322) 7.69% 15.38%,
+		    rgba(252,212,98,0.0701) 15.38% 23.08%,
+		    rgba(252,212,98,0.13287) 23.08% 30.77%,
+		    rgba(252,212,98,0.22509) 30.77% 38.46%,
+		    rgba(252,212,98,0.29817) 38.46% 46.15%,
+		    rgba(252,212,98,0.48339) 46.15% 53.85%,
+		    rgba(252,212,98,1) 53.85% 61.54%,
+		    rgba(251,211,94,1) 61.54% 69.23%, /*1% darker*/
+		    rgba(251,210,91,1) 69.23% 76.92%, /*2% darker*/
+		    rgba(251,205,75,1) 76.92% 84.62%, /*6.43014% darker*/
+		    rgba(250,193,29,1) 84.62% 92.31%, /*20% darker*/
+		    rgba(171,127,3,1) 92.31% 100% /*50% darker*/
+	    );
+	}
+
+	.slider.slider-horizontal .slider-track {
+		height: 30px;
+		top: 0;
+	}
+
+	.slider.slider-horizontal .slider-selection, .slider.slider-horizontal .slider-track-low, .slider.slider-horizontal .slider-track-high {
+		height: 33%;
+		top: 33%;
+	}
+
+	.slider.slider-horizontal .slider-tick-label-container {
+		margin-top: 30px;
+	}
+
+	.slider-tick:first-child,
+	.slider-tick:last-child,
+	.slider.slider-horizontal .slider-handle {
+		height: 30px;
+		width: 30px;
+		top: -5px;
+		margin-left: -15px;
+	}
+
+	.slider.slider-horizontal .slider-tick {
+		margin-left: -15px;
+	}
 }

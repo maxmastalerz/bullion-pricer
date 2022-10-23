@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import MetaTags from "react-meta-tags";
 import Header from '../layouts/Headertwo';
-import Footer from '../layouts/Footertwo';
+import Footer from '../layouts/Footer';
 import Newsletter from '../layouts/Newsletter';
 import Content from '../sections/homethree/Content';
 

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames'
 import $ from 'jquery'
@@ -103,8 +103,8 @@ class Header extends Component {
                                             <path className="diamond-spark spark-4" d="M456.607,435.393l-63-63c-5.858-5.857-15.356-5.857-21.213,0c-5.858,5.858-5.858,15.356,0,21.213l63,63    c2.928,2.929,6.767,4.394,10.606,4.394s7.678-1.465,10.607-4.394C462.465,450.748,462.465,441.25,456.607,435.393z" fill="#ffffff" />
                                         </svg>
                                         <div className="site-logo-text">
-                                            <h3>Laramiss</h3>
-                                            <h6>Luxury Pieces</h6>
+                                            <h3>PreciousPricer</h3>
+                                            <h6>Bullion Aggregator</h6>
                                         </div>
                                     </Link>
                                 </div>

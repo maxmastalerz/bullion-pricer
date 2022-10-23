@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../../layouts/Pagination';
-import Sidebar from '../../layouts/Shopsidebar';
+import ProductFilterLeft from '../../layouts/ProductFilterLeft';
+import ProductFilterTop from '../../layouts/ProductFilterTop';
 
 import img1 from '../../../assets/img/shop/01.jpg';
 import img2 from '../../../assets/img/shop/02.jpg';
@@ -32,19 +33,12 @@ class Content extends Component {
                     <div className="row justify-content-center">
                         {/* Shop Sidebar */}
                         <div className="col-lg-4 col-md-10 col-sm-10">
-                            <Sidebar />
+                            <ProductFilterLeft />
                         </div>
                         <div className="col-lg-8 col-md-10">
-                            <Sidebar />
-                        </div>
-                    </div>
-                    <div className="row justify-content-center pt-shop-section">
-                        {/* Shop Sidebar */}
-                        <div className="col-lg-4 col-md-10 col-sm-10">
-                            <Sidebar />
-                        </div>
-                        <div className="col-lg-8 col-md-10">
-                            <div className="shop-products-wrapper">
+                            <ProductFilterTop />
+
+                            <div className="shop-products-wrapper pt-shop-section">
                                 <div className="shop-product-top">
                                     <p>Showing 1 To 9 Of 60 results</p>
                                     <div className="sorting-box">
@@ -96,6 +90,7 @@ class Content extends Component {
                             <div className="pagination-wrap">
                                 <Pagination />
                             </div>
+
                         </div>
                     </div>
                 </div>

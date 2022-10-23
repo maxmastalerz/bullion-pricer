@@ -157,7 +157,7 @@ class Blogsidebar extends Component {
                     </ul>
                 </div>
                 {/* Popular Tags Widget */}
-                <div className="widget popular-tag-widget mb-40">
+                <div className="widget tag-widget mb-40">
                     <h5 className="widget-title">Popular Tags</h5>
                     <ul>
                         {tags.map((item, i) => (

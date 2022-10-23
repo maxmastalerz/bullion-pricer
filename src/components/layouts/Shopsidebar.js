@@ -66,7 +66,7 @@ class Shopsidebar extends Component {
         return (
             <div className="sidebar">
                 {/* Popular Tags Widget */}
-                <div className="widget popular-tag-widget">
+                <div className="widget tag-widget">
                     <h5 className="widget-title">Popular Tags</h5>
                     <ul>
                         {tags.map((item, i) => (
