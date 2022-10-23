@@ -8,22 +8,20 @@ import img1 from '../../../assets/img/shop/01.jpg';
 import img2 from '../../../assets/img/shop/02.jpg';
 import img3 from '../../../assets/img/shop/03.jpg';
 
+/* All prices are stored and processed as USD by us. */
+/* Only if a user selects a different currency do we calculate the exchange price. */
 const shopgridpost = [
-    { img: img1, title: 'Ankle Bracelet', discount: 15, price: 390 },
-    { img: img2, title: 'Stud Earrings', discount: '', price: 290 },
-    { img: img3, title: 'Crumpled Ring', discount: 10, price: 450 },
+    { img: img1, title: '1 oz 2022 Canadian Maple Leaf Silver Coin | Royal Canadian Mint', price: 390, seller: 'Silver Gold Bull', mint: 'Royal Canadian Mint' },
+    { img: img2, title: '100 oz Pure Assorted Silver Bar', price: 290, seller: 'Canadian PMX', mint: 'Various' },
+    { img: img3, title: '1 gram Platinum Bar | Valcambi', price: 450, seller: 'Canadian PMX', mint: 'Valcambi' },
 
-    { img: img1, title: 'Golden Pendant', discount: 15, price: 780 },
-    { img: img2, title: 'Silver Pendant.', discount: '', price: 290 },
-    { img: img3, title: 'Diamond Ring.', discount: 10, price: 890 },
+    { img: img1, title: '1 oz Fortuna Platinum Bar | PAMP Suisse', price: 780, seller: 'Silver Gold Bull', mint: 'PAMP Suisse' },
+    { img: img2, title: 'PAMP SUISSE GOLD BAR, 10 GRAM .9999', price: 290, seller: 'Canadian PMX', mint: 'PAMP Suisse' },
+    { img: img3, title: '1 kg | kilo Johnson Matthey Silver Bar', price: 890, seller: 'Silver Gold Bull', mint: 'Johnson Matthey' },
 
-    { img: img1, title: 'Stud Earrings', discount: 15, price: 580 },
-    { img: img2, title: 'Ankle Bracelet', discount: 40, price: 290 },
-    { img: img3, title: 'Diamond Ring.', discount: 10, price: 800 },
-
-    { img: img1, title: 'Ankle Bracelet', discount: 15, price: 390 },
-    { img: img2, title: 'Stud Earrings', discount: '', price: 290 },
-    { img: img3, title: 'Crumpled Ring', discount: 10, price: 450 },
+    { img: img1, title: '1 oz Random Year Canadian Maple Leaf Gold Coin | Royal Canadian Mint', price: 580, seller: 'Silver Gold Bull', mint: 'Royal Canadian Mint' },
+    { img: img2, title: '10 oz Silver Bar | Royal Canadian Mint', price: 290, seller: 'Canadian PMX', mint: 'Royal Canadian Mint' },
+    { img: img3, title: '1 kg | Kilo Heraeus Silver Bar', price: 800, seller: 'Canadian PMX', mint: 'Heraeus' }
 ];
 class Content extends Component {
     render() {
@@ -43,12 +41,12 @@ class Content extends Component {
                                     <p>Showing 1 To 9 Of 60 results</p>
                                     <div className="sorting-box">
                                         <select name="guests" id="guests" className="nice-select">
-                                            <option value={0}>Default Sorting</option>
-                                            <option value={1}>Sort By Popularity</option>
-                                            <option value={2}>Sort By Latest</option>
-                                            <option value={4}>Sort By Rating</option>
-                                            <option value={8}>Sort By Price:Low to High</option>
-                                            <option value={8}>Sort By Price:High to Low</option>
+                                            <option value={1}>Sort By Price:Low to High</option>
+                                            <option value={2}>Sort By Price:High to Low</option>
+                                            <option value={3}>Sort By Mint:Ascending</option>
+                                            <option value={4}>Sort By Mint:Descending</option>
+                                            <option value={5}>Sort By Seller:Ascending</option>
+                                            <option value={6}>Sort By Seller:Descending</option>
                                         </select>
                                     </div>
                                 </div>
@@ -59,14 +57,6 @@ class Content extends Component {
                                                 <div className="food-box shop-box">
                                                     <div className="thumb">
                                                         <img src={item.img} alt="" />
-                                                        <div className="badges">
-                                                            {
-                                                                item.discount > 0 || item.discount !== '' ? <span className="price">Sale</span> : ''
-                                                            }
-                                                            {
-                                                                item.discount > 0 || item.discount !== '' ? <span className="price discounted">-{item.discount}%</span> : ''
-                                                            }
-                                                        </div>
                                                         <div className="button-group">
                                                             <Link to="#"><i className="far fa-heart" /></Link>
                                                             <Link to="#"><i className="far fa-sync-alt" /></Link>
@@ -77,8 +67,15 @@ class Content extends Component {
                                                         <h4>
                                                             <Link to="/shop-detail">{item.title}</Link>
                                                         </h4>
-                                                        <span className="price">${item.price}
-                                                            {item.discount > 0 || item.discount !== '' ? <span> ${Math.ceil(item.price * (item.discount / 100))} </span> : ''}</span>
+                                                        <span className="price">
+                                                            ${item.price}
+                                                        </span>
+                                                        <span className="mint">
+                                                            <span> {item.mint} </span>
+                                                        </span><br/>
+                                                        <span className="seller">
+                                                            <span> {item.seller} </span>
+                                                        </span>
                                                         <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>

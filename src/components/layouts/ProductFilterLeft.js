@@ -30,9 +30,10 @@ const productSpecifics = [
     { name: 'Government Issued Tender' }
 ];
 
-
-
-
+const otherSettings = [
+    { name: 'Account for Shipping Discounts' },
+    { name: 'Account for Bulk Pricing Discounts' }
+];
 
 function ProductFilterLeft() {
     const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
@@ -62,17 +63,29 @@ function ProductFilterLeft() {
             <div className="widget socail-widget mb-40">
                 <h5 className="widget-title">Product Specifics</h5>
                 <div className="filter-color">
-                    <form>
-                        {productSpecifics.map((el, i) => (
-                            <label key={i} className="checkbox">
-                                <input type="checkbox" name="#" />
-                                <span className="custom-box" />
-                                {el.name}
-                            </label>
-                        ))}
-                    </form>
+                    {productSpecifics.map((el, i) => (
+                        <label key={i} className="checkbox">
+                            <input type="checkbox" name="#" />
+                            <span className="custom-box" />
+                            {el.name}
+                        </label>
+                    ))}
                 </div>
+                
+                <br/>
+
+                <h5 className="widget-title">Other Settings</h5>
+                {otherSettings.map((el, i) => (
+                    <div className="filter-color">
+                        <label key={i} className="checkbox">
+                            <input type="checkbox" name="#" />
+                            <span className="custom-box" />
+                            {el.name}
+                        </label>
+                    </div>
+                ))}
             </div>
+
 
         </div>
     );

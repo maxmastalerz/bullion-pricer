@@ -1129,6 +1129,11 @@ div.product-filter-top .slider.slider-horizontal .slider-tick {
   margin-left: -15px;
 }
 
+.nav-menu {
+  flex-grow: 1;
+  flex-direction: column;
+}
+
 /*=======  HEADER CSS  =======*/
 header.header-absolute {
   position: absolute;
@@ -2121,7 +2126,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 15px;
+  padding: 0 48px;
   line-height: 120px;
   font-size: 14px;
   font-weight: 700;
@@ -2130,7 +2135,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 @media only screen and (min-width: 991px) and (max-width: 1200px) {
   .sigma-header .sigma-main-menu > .menu-item > a {
-    padding: 0 5px;
+    padding: 0 30px;
   }
 }
 .sigma-header .sigma-main-menu > .menu-item:hover > a {
