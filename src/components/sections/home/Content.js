@@ -11,17 +11,17 @@ import img3 from '../../../assets/img/shop/03.jpg';
 /* All prices are stored and processed as USD by us. */
 /* Only if a user selects a different currency do we calculate the exchange price. */
 const shopgridpost = [
-    { img: img1, title: '1 oz 2022 Canadian Maple Leaf Silver Coin | Royal Canadian Mint', price: 390, seller: 'Silver Gold Bull', mint: 'Royal Canadian Mint' },
-    { img: img2, title: '100 oz Pure Assorted Silver Bar', price: 290, seller: 'Canadian PMX', mint: 'Various' },
-    { img: img3, title: '1 gram Platinum Bar | Valcambi', price: 450, seller: 'Canadian PMX', mint: 'Valcambi' },
+    { img: img1, title: '1 oz 2022 Canadian Maple Leaf Silver Coin | Royal Canadian Mint', price: 390, dealer: 'Silver Gold Bull', mint: 'Royal Canadian Mint' },
+    { img: img2, title: '100 oz Pure Assorted Silver Bar', price: 290, dealer: 'Canadian PMX', mint: 'Various' },
+    { img: img3, title: '1 gram Platinum Bar | Valcambi', price: 450, dealer: 'Canadian PMX', mint: 'Valcambi' },
 
-    { img: img1, title: '1 oz Fortuna Platinum Bar | PAMP Suisse', price: 780, seller: 'Silver Gold Bull', mint: 'PAMP Suisse' },
-    { img: img2, title: 'PAMP SUISSE GOLD BAR, 10 GRAM .9999', price: 290, seller: 'Canadian PMX', mint: 'PAMP Suisse' },
-    { img: img3, title: '1 kg | kilo Johnson Matthey Silver Bar', price: 890, seller: 'Silver Gold Bull', mint: 'Johnson Matthey' },
+    { img: img1, title: '1 oz Fortuna Platinum Bar | PAMP Suisse', price: 780, dealer: 'Silver Gold Bull', mint: 'PAMP Suisse' },
+    { img: img2, title: 'PAMP SUISSE GOLD BAR, 10 GRAM .9999', price: 290, dealer: 'Canadian PMX', mint: 'PAMP Suisse' },
+    { img: img3, title: '1 kg | kilo Johnson Matthey Silver Bar', price: 890, dealer: 'Silver Gold Bull', mint: 'Johnson Matthey' },
 
-    { img: img1, title: '1 oz Random Year Canadian Maple Leaf Gold Coin | Royal Canadian Mint', price: 580, seller: 'Silver Gold Bull', mint: 'Royal Canadian Mint' },
-    { img: img2, title: '10 oz Silver Bar | Royal Canadian Mint', price: 290, seller: 'Canadian PMX', mint: 'Royal Canadian Mint' },
-    { img: img3, title: '1 kg | Kilo Heraeus Silver Bar', price: 800, seller: 'Canadian PMX', mint: 'Heraeus' }
+    { img: img1, title: '1 oz Random Year Canadian Maple Leaf Gold Coin | Royal Canadian Mint', price: 580, dealer: 'Silver Gold Bull', mint: 'Royal Canadian Mint' },
+    { img: img2, title: '10 oz Silver Bar | Royal Canadian Mint', price: 290, dealer: 'Canadian PMX', mint: 'Royal Canadian Mint' },
+    { img: img3, title: '1 kg | Kilo Heraeus Silver Bar', price: 800, dealer: 'Canadian PMX', mint: 'Heraeus' }
 ];
 class Content extends Component {
     render() {
@@ -43,10 +43,10 @@ class Content extends Component {
                                         <select name="guests" id="guests" className="nice-select">
                                             <option value={1}>Sort By Price:Low to High</option>
                                             <option value={2}>Sort By Price:High to Low</option>
-                                            <option value={3}>Sort By Mint:Ascending</option>
-                                            <option value={4}>Sort By Mint:Descending</option>
-                                            <option value={5}>Sort By Seller:Ascending</option>
-                                            <option value={6}>Sort By Seller:Descending</option>
+                                            <option value={3}>Sort By Dealer:Ascending</option>
+                                            <option value={4}>Sort By Dealer:Descending</option>
+                                            <option value={5}>Sort By Mint:Ascending</option>
+                                            <option value={6}>Sort By Mint:Descending</option>
                                         </select>
                                     </div>
                                 </div>
@@ -73,8 +73,8 @@ class Content extends Component {
                                                         <span className="mint">
                                                             <span> {item.mint} </span>
                                                         </span><br/>
-                                                        <span className="seller">
-                                                            <span> {item.seller} </span>
+                                                        <span className="dealer">
+                                                            <span> {item.dealer} </span>
                                                         </span>
                                                         <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>

@@ -1104,7 +1104,7 @@ div.product-filter-top .slider-selection.tick-slider-selection {
   background-color: rgb(0, 0, 0);
 }
 div.product-filter-top .slider-track {
-  background-image: -webkit-linear-gradient(left, rgba(252, 212, 98, 0) 0% 7.69%, rgba(252, 212, 98, 0.03322) 7.69% 15.38%, rgba(252, 212, 98, 0.0701) 15.38% 23.08%, rgba(252, 212, 98, 0.13287) 23.08% 30.77%, rgba(252, 212, 98, 0.22509) 30.77% 38.46%, rgba(252, 212, 98, 0.29817) 38.46% 46.15%, rgba(252, 212, 98, 0.48339) 46.15% 53.85%, rgb(252, 212, 98) 53.85% 61.54%, rgb(251, 211, 94) 61.54% 69.23%, rgb(251, 210, 91) 69.23% 76.92%, rgb(251, 205, 75) 76.92% 84.62%, rgb(250, 193, 29) 84.62% 92.31%, rgb(171, 127, 3) 92.31% 100%);
+  background-image: -webkit-linear-gradient(left, rgba(252, 212, 98, 0.03322) 0% 8.33%, rgba(252, 212, 98, 0.0701) 8.33% 16.67%, rgba(252, 212, 98, 0.13287) 16.67% 25%, rgba(252, 212, 98, 0.22509) 25% 33.33%, rgba(252, 212, 98, 0.29817) 33.33% 41.67%, rgba(252, 212, 98, 0.48339) 41.67% 50%, rgb(252, 212, 98) 50% 58.33%, rgb(251, 211, 94) 58.33% 66.67%, rgb(251, 210, 91) 66.67% 75%, rgb(251, 205, 75) 75% 83.33%, rgb(250, 193, 29) 83.33% 91.67%, rgb(171, 127, 3) 91.67% 100%);
 }
 div.product-filter-top .slider.slider-horizontal .slider-track {
   height: 30px;
@@ -1123,9 +1123,6 @@ div.product-filter-top .slider.slider-horizontal .slider-handle {
   height: 30px;
   width: 30px;
   top: -5px;
-  margin-left: -15px;
-}
-div.product-filter-top .slider.slider-horizontal .slider-tick {
   margin-left: -15px;
 }
 
