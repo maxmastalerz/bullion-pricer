@@ -1,60 +1,17 @@
-import React, { Component, useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { Collapse } from 'react-bootstrap';
 
-import ppimg1 from '../../assets/img/recent-post-wid/04.png';
-import ppimg2 from '../../assets/img/recent-post-wid/05.png';
-import ppimg3 from '../../assets/img/recent-post-wid/06.png';
 
-import insta1 from '../../assets/img/instagram-wid/01.jpg';
-import insta2 from '../../assets/img/instagram-wid/02.jpg';
-import insta3 from '../../assets/img/instagram-wid/03.jpg';
-import insta4 from '../../assets/img/instagram-wid/04.jpg';
-import insta5 from '../../assets/img/instagram-wid/05.jpg';
-import insta6 from '../../assets/img/instagram-wid/06.jpg';
-import insta7 from '../../assets/img/instagram-wid/07.jpg';
-import insta8 from '../../assets/img/instagram-wid/08.jpg';
-import insta9 from '../../assets/img/instagram-wid/09.jpg';
-
-const productTypes = [
-    { name: 'Gold', type: 'gold' },
-    { name: 'Silver', type: 'silver' },
-    { name: 'Platinum', type: 'platinum' }
-];
-
-const productSpecifics = [
-    { name: '99999' },
-    { name: '9999' },
-    { name: '999' },
-    { name: '925' },
-    { name: '≤ 90' },
-    { name: 'Government Issued Tender' }
-];
-
-const otherSettings = [
-    { name: 'Account for Shipping Discounts' },
-    { name: 'Account for Bulk Pricing Discounts' }
-];
-
-function ProductFilterLeft() {
-    const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
-
-    function clicked(e) {
-        let productTypeClicked = e.target.getAttribute("data-product-type");
-        if(e.target.classList.contains('selected')) {
-            setProductTypesSelected(productTypesSelected.filter(item => item !== productTypeClicked));
-        } else {
-            setProductTypesSelected([...productTypesSelected, productTypeClicked]);
-        }
-    }
-
+function ProductFilterLeft(props) {
     return (
         <div className="product-filter-left">
             <div className="widget tag-widget">
                 <h5 className="widget-title">Product Type</h5>
                 <ul>
-                    {productTypes.map((el, i) => (
-                        <li key={i} onClick={(e) => clicked(e)}>
-                            <Link className={productTypesSelected.includes(el.type) ? 'selected' : ''} data-product-type={el.type} to="#">{el.name}</Link>
+                    {props.productTypes.map((el, i) => (
+                        <li key={i} onClick={(e) => props.productTypesChanged(e)}>
+                            <Link className={props.productTypesSelected.includes(el.id) ? 'selected' : ''} data-product-type={el.id} to="#">{el.text}</Link>
                         </li>
                     ))}
                 </ul>
@@ -63,11 +20,11 @@ function ProductFilterLeft() {
             <div className="widget socail-widget mb-40">
                 <h5 className="widget-title">Product Specifics</h5>
                 <div className="filter-color">
-                    {productSpecifics.map((el, i) => (
+                    {props.productSpecifics.map((el, i) => (
                         <label key={i} className="checkbox">
-                            <input type="checkbox" name="#" />
+                            <input type="checkbox" name={el.id} onChange={props.updateProductSpecificsFilter} checked={props.productSpecificsSelected.includes(el.id) ? 'checked' : ''}/>
                             <span className="custom-box" />
-                            {el.name}
+                            {el.text}
                         </label>
                     ))}
                 </div>
@@ -75,18 +32,48 @@ function ProductFilterLeft() {
                 <br/>
 
                 <h5 className="widget-title">Other Settings</h5>
-                {otherSettings.map((el, i) => (
-                    <div className="filter-color">
-                        <label key={i} className="checkbox">
-                            <input type="checkbox" name="#" />
-                            <span className="custom-box" />
-                            {el.name}
-                        </label>
+
+                <div className="filter-color">
+                    <label className="checkbox">
+                        <input type="checkbox" onChange={props.accountForBulkPricingChanged} />
+                        <span className="custom-box"  />
+                        Account for Bulk Pricing Discounts
+                    </label>
+                </div>
+                <Collapse in={props.bulkPricingDiscounts}>
+                    <div>
+                        How many items could you buy?
+                        <div className="filter-highlight">
+                            <div className="dropdown-filter-left-sidebar">
+                                <select className="nice-select" defaultValue={props.bulkPricingCouldBuy} onChange={props.bulkPricingCouldBuyChanged}>
+                                    <option value={1}>1</option>
+                                    <option value={2}>2</option>
+                                    <option value={5}>5</option>
+                                    <option value={10}>10</option>
+                                    <option value={20}>20</option>
+                                    <option value={50}>50</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                ))}
+                </Collapse>
+                
+                {/*
+                <div className="filter-color">
+                    <label className="checkbox">
+                        <input type="checkbox" onChange={accountForShippingChanged} />
+                        <span className="custom-box" />
+                        Account for Shipping Discounts
+                    </label>
+                </div>
+                <Collapse in={shippingDiscounts}>
+                    <div className="filter-highlight">
+                        TODO: NOT YET IMPLEMENTED...
+                    </div>
+                </Collapse>
+                */}
+
             </div>
-
-
         </div>
     );
 }

@@ -1155,7 +1155,15 @@ div.product-filter-top {
 	}
 }
 
+.product-filter-left {
+	.filter-highlight {
+		margin: 15px 0;
+		border: 1px solid #fff;
+	}
+}
+
 .nav-menu {
 	flex-grow: 1;
     flex-direction: column;
 }
+

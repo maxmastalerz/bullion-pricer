@@ -1126,6 +1126,11 @@ div.product-filter-top .slider.slider-horizontal .slider-handle {
   margin-left: -15px;
 }
 
+.product-filter-left .filter-highlight {
+  margin: 15px 0;
+  border: 1px solid #fff;
+}
+
 .nav-menu {
   flex-grow: 1;
   flex-direction: column;
