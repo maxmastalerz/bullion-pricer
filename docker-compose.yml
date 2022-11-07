@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  nginx:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    image: pp-nginx
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+  backend:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    image: pp-backend
+    expose:
+      - 3000
+    command: "npm start"
