@@ -22,10 +22,7 @@ services:
         command: "npm start"
     db:
         restart: unless-stopped
-        image: mongo
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=localpassword
-            - MONGO_INITDB_DATABASE=pplocaldb
+        build:
+            context: ./docker/db
         ports:
             - 27017:27017
