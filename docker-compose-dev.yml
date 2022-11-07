@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+    nginx:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/nginx/Dockerfile
+        image: pp-nginx
+        ports:
+            - 80:80
+        depends_on:
+            - backend
+    backend:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/backend/Dockerfile
+        image: pp-backend
+        expose:
+            - 3000
+        command: "npm start"
+    db:
+        restart: unless-stopped
+        image: mongo
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=localpassword
+            - MONGO_INITDB_DATABASE=pplocaldb
+        ports:
+            - 27017:27017
