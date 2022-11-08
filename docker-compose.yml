@@ -1,24 +1,27 @@
 version: "3"
 
 services:
-    nginx:
+    pp-nginx:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/nginx/Dockerfile
         image: pp-nginx
+        environment:
+            - PORT=${NGINX_PORT}
+            - BROWSER=${NGINX_BROWSER}
         ports:
             - 80:80
         depends_on:
-            - backend
-    backend:
+            - pp-backend
+    pp-backend:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/backend/Dockerfile
         image: pp-backend
-        env_file:
-            - ./server/.env.development
+        environment:
+            - MONGODB_CONNECTION_STRING=${BACKEND_MONGODB_CONNECTION_STRING}
         expose:
             - 3000
         command: "npm start"
