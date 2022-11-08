@@ -17,6 +17,8 @@ services:
             context: .
             dockerfile: ./docker/backend/Dockerfile
         image: pp-backend
+        env_file:
+            - ./server/.env.development
         expose:
             - 3000
         command: "npm start"

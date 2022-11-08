@@ -1,28 +1,46 @@
 version: "3"
 
 services:
-    nginx:
+    pp-nginx:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/nginx/Dockerfile
         image: pp-nginx
+        environment:
+            - PORT=${NGINX_PORT}
+            - BROWSER=${NGINX_BROWSER}
         ports:
             - 80:80
         depends_on:
-            - backend
-    backend:
+            - pp-backend
+    pp-backend:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/backend/Dockerfile
         image: pp-backend
+        environment:
+            - MONGODB_CONNECTION_STRING=${BACKEND_MONGODB_CONNECTION_STRING}
         expose:
             - 3000
+        depends_on:
+            - pp-db
         command: "npm start"
-    db:
+    pp-db:
         restart: unless-stopped
         build:
             context: ./docker/db
-        ports:
-            - 27017:27017
+        image: pp-db
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=${DB_MONGO_INITDB_ROOT_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${DB_MONGO_INITDB_ROOT_PASSWORD}
+            - MONGO_INITDB_DATABASE=${DB_MONGO_INITDB_DATABASE}
+        volumes:
+            - pp-mongodb:/data/db
+        expose:
+            - 27017
+
+volumes:
+    pp-mongodb:
+        name: pp-mongodb

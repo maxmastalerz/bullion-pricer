@@ -9,5 +9,4 @@ RUN npm ci
 
 COPY ./server /app
 
-EXPOSE 3000
 CMD ["npm", "start"]
