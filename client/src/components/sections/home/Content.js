@@ -89,16 +89,28 @@ function Content() {
         setWeightRange([e.target.value[0], e.target.value[1]]); // Set min and max for bullion weight range
     }
 
+    /*
+    Let's map a slider position(percentage) to its actual weight in grams
+    @arg pos Position in the slider is a percentage.
+    */
+    const weightRangePosToGrams = (pos) => {
+        let rangeToGramMap = {"0":1,"8.33":2,"16.67":3.11,"25":5,"33.33":7.78,"41.67":10,"50":15.55,"58.33":31.1,"66.67":155.52,"75":311.04,"83.33":1000,"91.67":3110.35,"100":31103.5};
+        return rangeToGramMap[pos];
+    }
+
     const changeSortBy = (e) => {
         setSortBy(e.target.value);
     }
 
     useEffect(() => {
+        let weightStart = weightRangePosToGrams(weightRange[0]);
+        let weightEnd = weightRangePosToGrams(weightRange[1]);
+
         console.log(`product types selected: ${JSON.stringify(productTypesSelected)}
 product specifics selected: ${JSON.stringify(productSpecificsSelected)}
 account for bulk pricing discounts: ${bulkPricingDiscounts}
 how many items could you buy: ${bulkPricingCouldBuy}
-weight range: ${JSON.stringify(weightRange)}
+weight range: ${JSON.stringify([weightStart, weightEnd])}
 sort by: ${sortBy}`);
         //TODO: Send an ajax request to the backend with the search parameters using axios.
 
