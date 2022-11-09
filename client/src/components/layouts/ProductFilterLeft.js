@@ -59,7 +59,6 @@ function ProductFilterLeft(props) {
                         <div className="filter-highlight">
                             <div className="dropdown-filter-left-sidebar">
                                 <select className="nice-select" defaultValue={props.bulkPricingCouldBuy} onChange={props.bulkPricingCouldBuyChanged}>
-                                    <option value={1}>1</option>
                                     <option value={2}>2</option>
                                     <option value={5}>5</option>
                                     <option value={10}>10</option>
