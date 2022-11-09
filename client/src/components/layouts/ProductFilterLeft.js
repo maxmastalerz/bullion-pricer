@@ -6,7 +6,7 @@ import { Collapse } from 'react-bootstrap';
 function ProductFilterLeft(props) {
     return (
         <div className="product-filter-left">
-            <div className="widget tag-widget">
+            <div className="widget tag-widget mb-40">
                 <h5 className="widget-title">Product Type</h5>
                 <ul>
                     {props.productTypes.map((el, i) => (
@@ -15,14 +15,27 @@ function ProductFilterLeft(props) {
                         </li>
                     ))}
                 </ul>
-            </div>
 
-            <div className="widget socail-widget mb-40">
+                <br/>
+
                 <h5 className="widget-title">Product Specifics</h5>
                 <div className="filter-color">
                     {props.productSpecifics.map((el, i) => (
                         <label key={i} className="checkbox">
                             <input type="checkbox" name={el.id} onChange={props.updateProductSpecificsFilter} checked={props.productSpecificsSelected.includes(el.id) ? 'checked' : ''}/>
+                            <span className="custom-box" />
+                            {el.text}
+                        </label>
+                    ))}
+                </div>
+
+                <br/>
+
+                <h5 className="widget-title">Payment Preferences</h5>
+                <div className="filter-color">
+                    {props.paymentPreferences.map((el, i) => (
+                        <label key={i} className="checkbox">
+                            <input type="checkbox" name={el.id} onChange={props.updatePaymentPreferences} checked={props.paymentPreferencesSelected.includes(el.id) ? 'checked' : ''}/>
                             <span className="custom-box" />
                             {el.text}
                         </label>

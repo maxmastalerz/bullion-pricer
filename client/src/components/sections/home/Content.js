@@ -39,9 +39,18 @@ const productSpecifics = [
     { id: 'government_issued_tender', text: 'Government Issued Tender' }
 ];
 
+const paymentPreferences = [
+    { id: 'check', text: 'Check'},
+    { id: 'wire', text: 'Wire'},
+    { id: 'crypto', text: 'Crypto'},
+    { id: 'creditcard', text: 'Credit Card'},
+    { id: 'paypal', text: 'PayPal'},
+]
+
 function Content() {
     const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
     const [productSpecificsSelected, setProductSpecificsSelected] = useState(['9999','999']);
+    const [paymentPreferencesSelected, setPaymentPreferencesSelected] = useState(['check','wire','crypto','creditcard','paypal']);
     const [bulkPricingDiscounts, setBulkPricingDiscounts] = useState(false);
     const [bulkPricingCouldBuy, setBulkPricingCouldBuy] = useState(5);
     //const [shippingDiscounts, setShippingDiscounts] = useState(false);
@@ -64,6 +73,14 @@ function Content() {
             setProductSpecificsSelected(productSpecificsSelected.filter(item => item !== e.target.name));
         }
     };
+
+    const updatePaymentPreferences = (e) => {
+        if(e.target.checked) {
+            setPaymentPreferencesSelected([...paymentPreferencesSelected, e.target.name]);
+        } else {
+            setPaymentPreferencesSelected(paymentPreferencesSelected.filter(item => item !== e.target.name));
+        }
+    }
 
     const accountForBulkPricingChanged = (e) => {
         if(bulkPricingDiscounts) {
@@ -108,13 +125,14 @@ function Content() {
 
         console.log(`product types selected: ${JSON.stringify(productTypesSelected)}
 product specifics selected: ${JSON.stringify(productSpecificsSelected)}
+payment preferences selected: ${JSON.stringify(paymentPreferencesSelected)}
 account for bulk pricing discounts: ${bulkPricingDiscounts}
 how many items could you buy: ${bulkPricingCouldBuy}
 weight range: ${JSON.stringify([weightStart, weightEnd])}
 sort by: ${sortBy}`);
         //TODO: Send an ajax request to the backend with the search parameters using axios.
 
-    }, [productTypesSelected, bulkPricingDiscounts, bulkPricingCouldBuy, productSpecificsSelected, weightRange, sortBy]);
+    }, [productTypesSelected, bulkPricingDiscounts, bulkPricingCouldBuy, productSpecificsSelected, paymentPreferencesSelected, weightRange, sortBy]);
 
     return (
         <section className="Shop-section pt-shop-section pb-120">
@@ -129,6 +147,9 @@ sort by: ${sortBy}`);
                             updateProductSpecificsFilter={updateProductSpecificsFilter}
                             productSpecifics={productSpecifics}
                             productSpecificsSelected={productSpecificsSelected}
+                            updatePaymentPreferences={updatePaymentPreferences}
+                            paymentPreferences={paymentPreferences}
+                            paymentPreferencesSelected={paymentPreferencesSelected}
                             accountForBulkPricingChanged={accountForBulkPricingChanged}
                             bulkPricingCouldBuyChanged={bulkPricingCouldBuyChanged}
                             bulkPricingDiscounts={bulkPricingDiscounts}
