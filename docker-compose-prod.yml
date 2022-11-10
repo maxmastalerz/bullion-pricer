@@ -9,8 +9,8 @@ services:
             target: prod
         image: pp-react-nginx
         environment:
-            - PORT=${REACT_NGINX_PORT}
-            - BROWSER=${REACT_NGINX_BROWSER}
+            - PORT=${REACT_PORT}
+            - BROWSER=${REACT_BROWSER}
         ports:
             - 80:80
         depends_on:

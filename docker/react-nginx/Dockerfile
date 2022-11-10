@@ -14,7 +14,7 @@ COPY ./react/ ./
 
 # ----------------
 
-FROM deps as dev
+FROM deps as dev-react
 CMD npm run start
 
 # ----------------
@@ -28,4 +28,11 @@ RUN npm run build
 FROM nginx:stable-alpine as prod
 COPY --from=build-prod /app/react/build /usr/share/nginx/html
 COPY ./docker/react-nginx/default.conf /etc/nginx/conf.d/
+CMD ["nginx", "-g", "daemon off;"]
+
+# ----------------
+
+FROM nginx:stable-alpine as dev-nginx
+COPY ./docker/react-nginx/default.conf /etc/nginx/conf.d/
+RUN rm /usr/share/nginx/html/index.html
 CMD ["nginx", "-g", "daemon off;"]

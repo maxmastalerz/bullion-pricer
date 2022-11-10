@@ -1,24 +1,23 @@
 version: "3"
 
 services:
-    pp-react-nginx:
+    pp-react:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/react-nginx/Dockerfile
-            target: dev
-        image: pp-react-nginx
+            target: dev-react
+        image: pp-react
         environment:
-            - PORT=${REACT_NGINX_PORT}
-            - BROWSER=${REACT_NGINX_BROWSER}
+            - PORT=${REACT_PORT}
+            - BROWSER=${REACT_BROWSER}
             - CHOKIDAR_USEPOLLING=true
         volumes:
             - pp-node_modules:/app/react/node_modules
             - ./react:/app/react
+        #Using ports instead of expose as CHOKIDAR_USEPOLLING (live code reloading) wouldn't work with nginx in front (was blocking port comms)
         ports:
             - 3000:3000
-        depends_on:
-            - pp-api
     pp-api:
         restart: unless-stopped
         build:
@@ -32,6 +31,18 @@ services:
         depends_on:
             - pp-db
         command: "npm start"
+    pp-nginx:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/react-nginx/Dockerfile
+            target: dev-nginx
+        image: pp-nginx
+        ports:
+            - 80:80
+        depends_on:
+            - pp-react
+            - pp-api
     pp-db:
         restart: unless-stopped
         build:
