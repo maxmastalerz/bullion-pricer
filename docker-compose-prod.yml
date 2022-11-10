@@ -1,27 +1,28 @@
 version: "3"
 
 services:
-    pp-nginx:
+    pp-react-nginx:
         restart: unless-stopped
         build:
             context: .
-            dockerfile: ./docker/nginx/Dockerfile
-        image: pp-nginx
+            dockerfile: ./docker/react-nginx/Dockerfile
+            target: prod
+        image: pp-react-nginx
         environment:
-            - PORT=${NGINX_PORT}
-            - BROWSER=${NGINX_BROWSER}
+            - PORT=${REACT_NGINX_PORT}
+            - BROWSER=${REACT_NGINX_BROWSER}
         ports:
             - 80:80
         depends_on:
-            - pp-backend
-    pp-backend:
+            - pp-api
+    pp-api:
         restart: unless-stopped
         build:
             context: .
-            dockerfile: ./docker/backend/Dockerfile
-        image: pp-backend
+            dockerfile: ./docker/api/Dockerfile
+        image: pp-api
         environment:
             - MONGODB_CONNECTION_STRING=${BACKEND_MONGODB_CONNECTION_STRING}
         expose:
-            - 3000
+            - 5000
         command: "npm start"
