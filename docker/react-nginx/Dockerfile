@@ -17,22 +17,22 @@ COPY ./react/ ./
 FROM deps as dev-react
 CMD npm run start
 
+# --
+
+FROM nginx:stable-alpine as dev-nginx
+COPY ./docker/react-nginx/default.conf /etc/nginx/conf.d/
+RUN rm /usr/share/nginx/html/index.html
+CMD ["nginx", "-g", "daemon off;"]
+
 # ----------------
 
 FROM deps as build-prod
 RUN npm run build
 
-# ----------------
+# --
 
 # Copy React static files and start nginx
 FROM nginx:stable-alpine as prod
 COPY --from=build-prod /app/react/build /usr/share/nginx/html
 COPY ./docker/react-nginx/default.conf /etc/nginx/conf.d/
-CMD ["nginx", "-g", "daemon off;"]
-
-# ----------------
-
-FROM nginx:stable-alpine as dev-nginx
-COPY ./docker/react-nginx/default.conf /etc/nginx/conf.d/
-RUN rm /usr/share/nginx/html/index.html
 CMD ["nginx", "-g", "daemon off;"]
