@@ -1,6 +1,4 @@
-
-# The first stage
-# Build React static files
+#Set up react app
 FROM node:16.13.0-alpine as deps
 WORKDIR /app/react
 COPY ./react/package.json ./
