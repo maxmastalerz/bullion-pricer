@@ -66,10 +66,6 @@ function Content() {
         }
     };
 
-    useEffect(() => {
-        console.log(productSpecificsSelected);
-    }, [productSpecificsSelected]);
-
     const clearCertainProductSpecifics = (productSpecificsToClear) => {
         let newSpecifics = productSpecificsSelected.filter(item => !productSpecificsToClear.includes(item));
         setProductSpecificsSelected(newSpecifics);
