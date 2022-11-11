@@ -9,7 +9,7 @@ $ docker-compose --env-file .env.dev -f docker-compose-dev.yml up
 
 Please wait(about 20 seconds), then:
 
-Go to http://localhost:3000
+Go to http://localhost
 
 ### To run production build locally with nginx proxy in front:
 
