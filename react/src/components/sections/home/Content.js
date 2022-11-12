@@ -68,7 +68,7 @@ function Content() {
 
     const updateProductSpecificsFilter = (e) => {
         if(e.target.checked) {
-            setProductSpecificsSelected([...productSpecificsSel, e.target.name]);
+            setProductSpecificsSelected([...productSpecificsSelected, e.target.name]);
         } else {
             setProductSpecificsSelected(productSpecificsSelected.filter(item => item !== e.target.name));
         }
