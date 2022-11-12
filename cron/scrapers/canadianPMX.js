@@ -73,7 +73,6 @@ module.exports = async (scrapeUrl) => {
 					price: 500
 				}
 			],
-			crypto: null,
 			creditcard: [
 				{
 					QtyRange: [1,4],
@@ -118,6 +117,9 @@ module.exports = async (scrapeUrl) => {
 					price: 510
 				}
 			]
+			crypto: null,
+			electronicbill: null,
+			bankdraft: null
 		}
 	};
 

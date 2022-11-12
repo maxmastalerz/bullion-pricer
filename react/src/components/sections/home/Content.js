@@ -42,6 +42,8 @@ const productSpecifics = [
 const paymentPreferences = [
     { id: 'check', text: 'Check'},
     { id: 'wire', text: 'Wire'},
+    { id: 'electronicbill', text: 'Electronic Bill'},
+    { id: 'bankdraft', text: 'Bank Draft'},
     { id: 'crypto', text: 'Crypto'},
     { id: 'creditcard', text: 'Credit Card'},
     { id: 'paypal', text: 'PayPal'},
