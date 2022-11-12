@@ -50,7 +50,7 @@ const paymentPreferences = [
 function Content() {
     const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
     const [productSpecificsSelected, setProductSpecificsSelected] = useState(['9999']);
-    const [paymentPreferencesSelected, setPaymentPreferencesSelected] = useState(['check','wire','crypto','creditcard','paypal']);
+    const [paymentPreferencesSelected, setPaymentPreferencesSelected] = useState(['check']);
     const [bulkPricingDiscounts, setBulkPricingDiscounts] = useState(false);
     const [bulkPricingCouldBuy, setBulkPricingCouldBuy] = useState(5);
     //const [shippingDiscounts, setShippingDiscounts] = useState(false);
@@ -66,20 +66,8 @@ function Content() {
         }
     };
 
-    const clearCertainProductSpecifics = (productSpecificsToClear) => {
-        let newSpecifics = productSpecificsSelected.filter(item => !productSpecificsToClear.includes(item));
-        setProductSpecificsSelected(newSpecifics);
-        return newSpecifics;
-    }
-
     const updateProductSpecificsFilter = (e) => {
         if(e.target.checked) {
-            let purityRadioOptions = ['99999','9999','999','925','less_than_or_equal_90'];
-            let productSpecificsSel = productSpecificsSelected;
-            if(purityRadioOptions.includes(e.target.name)) { //If a purity option is selected,
-                productSpecificsSel = clearCertainProductSpecifics(purityRadioOptions); // Clear all purity related product specifics
-            }
-
             setProductSpecificsSelected([...productSpecificsSel, e.target.name]);
         } else {
             setProductSpecificsSelected(productSpecificsSelected.filter(item => item !== e.target.name));
@@ -88,7 +76,7 @@ function Content() {
 
     const updatePaymentPreferences = (e) => {
         if(e.target.checked) {
-            setPaymentPreferencesSelected([...paymentPreferencesSelected, e.target.name]);
+            setPaymentPreferencesSelected([e.target.name]);
         } else {
             setPaymentPreferencesSelected(paymentPreferencesSelected.filter(item => item !== e.target.name));
         }
