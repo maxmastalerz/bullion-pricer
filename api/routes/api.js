@@ -2,21 +2,18 @@ var express = require("express");
 var router = express.Router();
 const { MongoClient } = require("mongodb");
 
-/* GET home page. */
-router.get("/hello", function (req, res, next) {
-	console.log("Saying hello");
-	const { name } = req.query;
-	res.send(`<h1>Hello ${name || "world"}</h1>`);
+router.get("/", function (req, res, next) {
+	res.send(`<h1>PreciousPricer API Working</h1>`);
 });
 
-router.get("/users", async (req, res) => {
+router.get("/products", async (req, res) => {
 	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
 	await client.connect();
 	const db = client.db();
-	const usersCollection = db.collection("users");
-	const users = await usersCollection.find().toArray();
+	const productsCollection = db.collection("products");
+	const products = await productsCollection.find().toArray();
 
-	res.send(users);
+	res.send(products);
 });
 
 module.exports = router;

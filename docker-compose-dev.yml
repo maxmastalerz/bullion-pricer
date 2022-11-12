@@ -13,7 +13,7 @@ services:
             - BROWSER=${REACT_BROWSER}
             - CHOKIDAR_USEPOLLING=true
         volumes:
-            - pp-node_modules:/app/react/node_modules
+            - pp-react-node_modules:/app/react/node_modules
             - ./react:/app/react
         #Using ports instead of expose as CHOKIDAR_USEPOLLING (live code reloading) wouldn't work with nginx in front (was blocking port comms)
         ports:
@@ -56,9 +56,24 @@ services:
             - pp-mongodb:/data/db
         expose:
             - 27017
+    pp-cron:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/cron/Dockerfile
+        image: pp-cron
+        environment:
+            - MONGODB_CONNECTION_STRING=${BACKEND_MONGODB_CONNECTION_STRING}
+        volumes:
+            - pp-cron-node_modules:/app/node_modules
+            - ./cron:/app
+        depends_on:
+            - pp-db
 
 volumes:
     pp-mongodb:
         name: pp-mongodb
-    pp-node_modules:
-        name: pp-node_modules
+    pp-react-node_modules:
+        name: pp-react-node_modules
+    pp-cron-node_modules:
+        name: pp-cron-node_modules
