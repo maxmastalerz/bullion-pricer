@@ -116,7 +116,7 @@ module.exports = async (scrapeUrl) => {
 					QtyRange: [50,null],
 					price: 510
 				}
-			]
+			],
 			crypto: null,
 			electronicbill: null,
 			bankdraft: null
