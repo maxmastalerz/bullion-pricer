@@ -1,0 +1,42 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"command": "npm run dev",
+			"name": "Run server",
+			"request": "launch",
+			"type": "node-terminal",
+			"cwd": "${workspaceFolder}/api"
+		},
+		{
+			"command": "npm start",
+			"name": "Run client",
+			"request": "launch",
+			"type": "node-terminal",
+			"cwd": "${workspaceFolder}/react"
+		},
+		{
+			"name": "Attach frontend",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:8080",
+			"webRoot": "${workspaceFolder}/react/src",
+			"sourceMapPathOverrides": {
+				"webpack:///client/src/*": "${webRoot}/*"
+			},
+		}
+	],
+	"compounds": [
+		{
+			"name": "Run full app",
+			"configurations": [
+				"Run server",
+				"Run client",
+				"Attach frontend"
+			]
+		}
+	]
+}
