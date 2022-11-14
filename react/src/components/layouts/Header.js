@@ -40,6 +40,11 @@ class Header extends Component {
             togglecart: !this.state.togglecart
         });
     }
+    onScroll = () => {
+        this.setState({
+            isTop: window.scrollY > 110
+        });
+    }
     componentDidMount() {
         function megamenu() {
             $('.sigm-megamenu-nav>li').on('mouseover', function (e) {
@@ -52,12 +57,12 @@ class Header extends Component {
             });
         }
         megamenu();
-        window.addEventListener('scroll', () => {
-            this.setState({
-                isTop: window.scrollY > 110
-            });
-        }, false);
+        window.addEventListener('scroll', this.onScroll, false);
     }
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll, false);
+    }
+    
     render() {
         const stickyheader = this.state.isTop ? 'sticky-active' : '';
         return (

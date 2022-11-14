@@ -8,11 +8,15 @@ class Backtotop extends Component {
     }
     // Back to top
     componentDidMount() {
-        window.addEventListener('scroll', () => {
-            this.setState({
-                isTop: window.scrollY > 300
-            });
-        }, false);
+        window.addEventListener('scroll', this.onScroll, false);
+    }
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll, false);
+    }
+    onScroll = () => {
+        this.setState({
+            isTop: window.scrollY > 300
+        });
     }
     scrollToTop() {
         window.scrollTo({
