@@ -23,17 +23,21 @@ const scrapeBullionSites = async () => {
 		let scraperName = product.dealer;
 		let scrape = scrapers[scraperName];
 
-		let scrapeResults = await scrape(product.url);
+		try {
+			let scrapeResults = await scrape(product.url);
 
-		await productsCollection.updateOne(
-			{ _id: productId },
-			{
-				$set: {
-					pricing: scrapeResults.pricing,
-					pricing_last_updated: new Date().getTime(),
-				},
-			}
-		);
+			await productsCollection.updateOne(
+				{ _id: productId },
+				{
+					$set: {
+						pricing: scrapeResults.pricing,
+						pricing_last_updated: new Date().getTime(),
+					},
+				}
+			);
+		} catch {
+			console.error("Scraping failed for", product.url);
+		}
 	}
 
 	console.log("== DONE SCRAPING BULLION SITES. FOR NOW... ==");
