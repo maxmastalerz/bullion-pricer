@@ -22,8 +22,8 @@ router.get("/products", async (req, res) => {
 	let paymentPreferencesSelected = req.query.paymentPreferencesSelected.split(',');
 	let bulkPricingCouldBuy = req.query.bulkPricingCouldBuy;
 	let weightRange = req.query.weightRange.split(',');
-	let weightStart = weightRange[0];
-	let weightEnd = weightRange[1];
+	let weightStart = Number(weightRange[0]);
+	let weightEnd = Number(weightRange[1]);
 
 	console.log("productTypesSelected:"+JSON.stringify(productTypesSelected));
 	console.log("productSpecificsSelected: "+JSON.stringify(productSpecificsSelected));
