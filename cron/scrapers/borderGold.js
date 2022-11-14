@@ -1,6 +1,10 @@
 const fetch = require("node-fetch");
 const { parse } = require("node-html-parser");
 
+// PP-TODO: Get PID like the one here: https://www.bordergold.com/?p=10246 from the scrapeURL, then send a request to
+// https://www.bordergold.com/wp-content/plugins/istpricecontroller/cache/products/Retail_10246_CAD_tiers.json?_=1668453682180
+// replacing the PID and the timestamp with now, to get the current price
+
 function parsePrice(strPrice) {
 	return parseFloat(strPrice.replace(/^\$|(\sCAD)$|,/g, ""));
 }
