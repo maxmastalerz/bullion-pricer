@@ -1,11 +1,12 @@
-var CronJob = require('cron').CronJob;
-const { MongoClient } = require('mongodb');
+require("dotenv-flow").config();
+var CronJob = require("cron").CronJob;
+const { MongoClient } = require("mongodb");
 
 const scrapeBullionSites = async () => {
 	console.log("== SCRAPING BULLION SITES ==");
 
 	let scrapers = {
-		"CanadianPMX": require('./scrapers/canadianPMX.js'),
+		CanadianPMX: require("./scrapers/canadianPMX.js"),
 		//add other scrapers here
 	};
 
@@ -15,7 +16,7 @@ const scrapeBullionSites = async () => {
 	const productsCollection = db.collection("products");
 	const products = await productsCollection.find().toArray();
 
-	for(let i=0; i<products.length; i++) {
+	for (let i = 0; i < products.length; i++) {
 		let product = products[i];
 
 		let productId = product._id;
@@ -24,11 +25,19 @@ const scrapeBullionSites = async () => {
 
 		let scrapeResults = await scrape(product.url);
 
-		await productsCollection.updateOne({ _id: productId }, { $set: { pricing: scrapeResults.pricing, pricing_last_updated: new Date().getTime() } });
-	};
+		await productsCollection.updateOne(
+			{ _id: productId },
+			{
+				$set: {
+					pricing: scrapeResults.pricing,
+					pricing_last_updated: new Date().getTime(),
+				},
+			}
+		);
+	}
 
 	console.log("== DONE SCRAPING BULLION SITES. FOR NOW... ==");
-}
+};
 
 console.log("INITIALIZING CRON JOB(S).");
 
@@ -41,18 +50,20 @@ immediately rather than waiting for the spefic x:00 hour mark. This helps with d
 */
 let job = {};
 new CronJob({
-	cronTime: '0 0 * * * *', // Every hour, on the hour
+	cronTime: "0 0 * * * *", // Every hour, on the hour
 	onTick: async () => {
-		if(job.taskRunning) {
+		if (job.taskRunning) {
 			return;
 		}
 
-		job.taskRunning = true
+		job.taskRunning = true;
 
 		try {
 			await scrapeBullionSites();
 		} catch (err) {
-			console.log("ERROR: There's been an issue with scraping the bullion sites");
+			console.log(
+				"ERROR: There's been an issue with scraping the bullion sites"
+			);
 			console.log(err);
 			// Handle error
 		}
@@ -60,6 +71,6 @@ new CronJob({
 		job.taskRunning = false;
 	},
 	start: true,
-	timeZone: 'UTC',
-	runOnInit: true // Runs when this cron job was first initialized, even if we're not exactly on the hour
+	timeZone: "UTC",
+	runOnInit: true, // Runs when this cron job was first initialized, even if we're not exactly on the hour
 });

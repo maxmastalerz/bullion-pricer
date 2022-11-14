@@ -27,7 +27,14 @@
 			"sourceMapPathOverrides": {
 				"webpack:///client/src/*": "${webRoot}/*"
 			},
-		}
+		},
+		{
+			"command": "npm run dev",
+			"name": "Run cron",
+			"request": "launch",
+			"type": "node-terminal",
+			"cwd": "${workspaceFolder}/cron"
+		},
 	],
 	"compounds": [
 		{
@@ -35,6 +42,7 @@
 			"configurations": [
 				"Run server",
 				"Run client",
+				"Run cron",
 				"Attach frontend"
 			]
 		}

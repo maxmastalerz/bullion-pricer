@@ -1,126 +1,79 @@
-const axios = require('axios').default;
+const fetch = require("node-fetch");
+const { parse } = require("node-html-parser");
+
+function parsePrice(strPrice) {
+	return parseFloat(strPrice.replace(/^\$|(\sCAD)$|,/g, ""));
+}
 
 module.exports = async (scrapeUrl) => {
-	console.log("Scraping: "+scrapeUrl);
-
-	// returning results from scrape. For now and into the foreseeable future, we only scrape price data.
-	// dummy data. Important, when you're actually scraping data, remember to sanitize it. It could be unsafe.
-	return {
-		pricing: {
-			cash: [
-				{
-					QtyRange: [1,4],
-					price: 100
-				},
-				{
-					QtyRange: [5,9],
-					price: 200
-				},
-				{
-					QtyRange: [10,19],
-					price: 300
-				},
-				{
-					QtyRange: [20,49],
-					price: 400
-				},
-				{
-					QtyRange: [50,null],
-					price: 500
-				}
-			],
-			check: [
-				{
-					QtyRange: [1,4],
-					price: 100
-				},
-				{
-					QtyRange: [5,9],
-					price: 200
-				},
-				{
-					QtyRange: [10,19],
-					price: 300
-				},
-				{
-					QtyRange: [20,49],
-					price: 400
-				},
-				{
-					QtyRange: [50,null],
-					price: 500
-				}
-			],
-			wire: [
-				{
-					QtyRange: [1,4],
-					price: 100
-				},
-				{
-					QtyRange: [5,9],
-					price: 200
-				},
-				{
-					QtyRange: [10,19],
-					price: 300
-				},
-				{
-					QtyRange: [20,49],
-					price: 400
-				},
-				{
-					QtyRange: [50,null],
-					price: 500
-				}
-			],
-			creditcard: [
-				{
-					QtyRange: [1,4],
-					price: 110
-				},
-				{
-					QtyRange: [5,9],
-					price: 210
-				},
-				{
-					QtyRange: [10,19],
-					price: 310
-				},
-				{
-					QtyRange: [20,49],
-					price: 410
-				},
-				{
-					QtyRange: [50,null],
-					price: 510
-				}
-			],
-			paypal: [
-				{
-					QtyRange: [1,4],
-					price: 110
-				},
-				{
-					QtyRange: [5,9],
-					price: 210
-				},
-				{
-					QtyRange: [10,19],
-					price: 310
-				},
-				{
-					QtyRange: [20,49],
-					price: 410
-				},
-				{
-					QtyRange: [50,null],
-					price: 510
-				}
-			],
-			crypto: null,
-			electronicbill: null,
-			bankdraft: null
-		}
+	console.log("Scraping: " + scrapeUrl);
+	const priceLine = [];
+	const pricing = {
+		cash: [],
+		check: [],
+		wire: [],
+		creditcard: [],
+		paypal: [],
 	};
 
+	// send request with headers mimicking a user browser
+	const res = await fetch(scrapeUrl, {
+		headers: {
+			accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+			"accept-language": "en-US,en;q=0.9",
+			"sec-ch-ua":
+				'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+			"sec-ch-ua-mobile": "?0",
+			"sec-ch-ua-platform": '"macOS"',
+			"sec-fetch-dest": "document",
+			"sec-fetch-mode": "navigate",
+			"sec-fetch-site": "none",
+			"sec-fetch-user": "?1",
+			"upgrade-insecure-requests": "1",
+			cookie: "storeclosing=Mon, 1 Jan 2099 00:00:00 GMT",
+			"user-agent":
+				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+		},
+		referrerPolicy: "strict-origin-when-cross-origin",
+	});
+
+	const html = await res.text();
+
+	const document = parse(html);
+	const catalogTable = document.querySelector(".nfs_catalog_plugin_table");
+	const catalogRows = catalogTable.querySelectorAll("tr").slice(1);
+
+	for (const catalogRow of catalogRows) {
+		const quantityStep = parseInt(
+			catalogRow.firstChild.text.replace("+", "")
+		);
+		const cashPrice = parsePrice(catalogRow.childNodes[1].text);
+		const creditPrice = parsePrice(catalogRow.childNodes[2].text);
+		priceLine.push([quantityStep, cashPrice, creditPrice]);
+	}
+
+	for (let i = 0; i < priceLine.length; i++) {
+		const [quantityStep, cashPrice, creditPrice] = priceLine[i];
+		const nextQuantityStep = priceLine?.[i + 1]?.[0] - 1 || null;
+		const qtyRange = [quantityStep, nextQuantityStep];
+
+		const cashPricing = {
+			QtyRange: qtyRange,
+			price: cashPrice,
+		};
+
+		pricing.cash.push(cashPricing);
+		pricing.wire.push(cashPricing);
+		pricing.check.push(cashPricing);
+
+		const creditPricing = {
+			QtyRange: qtyRange,
+			price: creditPrice,
+		};
+
+		pricing.creditcard.push(creditPricing);
+		pricing.paypal.push(creditPricing);
+	}
+
+	return { pricing };
 };
