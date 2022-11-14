@@ -151,13 +151,28 @@ function Content() {
         let weightStart = weightRangePosToGrams(weightRange[0]);
         let weightEnd = weightRangePosToGrams(weightRange[1]);
 
-        console.log(`product types selected: ${JSON.stringify(productTypesSelected)}
+        /*console.log(`product types selected: ${JSON.stringify(productTypesSelected)}
 product specifics selected: ${JSON.stringify(productSpecificsSelected)}
 payment preferences selected: ${JSON.stringify(paymentPreferencesSelected)}
 how many items could you buy: ${bulkPricingDiscounts ? bulkPricingCouldBuy: 1 }
 weight range: ${JSON.stringify([weightStart, weightEnd])}
-sort by: ${sortBy}`);
-        //TODO: Send an ajax request to the backend with the search parameters using axios.
+sort by: ${sortBy}`);*/
+
+        let bulkPricingCouldBuyAdjusted = bulkPricingDiscounts ? bulkPricingCouldBuy : 1;
+        const params = new URLSearchParams({
+            productTypesSelected: productTypesSelected,
+            productSpecificsSelected: productSpecificsSelected,
+            paymentPreferencesSelected: paymentPreferencesSelected,
+            bulkPricingCouldBuy: bulkPricingCouldBuyAdjusted,
+            weightRange: [weightStart, weightEnd]
+        });
+        console.log(params.toString());
+
+        fetch(`/api/products?${params.toString()}`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+        });
 
     }, [productTypesSelected, bulkPricingDiscounts, bulkPricingCouldBuy, productSpecificsSelected, paymentPreferencesSelected, weightRange, sortBy]);
 

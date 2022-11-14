@@ -26,6 +26,9 @@ services:
         image: pp-api
         environment:
             - MONGODB_CONNECTION_STRING=${BACKEND_MONGODB_CONNECTION_STRING}
+        volumes:
+            - pp-api-node_modules:/app/node_modules
+            - ./api:/app
         expose:
             - 5000
         depends_on:
@@ -76,5 +79,7 @@ volumes:
         name: pp-mongodb
     pp-react-node_modules:
         name: pp-react-node_modules
+    pp-api-node_modules:
+        name: pp-api-node_modules
     pp-cron-node_modules:
         name: pp-cron-node_modules
