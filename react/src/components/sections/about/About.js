@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import $ from 'jquery';
-import 'magnific-popup';
-
 import aboutimg from '../../../assets/img/text-block/05.jpg';
-import videobg from '../../../assets/img/text-block/04.jpg';
 
 const featuresposts = [
     { icon: 'flaticon-ring', title: 'Diamond Ring' },
@@ -14,21 +10,10 @@ const featuresposts = [
     { icon: 'flaticon-earrings', title: 'Earrings' },
 ];
 class About extends Component {
-    componentDidMount(){
-        function popup(){
-            $('.popup-video').magnificPopup({
-                type: 'iframe',
-            });
-        }
-        popup();
-    }
     render() {
         return (
             <section className="about-section pt-115 pb-115">
                 <div className="container">
-                    <div className="video-wrap video-wrap-two video-about mb-60" style={{ backgroundImage: "url(" + videobg + ")" }}>
-                        <Link to="http://www.youtube.com/embed/watch?v=EEJFMdfraVY" className="popup-video"><i className="fas fa-play" /></Link>
-                    </div>
                     <div className="section-title about-title text-center">
                         <span className="title-tag">since <span>1994</span></span>
                         <h2>Hello. Our store has been present for over 30 years . We give assurance to all customers.</h2>

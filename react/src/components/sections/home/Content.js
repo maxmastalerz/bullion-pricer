@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../../layouts/Pagination';
 import ProductFilterLeft from '../../layouts/ProductFilterLeft';
@@ -154,8 +154,7 @@ function Content() {
         console.log(`product types selected: ${JSON.stringify(productTypesSelected)}
 product specifics selected: ${JSON.stringify(productSpecificsSelected)}
 payment preferences selected: ${JSON.stringify(paymentPreferencesSelected)}
-account for bulk pricing discounts: ${bulkPricingDiscounts}
-how many items could you buy: ${bulkPricingCouldBuy}
+how many items could you buy: ${bulkPricingDiscounts ? bulkPricingCouldBuy: 1 }
 weight range: ${JSON.stringify([weightStart, weightEnd])}
 sort by: ${sortBy}`);
         //TODO: Send an ajax request to the backend with the search parameters using axios.

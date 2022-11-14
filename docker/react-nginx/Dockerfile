@@ -2,8 +2,7 @@
 FROM node:16.13.0-alpine as deps
 WORKDIR /app/react
 COPY ./react/package.json ./
-COPY ./react/package-lock.json ./
-RUN npm ci
+RUN npm install
 
 #This line is required due to stackoverflow.com/questions/67087735/eacces-permission-denied-mkdir-usr-app-node-modules-cache-how-can-i-creat
 RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache

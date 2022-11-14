@@ -22,8 +22,6 @@ import Comingsoon from './components/pages/Comingsoon';
 import Contact from './components/pages/Contact';
 import Error from './components/pages/Error';
 import Faq from './components/pages/Faq';
-import Gallery from './components/pages/Gallery';
-import Gallerytwo from './components/pages/Gallerytwo';
 import Legal from './components/pages/Legal';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
@@ -59,8 +57,6 @@ function App() {
           <Route exact path="/coming-soon" component={Comingsoon} />
           <Route exact path="/contact" component={Contact} />
           <Route exact path="/faq" component={Faq} />
-          <Route exact path="/gallery" component={Gallery} />
-          <Route exact path="/gallery-two" component={Gallerytwo} />
           <Route exact path="/legal" component={Legal} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />

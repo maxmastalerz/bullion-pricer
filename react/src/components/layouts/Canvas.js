@@ -56,8 +56,6 @@ class Canvas extends Component {
                                 </li>
                             </ul>
                         </li>
-                        <li><Link to="/gallery">Our Gallery</Link>
-                        </li>
                         <li><Link to="/team">Team</Link>
                         </li>
                         <li><Link to="/contact">Contact Us</Link>

@@ -602,17 +602,6 @@ class Headertwo extends Component {
                                                         <li className="menu-item">
                                                             <Link to="/account">Account</Link>
                                                         </li>
-                                                        <li className="menu-item menu-item-has-children">
-                                                            <Link to="/gallery">Gallery</Link>
-                                                            <ul className="sub-menu">
-                                                                <li className="menu-item">
-                                                                    <Link to="/gallery">Gallery 2 Columns</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/gallery-two">Gallery 3 Columns</Link>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
                                                         <li className="menu-item">
                                                             <Link to="/team">Team</Link>
                                                         </li>

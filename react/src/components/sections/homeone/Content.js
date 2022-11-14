@@ -12,7 +12,6 @@ import Ourproducts from '../../layouts/Ourproducts';
 import Saleproducts from './Saleproducts';
 import Counter from './Counter';
 import Onsale from './Onsale';
-import Video from './Video';
 import Latestproducts from '../../layouts/Latestproducts';
 import Blog from './Blog';
 
@@ -33,7 +32,6 @@ class Content extends Component {
                 <Saleproducts/>
                 <Counter/>
                 <Onsale/>
-                <Video/>
                 <Latestproducts/>
                 <Blog/>
             </Fragment>
