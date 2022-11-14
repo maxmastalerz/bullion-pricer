@@ -1,4 +1,10 @@
 {
+	"//": "========== IMPORTANT READ ME FIRST ==========",
+	"//": "",
+	"//": "the dependency react-scripts: ^5.0.1 has an issue that needed to be patched via 'postinstall' patch-package script",
+	"//": "https://github.com/facebook/create-react-app/pull/11752",
+	"//": "If a new release comes out that solves this, please remove the patch and update to the newest release.",
+	"//": "",
 	"name": "precious-pricer",
 	"version": "0.1.0",
 	"private": true,
@@ -16,6 +22,7 @@
 		"mapbox-gl": "^1.13.1",
 		"moment": "^2.29.1",
 		"moment-timezone": "^0.5.33",
+		"patch-package": "^6.5.0",
 		"react": "^16.13.1",
 		"react-bootstrap": "^1.6.1",
 		"react-bootstrap-slider": "^3.0.0",
@@ -41,7 +48,8 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"postinstall": "patch-package"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
