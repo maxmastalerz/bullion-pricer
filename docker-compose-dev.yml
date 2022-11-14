@@ -54,8 +54,7 @@ services:
             - MONGO_INITDB_DATABASE=${DB_MONGO_INITDB_DATABASE}
         volumes:
             - pp-mongodb:/data/db
-        expose:
-            - 27017
+        #Having port 27017 available from the host for local development with mongodb tools
         ports:
             - 27017:27017
     pp-cron:

@@ -36,7 +36,8 @@ const productSpecifics = [
     { id: '999', text: '999' },
     { id: '925', text: '925' },
     { id: 'less_than_or_equal_90', text: '≤ 90' },
-    { id: 'government_issued_tender', text: 'Government Issued Tender' }
+    { id: 'government_issued', text: 'Government Issued' },
+    { id: 'not_government_issued', text: 'Not Government Issued' }
 ];
 
 const paymentPreferences = [
@@ -51,7 +52,7 @@ const paymentPreferences = [
 
 function Content() {
     const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
-    const [productSpecificsSelected, setProductSpecificsSelected] = useState(['9999']);
+    const [productSpecificsSelected, setProductSpecificsSelected] = useState(['99999','9999','government_issued','not_government_issued']);
     const [paymentPreferencesSelected, setPaymentPreferencesSelected] = useState(['check']);
     const [bulkPricingDiscounts, setBulkPricingDiscounts] = useState(false);
     const [bulkPricingCouldBuy, setBulkPricingCouldBuy] = useState(5);
@@ -72,7 +73,32 @@ function Content() {
         if(e.target.checked) {
             setProductSpecificsSelected([...productSpecificsSelected, e.target.name]);
         } else {
-            setProductSpecificsSelected(productSpecificsSelected.filter(item => item !== e.target.name));
+            let purityOptions = ['99999','9999','999','925','less_than_or_equal_90'];
+            let governmentNotGovernmentOptions = ['government_issued','not_government_issued'];
+            
+            let purityOptionsSelected = productSpecificsSelected.filter(item => purityOptions.includes(item));
+            let governmentNotGovernmentOptionsSelected = productSpecificsSelected.filter(item => governmentNotGovernmentOptions.includes(item));
+
+            // If a purity option is selected for unchecking
+            if(purityOptions.includes(e.target.name)) {
+                if(purityOptionsSelected.length > 1) { // and it's not the last purity option remaining, allowing unchecking
+                    setProductSpecificsSelected(productSpecificsSelected.filter(item => item !== e.target.name));
+                }
+            } else if(governmentNotGovernmentOptions.includes(e.target.name)) { // If a government / non government option is selected for unchecking
+                if(governmentNotGovernmentOptionsSelected.length === 1) { //if last government/not government checkbox clicked, toggle
+                    let productSpecificsSel = productSpecificsSelected.slice(); // duplicate
+
+                    if(e.target.name === "government_issued") {
+                        productSpecificsSel[productSpecificsSelected.indexOf('government_issued')] = "not_government_issued";
+                    } else {
+                        productSpecificsSel[productSpecificsSelected.indexOf('not_government_issued')] = "government_issued";
+                    }
+                    
+                    setProductSpecificsSelected(productSpecificsSel);
+                    return;
+                }
+                setProductSpecificsSelected(productSpecificsSelected.filter(item => item !== e.target.name)); //uncheck
+            }
         }
     };
 
