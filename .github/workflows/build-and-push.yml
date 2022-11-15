@@ -21,12 +21,30 @@ jobs:
                   registry: ${{ secrets.AZURECR_SERVER }}
                   username: ${{ secrets.AZURECR_USERNAME }}
                   password: ${{ secrets.AZURECR_PASSWORD }}
-            - name: Build and push
+            - name: Build and push react-nginx
               uses: docker/build-push-action@v3
               with:
                   context: .
                   platforms: linux/amd64,linux/arm64
                   push: true
-                  file: "./docker/react-nginx"
+                  file: "./docker/react-nginx/Dockerfile"
                   tags: |
                       ${{ secrets.AZURECR_SERVER }}/react-nginx:latest
+            - name: Build and push api
+              uses: docker/build-push-action@v3
+              with:
+                  context: .
+                  platforms: linux/amd64,linux/arm64
+                  push: true
+                  file: "./docker/api/Dockerfile"
+                  tags: |
+                      ${{ secrets.AZURECR_SERVER }}/api:latest
+            - name: Build and push cron
+              uses: docker/build-push-action@v3
+              with:
+                  context: .
+                  platforms: linux/amd64,linux/arm64
+                  push: true
+                  file: "./docker/cron/Dockerfile"
+                  tags: |
+                      ${{ secrets.AZURECR_SERVER }}/cron:latest
