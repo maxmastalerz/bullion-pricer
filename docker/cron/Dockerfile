@@ -5,7 +5,7 @@ WORKDIR /app
 COPY ./cron/package.json /app
 COPY ./cron/package-lock.json /app
 
-RUN npm install
+RUN npm ci
 
 COPY ./cron /app
 

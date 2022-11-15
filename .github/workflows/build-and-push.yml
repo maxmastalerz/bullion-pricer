@@ -28,6 +28,7 @@ jobs:
                   platforms: linux/amd64,linux/arm64
                   push: true
                   file: "./docker/react-nginx/Dockerfile"
+                  target: prod
                   tags: |
                       ${{ secrets.AZURECR_SERVER }}/react-nginx:latest
             - name: Build and push api
