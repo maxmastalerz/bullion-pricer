@@ -6,8 +6,8 @@ const scrapeBullionSites = async () => {
 	console.log("== SCRAPING BULLION SITES ==");
 
 	let scrapers = {
-		CanadianPMX: require("./scrapers/canadianPMX.js"),
-		BorderGold: require("./scrapers/borderGold.js"),
+		"CanadianPMX": require("./scrapers/canadianPMX.js"),
+		"Border Gold": require("./scrapers/borderGold.js"),
 		//add other scrapers here
 	};
 
