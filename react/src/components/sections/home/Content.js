@@ -43,6 +43,7 @@ const productSpecifics = [
 const paymentPreferences = [
     { id: 'check', text: 'Check'},
     { id: 'wire', text: 'Wire'},
+    { id: 'cash', text: 'Cash (In-person)'},
     { id: 'electronicbill', text: 'Electronic Bill'},
     { id: 'bankdraft', text: 'Bank Draft'},
     { id: 'crypto', text: 'Crypto'},
@@ -108,7 +109,7 @@ function Content() {
         } else {
             setPaymentPreferencesSelected(paymentPreferencesSelected.filter(item => item !== e.target.name));
         }
-    }
+    };
 
     const accountForBulkPricingChanged = (e) => {
         if(bulkPricingDiscounts) {
@@ -132,7 +133,7 @@ function Content() {
 
     const weightRangeChanged = (e) => {
         setWeightRange([e.target.value[0], e.target.value[1]]); // Set min and max for bullion weight range
-    }
+    };
 
     /*
     Let's map a slider position(percentage) to its actual weight in grams
@@ -141,24 +142,32 @@ function Content() {
     const weightRangePosToGrams = (pos) => {
         let rangeToGramMap = {"0":1,"8.33":2,"16.67":3.11,"25":5,"33.33":7.78,"41.67":10,"50":15.55,"58.33":31.1,"66.67":155.52,"75":311.04,"83.33":1000,"91.67":3110.35,"100":31103.5};
         return rangeToGramMap[pos];
-    }
+    };
 
     const changeSortBy = (e) => {
         setSortBy(e.target.value);
-    }
+    };
+
+    /*
+    The JSON response from our API has the qtyRange [someLow,Infinity] converted to [someLow,null] as JSON does not support Infinity.
+    This function converts the null back to Infinity.
+    */
+    const convertQtyRangeNullToInfinity = (arr) => {
+        return arr.map(obj => {
+            for(let prop in obj.pricing) {
+                if(obj.pricing[prop].qtyRange[1] === null) {
+                    obj.pricing[prop].qtyRange[1] = Infinity;
+                }
+            }
+            return obj;
+        });
+    };
 
     useEffect(() => {
         let weightStart = weightRangePosToGrams(weightRange[0]);
         let weightEnd = weightRangePosToGrams(weightRange[1]);
-
-        /*console.log(`product types selected: ${JSON.stringify(productTypesSelected)}
-product specifics selected: ${JSON.stringify(productSpecificsSelected)}
-payment preferences selected: ${JSON.stringify(paymentPreferencesSelected)}
-how many items could you buy: ${bulkPricingDiscounts ? bulkPricingCouldBuy: 1 }
-weight range: ${JSON.stringify([weightStart, weightEnd])}
-sort by: ${sortBy}`);*/
-
         let bulkPricingCouldBuyAdjusted = bulkPricingDiscounts ? bulkPricingCouldBuy : 1;
+
         const params = new URLSearchParams({
             productTypesSelected: productTypesSelected,
             productSpecificsSelected: productSpecificsSelected,
@@ -166,11 +175,11 @@ sort by: ${sortBy}`);*/
             bulkPricingCouldBuy: bulkPricingCouldBuyAdjusted,
             weightRange: [weightStart, weightEnd]
         });
-        console.log(params.toString());
 
         fetch(`/api/products?${params.toString()}`)
         .then((response) => response.json())
         .then((data) => {
+            data = convertQtyRangeNullToInfinity(data); // JSON doesn't support Infinity, let's add it back.
             console.log(data);
         });
 

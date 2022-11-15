@@ -13,7 +13,6 @@ module.exports = async (scrapeUrl) => {
 	console.log("Scraping: " + scrapeUrl);
 	const priceLine = [];
 	const pricing = {
-		cash: [],
 		check: [],
 		wire: [],
 		creditcard: [],
@@ -54,7 +53,7 @@ module.exports = async (scrapeUrl) => {
 		const qtyRangeText = catalogRow.firstChild.text;
 		const quantityRange = qtyRangeText.includes(" - ")
 			? qtyRangeText.split(" - ").map((s) => parseInt(s))
-			: [parseInt(qtyRangeText.replace("+", "")), null];
+			: [parseInt(qtyRangeText.replace("+", "")), Infinity];
 
 		const cashPrice = parsePrice(catalogRow.childNodes[1].text);
 		const creditPrice = parsePrice(catalogRow.childNodes[2].text);
@@ -65,16 +64,15 @@ module.exports = async (scrapeUrl) => {
 		const [qtyRange, cashPrice, creditPrice] = priceLine[i];
 
 		const cashPricing = {
-			QtyRange: qtyRange,
+			qtyRange: qtyRange,
 			price: cashPrice,
 		};
 
-		pricing.cash.push(cashPricing);
 		pricing.wire.push(cashPricing);
 		pricing.check.push(cashPricing);
 
 		const creditPricing = {
-			QtyRange: qtyRange,
+			qtyRange: qtyRange,
 			price: creditPrice,
 		};
 

@@ -15,7 +15,7 @@ Go to http://localhost
 
 #### Connecting to local dockerized database:
 
-$ docker exec -it $(docker ps -aqf "name=pp-db") mongosh --username root
+$ docker exec -it $(docker ps -aqf "name=pp-db") mongosh --username root --authenticationDatabase admin preciousPricer
 
 The password is password
 

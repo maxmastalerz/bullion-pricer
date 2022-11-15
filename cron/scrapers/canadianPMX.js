@@ -54,11 +54,11 @@ module.exports = async (scrapeUrl) => {
 
 	for (let i = 0; i < priceLine.length; i++) {
 		const [quantityStep, cashPrice, creditPrice] = priceLine[i];
-		const nextQuantityStep = priceLine?.[i + 1]?.[0] - 1 || null;
+		const nextQuantityStep = priceLine?.[i + 1]?.[0] - 1 || Infinity;
 		const qtyRange = [quantityStep, nextQuantityStep];
 
 		const cashPricing = {
-			QtyRange: qtyRange,
+			qtyRange: qtyRange,
 			price: cashPrice,
 		};
 
@@ -67,7 +67,7 @@ module.exports = async (scrapeUrl) => {
 		pricing.check.push(cashPricing);
 
 		const creditPricing = {
-			QtyRange: qtyRange,
+			qtyRange: qtyRange,
 			price: creditPrice,
 		};
 
