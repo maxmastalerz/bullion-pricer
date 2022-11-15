@@ -1,7 +1,7 @@
 # precious-pricer
 Group Project for 9549/4471
 
-### To run locally:
+### To run locally ( THIS SECTION IS FOR THE PROF / TA ):
 
 $ DOCKER_BUILDKIT=1 docker-compose --env-file .env.dev -f docker-compose-dev.yml build
 
@@ -21,12 +21,22 @@ The password is password
 
 test> use preciousPricer
 
-### To run production build locally with nginx proxy in front:
+### To run production build locally with nginx proxy in front (NOT FOR PROF / TA as you don't have production credentials):
 
-Note: For now we are using the same env file that we're using for dev.
+To deploy a production build, you will need a mongodb database already deployed on the cloud.
 
-$ DOCKER_BUILDKIT=1 docker-compose --env-file .env.dev -f docker-compose-prod.yml build
+Please copy the `.env.prod.template` file and name it `.env.prod`
 
-$ docker-compose --env-file .env.dev -f docker-compose-prod.yml up
+Go into this file and update the following variables:
+
+- API_MONGODB_CONNECTION_STRING
+- DB_MONGO_INITDB_ROOT_USERNAME
+- DB_MONGO_INITDB_ROOT_PASSWORD
+
+Please ask a group member for credentials to fill in the variables above.
+
+$ DOCKER_BUILDKIT=1 docker-compose --env-file .env.prod -f docker-compose-prod.yml build
+
+$ docker-compose --env-file .env.prod -f docker-compose-prod.yml up
 
 Go to http://localhost

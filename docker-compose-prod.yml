@@ -22,7 +22,7 @@ services:
             dockerfile: ./docker/api/Dockerfile
         image: pp-api
         environment:
-            - MONGODB_CONNECTION_STRING=${BACKEND_MONGODB_CONNECTION_STRING}
+            - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
         expose:
             - 5000
         command: "npm start"
@@ -32,3 +32,5 @@ services:
             context: .
             dockerfile: ./docker/cron/Dockerfile
         image: pp-cron
+        environment:
+            - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}

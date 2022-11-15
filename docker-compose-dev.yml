@@ -25,7 +25,7 @@ services:
             dockerfile: ./docker/api/Dockerfile
         image: pp-api
         environment:
-            - MONGODB_CONNECTION_STRING=${BACKEND_MONGODB_CONNECTION_STRING}
+            - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
         volumes:
             - pp-api-node_modules:/app/node_modules
             - ./api:/app
@@ -67,7 +67,7 @@ services:
             dockerfile: ./docker/cron/Dockerfile
         image: pp-cron
         environment:
-            - MONGODB_CONNECTION_STRING=${BACKEND_MONGODB_CONNECTION_STRING}
+            - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
         volumes:
             - pp-cron-node_modules:/app/node_modules
             - ./cron:/app
