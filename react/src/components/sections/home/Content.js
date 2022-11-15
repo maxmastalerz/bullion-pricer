@@ -5,24 +5,6 @@ import ProductFilterLeft from '../../layouts/ProductFilterLeft';
 import ProductFilterTop from '../../layouts/ProductFilterTop';
 
 import img1 from '../../../assets/img/shop/01.jpg';
-import img2 from '../../../assets/img/shop/02.jpg';
-import img3 from '../../../assets/img/shop/03.jpg';
-
-/* All prices are stored and processed as USD by us. */
-/* Only if a user selects a different currency do we calculate the exchange price. */
-const shopgridpost = [
-    { img: img1, title: '1 oz 2022 Canadian Maple Leaf Silver Coin | Royal Canadian Mint', price: 390, dealer: 'Silver Gold Bull', mint: 'Royal Canadian Mint' },
-    { img: img2, title: '100 oz Pure Assorted Silver Bar', price: 290, dealer: 'Canadian PMX', mint: 'Various' },
-    { img: img3, title: '1 gram Platinum Bar | Valcambi', price: 450, dealer: 'Canadian PMX', mint: 'Valcambi' },
-
-    { img: img1, title: '1 oz Fortuna Platinum Bar | PAMP Suisse', price: 780, dealer: 'Silver Gold Bull', mint: 'PAMP Suisse' },
-    { img: img2, title: 'PAMP SUISSE GOLD BAR, 10 GRAM .9999', price: 290, dealer: 'Canadian PMX', mint: 'PAMP Suisse' },
-    { img: img3, title: '1 kg | kilo Johnson Matthey Silver Bar', price: 890, dealer: 'Silver Gold Bull', mint: 'Johnson Matthey' },
-
-    { img: img1, title: '1 oz Random Year Canadian Maple Leaf Gold Coin | Royal Canadian Mint', price: 580, dealer: 'Silver Gold Bull', mint: 'Royal Canadian Mint' },
-    { img: img2, title: '10 oz Silver Bar | Royal Canadian Mint', price: 290, dealer: 'Canadian PMX', mint: 'Royal Canadian Mint' },
-    { img: img3, title: '1 kg | Kilo Heraeus Silver Bar', price: 800, dealer: 'Canadian PMX', mint: 'Heraeus' }
-];
 
 const productTypes = [
     { id: 'gold', text: 'Gold'},
@@ -60,6 +42,7 @@ function Content() {
     //const [shippingDiscounts, setShippingDiscounts] = useState(false);
     const [weightRange, setWeightRange] = useState([58.33, 75]);
     const [sortBy, setSortBy] = useState(1);
+    const [searchResults, setSearchResults] = useState([]);
 
     const productTypesChanged = (e) => {
         let productTypeClicked = e.target.getAttribute("data-product-type");
@@ -154,11 +137,11 @@ function Content() {
     */
     const convertQtyRangeNullToInfinity = (arr) => {
         return arr.map(obj => {
-            for(let prop in obj.pricing) {
-                if(obj.pricing[prop].qtyRange[1] === null) {
-                    obj.pricing[prop].qtyRange[1] = Infinity;
-                }
+            let pricingDetails = obj.pricing[Object.keys(obj.pricing)[0]];
+            if(pricingDetails.qtyRange[1] === null) {
+                pricingDetails.qtyRange[1] = Infinity;
             }
+
             return obj;
         });
     };
@@ -178,9 +161,10 @@ function Content() {
 
         fetch(`/api/products?${params.toString()}`)
         .then((response) => response.json())
-        .then((data) => {
-            data = convertQtyRangeNullToInfinity(data); // JSON doesn't support Infinity, let's add it back.
-            console.log(data);
+        .then((results) => {
+            results = convertQtyRangeNullToInfinity(results); // JSON doesn't support Infinity, let's add it back.
+            setSearchResults(results);
+            console.log(results);
         });
 
     }, [productTypesSelected, bulkPricingDiscounts, bulkPricingCouldBuy, productSpecificsSelected, paymentPreferencesSelected, weightRange, sortBy]);
@@ -229,31 +213,28 @@ function Content() {
                             </div>
                             <div className="product-wrapper restaurant-tab-area">
                                 <div className="row">
-                                    {shopgridpost.map((item, i) => (
+                                    {searchResults.map((item, i) => (
                                         <div key={i} className="col-lg-4 col-md-6">
                                             <div className="food-box shop-box">
                                                 <div className="thumb">
-                                                    <img src={item.img} alt="" />
-                                                    <div className="button-group">
-                                                        <Link to="#"><i className="far fa-heart" /></Link>
-                                                        <Link to="#"><i className="far fa-sync-alt" /></Link>
-                                                        <Link to="#"><i className="far fa-eye" /></Link>
-                                                    </div>
+                                                    <a href={item.url}>
+                                                        <img src={img1} alt="" />
+                                                    </a>
                                                 </div>
                                                 <div className="desc">
                                                     <h4>
-                                                        <Link to="/shop-detail">{item.title}</Link>
+                                                        <a href={item.url}>{item.title}</a>
                                                     </h4>
                                                     <span className="price">
-                                                        ${item.price}
+                                                        <a href={item.url}>${item.pricing[Object.keys(item.pricing)[0]].price}</a>
                                                     </span>
                                                     <span className="mint">
-                                                        <span> {item.mint} </span>
+                                                        <span>Mint: {item.mint}</span>
                                                     </span><br/>
                                                     <span className="dealer">
-                                                        <span> {item.dealer} </span>
+                                                        <span>Dealer: {item.dealer}</span>
                                                     </span>
-                                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                    <a href={item.url} className="link"><i className="fal fa-arrow-right" /></a>
                                                 </div>
                                             </div>
                                         </div>

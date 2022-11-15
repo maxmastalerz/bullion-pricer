@@ -1,6 +1,7 @@
 db.products.insertMany([
 	{
 		url: "https://canadianpmx.com/product/misc-dated-backdated-canadian-gold-maple-leaf-1-oz-9999/",
+		title: "Misc. Dated (Backdated) Canadian Gold Maple Leaf 1 oz .9999",
 		productType: "gold",
 		productSpecifics: ["government_issued", "9999"],
 		weight: 31.1,
@@ -11,6 +12,7 @@ db.products.insertMany([
 	},
 	{
 		url: "https://www.bordergold.com/product/1-oz-2022-canadian-gold-maple-leaf-coin/",
+		title: "1 oz 2022 Canadian Gold Maple Leaf Coin",
 		productType: "gold",
 		productSpecifics: ["government_issued", "9999"],
 		weight: 31.1,
@@ -21,6 +23,7 @@ db.products.insertMany([
 	},
 	{
 		url: "https://canadianpmx.com/product/credit-suisse-gold-bar-1-oz-9999/",
+		title: "Credit Suisse Gold Bar 1 oz .9999",
 		productType: "gold",
 		productSpecifics: ["not_government_issued", "9999"],
 		weight: 31.1,
@@ -31,6 +34,7 @@ db.products.insertMany([
 	},
 	{
 		url: "https://www.bordergold.com/product/1-oz-gold-bar/",
+		title: "1 oz Gold Bar",
 		productType: "gold",
 		productSpecifics: ["not_government_issued", "9999"],
 		weight: 31.1,
@@ -41,6 +45,7 @@ db.products.insertMany([
 	},
 	{
 		url: "https://canadianpmx.com/product/misc-branded-gold-bar-1-kilogram-999-32-15-tr-oz/",
+		title: "Misc. Branded Gold Bar, 1 Kilogram .999 (32.15 Tr Oz)",
 		productType: "gold",
 		productSpecifics: ["not_government_issued", "9999"],
 		weight: 1000,
@@ -51,6 +56,7 @@ db.products.insertMany([
 	},
 	{
 		url: "https://www.bordergold.com/product/kilo-gold-bar/",
+		title: "1 Kilo Gold Bar",
 		productType: "gold",
 		productSpecifics: ["not_government_issued", "9999"],
 		weight: 1000,

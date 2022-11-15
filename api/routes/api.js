@@ -59,11 +59,12 @@ router.get("/products", async (req, res) => {
 		}},
 		{
 			$project: {
+				url: 1,
+				title: 1,
 				dealer: 1,
 				mint: 1,
 				productSpecifics: 1,
 				productType: 1,
-				url: 1,
 				weight: 1,
 				[pricingPaymentMethod]: 1
 			}
