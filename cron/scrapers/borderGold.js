@@ -53,7 +53,7 @@ module.exports = async (scrapeUrl) => {
 	for (const catalogRow of catalogRows) {
 		const qtyRangeText = catalogRow.firstChild.text;
 		const quantityRange = qtyRangeText.includes(" - ")
-			? qtyRangeText.split(" - ")
+			? qtyRangeText.split(" - ").map((s) => parseInt(s))
 			: [parseInt(qtyRangeText.replace("+", "")), null];
 
 		const cashPrice = parsePrice(catalogRow.childNodes[1].text);
