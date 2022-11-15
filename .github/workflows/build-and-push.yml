@@ -22,9 +22,9 @@ jobs:
             - name: Build and push
               uses: docker/build-push-action@v3
               with:
-                  context: .
+                  context: "{{defaultContext}}/docker"
                   platforms: linux/amd64,linux/arm64
                   push: true
-                  file: "{context}/docker/react-nginx"
+                  file: "{{defaultContext}}/docker/react-nginx"
                   tags: |
                       ${{ secrets.AZURECR_SERVER }}/react-nginx:latest
