@@ -6,6 +6,20 @@ on:
             - "main"
 
 jobs:
+    settings:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: azure/login@v1
+              with:
+                  creds: "${{ secrets.AZURE_CREDENTIALS }}"
+            - uses: azure/appservice-settings@v1
+              with:
+                  app-name: "precious-pricer"
+                  connection-strings-json: "${{ secrets.CONNECTION_STRINGS }}"
+              id: settings
+            - run: echo "The webapp-url is ${{ steps.settings.outputs.webapp-url }}"
+            - run: |
+                  az logout
     docker:
         runs-on: ubuntu-latest
         steps:
