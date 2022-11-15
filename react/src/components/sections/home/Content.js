@@ -89,7 +89,9 @@ function Content() {
         if(e.target.checked) {
             setPaymentPreferencesSelected([e.target.name]);
         } else {
-            setPaymentPreferencesSelected(paymentPreferencesSelected.filter(item => item !== e.target.name));
+            if(paymentPreferencesSelected.length > 1) {
+                setPaymentPreferencesSelected(paymentPreferencesSelected.filter(item => item !== e.target.name));
+            }
         }
     };
 
