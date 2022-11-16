@@ -14,8 +14,8 @@ jobs:
                   creds: "${{ secrets.AZURE_CREDENTIALS }}"
             - uses: azure/appservice-settings@v1
               with:
-                  app-name: "precious-pricer"
-                  connection-strings-json: "${{ secrets.CONNECTION_STRINGS }}"
+                  app-name: precious-pricer
+                  app-settings-json: "${{ secrets.AZURE_APP_SETTINGS }}"
               id: settings
             - run: echo "The webapp-url is ${{ steps.settings.outputs.webapp-url }}"
             - run: |
