@@ -26,11 +26,20 @@ router.get("/products", async (req, res) => {
     let purityOptionsSelected = productSpecificsSelected.filter(item => purityOptions.includes(item));
     let governmentNotGovernmentOptionsSelected = productSpecificsSelected.filter(item => governmentNotGovernmentOptions.includes(item));
 	let paymentPreferencesSelected = req.query.paymentPreferencesSelected.split(',');
-	let paymentPreferenceSelected = paymentPreferencesSelected[0]
+	let paymentPreferenceSelected = paymentPreferencesSelected[0];
 	let bulkPricingCouldBuy = Number(req.query.bulkPricingCouldBuy);
 	let weightRange = req.query.weightRange.split(',');
 	let weightStart = Number(weightRange[0]);
 	let weightEnd = Number(weightRange[1]);
+	let sortBy = Number(req.query.sortBy);
+	let sortByMap = [ // 0:priceLowToHigh 1:priceHighToLow 2:dealerAsc 3:dealerDsc 4:mintAsc 5:mintDsc
+		{ ["pricing."+paymentPreferenceSelected+".price"]: 1 },
+		{ ["pricing."+paymentPreferenceSelected+".price"]: -1 },
+		{ dealer: 1 },
+		{ dealer: -1 },
+		{ mint: 1 },
+		{ mint: -1 },
+	];
 
 	console.log("productTypesSelected:"+JSON.stringify(productTypesSelected));
 	console.log("productSpecificsSelected: "+JSON.stringify(productSpecificsSelected));
@@ -38,8 +47,7 @@ router.get("/products", async (req, res) => {
 	console.log("bulkPricingCouldBuy: "+bulkPricingCouldBuy);
 	console.log("weightStart: "+weightStart);
 	console.log("weightEnd: "+weightEnd);
-
-	let pricingPaymentMethod = `pricing.${paymentPreferenceSelected}`;
+	console.log("sortBy: "+sortBy);
 
 	const pipeline = [
 		{
@@ -54,8 +62,8 @@ router.get("/products", async (req, res) => {
 		{ $unwind: "$pricing" },
 		{ $unwind: "$pricing."+paymentPreferenceSelected },
 		{ $match : {
-			[pricingPaymentMethod+".qtyRange.0"]: { $lte: bulkPricingCouldBuy },
-			[pricingPaymentMethod+".qtyRange.1"]: { $gte: bulkPricingCouldBuy }
+			["pricing."+paymentPreferenceSelected+".qtyRange.0"]: { $lte: bulkPricingCouldBuy },
+			["pricing."+paymentPreferenceSelected+".qtyRange.1"]: { $gte: bulkPricingCouldBuy }
 		}},
 		{
 			$project: {
@@ -66,9 +74,10 @@ router.get("/products", async (req, res) => {
 				productSpecifics: 1,
 				productType: 1,
 				weight: 1,
-				[pricingPaymentMethod]: 1
+				["pricing."+paymentPreferenceSelected]: 1
 			}
-		}
+		},
+		{ $sort: sortByMap[sortBy] }
 	];
 
 	const products = await toArray(productsCollection.aggregate(pipeline));

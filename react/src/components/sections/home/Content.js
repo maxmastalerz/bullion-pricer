@@ -40,7 +40,7 @@ function Content() {
     const [bulkPricingCouldBuy, setBulkPricingCouldBuy] = useState(5);
     //const [shippingDiscounts, setShippingDiscounts] = useState(false);
     const [weightRange, setWeightRange] = useState([58.33, 75]);
-    const [sortBy, setSortBy] = useState(1);
+    const [sortBy, setSortBy] = useState(0);
     const [searchResults, setSearchResults] = useState([]);
 
     const productTypesChanged = (e) => {
@@ -157,8 +157,10 @@ function Content() {
             productSpecificsSelected: productSpecificsSelected,
             paymentPreferencesSelected: paymentPreferencesSelected,
             bulkPricingCouldBuy: bulkPricingCouldBuyAdjusted,
-            weightRange: [weightStart, weightEnd]
+            weightRange: [weightStart, weightEnd],
+            sortBy: sortBy
         });
+        console.log(params.toString());
 
         fetch(`/api/products?${params.toString()}`)
         .then((response) => response.json())
@@ -203,12 +205,12 @@ function Content() {
                                 <p>Showing 1 To 9 Of 60 results</p>
                                 <div className="sorting-box">
                                     <select className="nice-select" onChange={changeSortBy}>
-                                        <option value={1}>Sort By Price:Low to High</option>
-                                        <option value={2}>Sort By Price:High to Low</option>
-                                        <option value={3}>Sort By Dealer:Ascending</option>
-                                        <option value={4}>Sort By Dealer:Descending</option>
-                                        <option value={5}>Sort By Mint:Ascending</option>
-                                        <option value={6}>Sort By Mint:Descending</option>
+                                        <option value={0}>Sort By Price:Low to High</option>
+                                        <option value={1}>Sort By Price:High to Low</option>
+                                        <option value={2}>Sort By Dealer A-Z</option>
+                                        <option value={3}>Sort By Dealer Z-A</option>
+                                        <option value={4}>Sort By Mint A-Z</option>
+                                        <option value={5}>Sort By Mint Z-A</option>
                                     </select>
                                 </div>
                             </div>
