@@ -1,12 +1,13 @@
 require("dotenv-flow").config();
 var CronJob = require("cron").CronJob;
 const { MongoClient } = require("mongodb");
+const spot = require("./spot");
 
 const scrapeBullionSites = async () => {
 	console.log("== SCRAPING BULLION SITES ==");
 
 	let scrapers = {
-		"CanadianPMX": require("./scrapers/canadianPMX.js"),
+		CanadianPMX: require("./scrapers/canadianPMX.js"),
 		"Border Gold": require("./scrapers/borderGold.js"),
 		//add other scrapers here
 	};
@@ -74,6 +75,24 @@ new CronJob({
 		}
 
 		job.taskRunning = false;
+	},
+	start: true,
+	timeZone: "UTC",
+	runOnInit: true, // Runs when this cron job was first initialized, even if we're not exactly on the hour
+});
+
+new CronJob({
+	cronTime: "0 0 * * * *", // Every hour, on the hour
+	onTick: async () => {
+		try {
+			await spot.updateSpotPrices();
+		} catch (err) {
+			console.log(
+				"ERROR: There's been an issue with fetching metal spot prices"
+			);
+			console.log(err);
+			// Handle error
+		}
 	},
 	start: true,
 	timeZone: "UTC",

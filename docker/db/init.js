@@ -66,3 +66,10 @@ db.products.insertMany([
 		pricing: null,
 	},
 ]);
+
+db.createCollection("spot", {
+	timeseries: {
+		timeField: "timestamp",
+		granularity: "hours",
+	},
+});
