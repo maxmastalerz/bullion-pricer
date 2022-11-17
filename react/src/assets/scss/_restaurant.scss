@@ -39,7 +39,10 @@
 		}
 	}
 	.food-box {
-		margin-bottom: 30px;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+
 		@media #{$tiny} {
 			margin-left: -5px;
 			margin-right: -5px;
@@ -61,6 +64,7 @@
 			}
 		}
 		.desc {
+      flex: 1 1 auto;
 			padding: 30px;	
 			background-color: #353530;
 			position: relative;

@@ -14,6 +14,7 @@ const productTypes = [
 const productSpecifics = [
     { id: '99999', text: '99999' },
     { id: '9999', text: '9999' },
+    { id: '9995', text: '9995' },
     { id: '999', text: '999' },
     { id: '925', text: '925' },
     { id: 'less_than_or_equal_90', text: '≤ 90' },
@@ -34,14 +35,17 @@ const paymentPreferences = [
 
 function Content() {
     const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
-    const [productSpecificsSelected, setProductSpecificsSelected] = useState(['99999','9999','government_issued','not_government_issued']);
+    const [productSpecificsSelected, setProductSpecificsSelected] = useState(['9999','9995','government_issued','not_government_issued']);
     const [paymentPreferencesSelected, setPaymentPreferencesSelected] = useState(['check']);
     const [bulkPricingDiscounts, setBulkPricingDiscounts] = useState(false);
     const [bulkPricingCouldBuy, setBulkPricingCouldBuy] = useState(5);
     //const [shippingDiscounts, setShippingDiscounts] = useState(false);
     const [weightRange, setWeightRange] = useState([58.33, 75]);
     const [sortBy, setSortBy] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
     const [searchResults, setSearchResults] = useState([]);
+    const pageSize = 3;
 
     const productTypesChanged = (e) => {
         let productTypeClicked = e.target.getAttribute("data-product-type");
@@ -56,7 +60,7 @@ function Content() {
         if(e.target.checked) {
             setProductSpecificsSelected([...productSpecificsSelected, e.target.name]);
         } else {
-            let purityOptions = ['99999','9999','999','925','less_than_or_equal_90'];
+            let purityOptions = ['99999','9999','9995','999','925','less_than_or_equal_90'];
             let governmentNotGovernmentOptions = ['government_issued','not_government_issued'];
             
             let purityOptionsSelected = productSpecificsSelected.filter(item => purityOptions.includes(item));
@@ -158,19 +162,39 @@ function Content() {
             paymentPreferencesSelected: paymentPreferencesSelected,
             bulkPricingCouldBuy: bulkPricingCouldBuyAdjusted,
             weightRange: [weightStart, weightEnd],
-            sortBy: sortBy
+            sortBy: sortBy,
+            currentPage: currentPage
         });
         console.log(params.toString());
 
         fetch(`/api/products?${params.toString()}`)
         .then((response) => response.json())
         .then((results) => {
-            results = convertQtyRangeNullToInfinity(results); // JSON doesn't support Infinity, let's add it back.
-            setSearchResults(results);
             console.log(results);
+
+            let totalCountToSet = (results[0].totalCount.length === 1) ? results[0].totalCount[0].count : 0;
+            setTotalCount(totalCountToSet);
+            results = convertQtyRangeNullToInfinity(results[0].totalData); // JSON doesn't support Infinity, let's add it back.
+            setSearchResults(results);
+
+            // If someone was viewing their results on page 3, then changed their filter to something with less results
+            // where two pages are available, we force set them to the last page of search results.
+            let maxPage = Math.max(Math.ceil(totalCountToSet/pageSize),1);
+            if(maxPage < currentPage) {
+                setCurrentPage(maxPage);
+            }
         });
 
-    }, [productTypesSelected, bulkPricingDiscounts, bulkPricingCouldBuy, productSpecificsSelected, paymentPreferencesSelected, weightRange, sortBy]);
+    }, [
+        productTypesSelected,
+        bulkPricingDiscounts,
+        bulkPricingCouldBuy,
+        productSpecificsSelected,
+        paymentPreferencesSelected,
+        weightRange,
+        sortBy,
+        currentPage
+    ]);
 
     return (
         <section className="Shop-section pt-shop-section pb-120">
@@ -202,7 +226,12 @@ function Content() {
 
                         <div className="shop-products-wrapper pt-shop-section">
                             <div className="shop-product-top">
-                                <p>Showing 1 To 9 Of 60 results</p>
+                                { (totalCount!==0) ? (
+                                    <p>Showing page {currentPage} of {Math.ceil(totalCount/pageSize)}</p>
+                                ) :
+                                <p></p>
+                                }
+
                                 <div className="sorting-box">
                                     <select className="nice-select" onChange={changeSortBy}>
                                         <option value={0}>Sort By Price:Low to High</option>
@@ -216,37 +245,49 @@ function Content() {
                             </div>
                             <div className="product-wrapper restaurant-tab-area">
                                 <div className="row">
-                                    {searchResults.map((item, i) => (
-                                        <div key={i} className="col-lg-4 col-md-6">
-                                            <div className="food-box shop-box">
-                                                <div className="thumb">
-                                                    <a href={item.url}>
-                                                        <img src={img1} alt="" />
-                                                    </a>
-                                                </div>
-                                                <div className="desc">
-                                                    <h4>
-                                                        <a href={item.url}>{item.title}</a>
-                                                    </h4>
-                                                    <span className="price">
-                                                        <a href={item.url}>${item.pricing[Object.keys(item.pricing)[0]].price}</a>
-                                                    </span>
-                                                    <span className="mint">
-                                                        <span>Mint: {item.mint}</span>
-                                                    </span><br/>
-                                                    <span className="dealer">
-                                                        <span>Dealer: {item.dealer}</span>
-                                                    </span>
-                                                    <a href={item.url} className="link"><i className="fal fa-arrow-right" /></a>
+                                    { searchResults.length === 0 ?
+                                        (<div className="text-center w-100">
+                                            <h2 className="pt-5">No results found.</h2>
+                                            <h2 className="pt-5">Please widen your search.</h2>
+                                        </div>)
+                                    :
+                                        searchResults.map((item, i) => (
+                                            <div key={i} className="col-lg-4 col-md-6 mb-4">
+                                                <div className="food-box shop-box">
+                                                    <div className="thumb">
+                                                        <a href={item.url}>
+                                                            <img src={img1} alt="" />
+                                                        </a>
+                                                    </div>
+                                                    <div className="desc">
+                                                        <h4>
+                                                            <a href={item.url}>{item.title}</a>
+                                                        </h4>
+                                                        <span className="price">
+                                                            <a href={item.url}>${item.pricing[Object.keys(item.pricing)[0]].price}</a>
+                                                        </span>
+                                                        <span className="mint">
+                                                            <span>Mint: {item.mint}</span>
+                                                        </span><br/>
+                                                        <span className="dealer">
+                                                            <span>Dealer: {item.dealer}</span>
+                                                        </span>
+                                                        <a href={item.url} className="link"><i className="fal fa-arrow-right" /></a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
                         <div className="pagination-wrap">
-                            <Pagination />
+                            <Pagination
+                                currentPage={currentPage}
+                                totalCount={totalCount}
+                                pageSize={pageSize}
+                                onPageChange={page => setCurrentPage(page)}
+                            />
                         </div>
 
                     </div>

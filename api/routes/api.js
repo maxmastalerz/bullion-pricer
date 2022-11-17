@@ -18,15 +18,15 @@ router.get("/products", async (req, res) => {
 	const db = client.db();
 	const productsCollection = db.collection("products");
 
-	let purityOptions = ['99999','9999','999','925','less_than_or_equal_90'];
+	let purityOptions = ['99999','9999','9995','999','925','less_than_or_equal_90'];
     let governmentNotGovernmentOptions = ['government_issued','not_government_issued'];
+	let nPerPage = 3;
 
 	let productTypesSelected = req.query.productTypesSelected.split(',');
 	let productSpecificsSelected = req.query.productSpecificsSelected.split(',');    
     let purityOptionsSelected = productSpecificsSelected.filter(item => purityOptions.includes(item));
     let governmentNotGovernmentOptionsSelected = productSpecificsSelected.filter(item => governmentNotGovernmentOptions.includes(item));
-	let paymentPreferencesSelected = req.query.paymentPreferencesSelected.split(',');
-	let paymentPreferenceSelected = paymentPreferencesSelected[0];
+	let paymentPreferenceSelected = req.query.paymentPreferencesSelected.split(',')[0];
 	let bulkPricingCouldBuy = Number(req.query.bulkPricingCouldBuy);
 	let weightRange = req.query.weightRange.split(',');
 	let weightStart = Number(weightRange[0]);
@@ -40,6 +40,7 @@ router.get("/products", async (req, res) => {
 		{ mint: 1 },
 		{ mint: -1 },
 	];
+	let skip = (req.query.currentPage>0) ? ((req.query.currentPage-1)*nPerPage) : 0;
 
 	console.log("productTypesSelected:"+JSON.stringify(productTypesSelected));
 	console.log("productSpecificsSelected: "+JSON.stringify(productSpecificsSelected));
@@ -48,6 +49,7 @@ router.get("/products", async (req, res) => {
 	console.log("weightStart: "+weightStart);
 	console.log("weightEnd: "+weightEnd);
 	console.log("sortBy: "+sortBy);
+	console.log("skip: "+skip);
 
 	const pipeline = [
 		{
@@ -77,7 +79,16 @@ router.get("/products", async (req, res) => {
 				["pricing."+paymentPreferenceSelected]: 1
 			}
 		},
-		{ $sort: sortByMap[sortBy] }
+		{ $sort: sortByMap[sortBy] },
+		{ "$facet": {
+			"totalData": [
+				{ $skip: skip },
+				{ $limit: nPerPage }
+			],
+			"totalCount": [
+				{ "$count": "count" }
+			]
+		}}
 	];
 
 	const products = await toArray(productsCollection.aggregate(pipeline));
