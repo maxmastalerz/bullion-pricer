@@ -1,13 +1,17 @@
 # precious-pricer
 Group Project for 9549/4471
 
+### Where to find the project ( THIS SECTION IS FOR THE PROF / TA )
+
+You may find the deployed version of this code at https://metals.xactweb.com/
+
 ### To run locally ( THIS SECTION IS FOR THE PROF / TA ):
 
 $ DOCKER_BUILDKIT=1 docker-compose --env-file .env.dev -f docker-compose-dev.yml build
 
 $ docker-compose --env-file .env.dev -f docker-compose-dev.yml up
 
-Please wait(about 20 seconds), then:
+Please wait(about 55 seconds for scraping to finish), then:
 
 Go to http://localhost
 
@@ -19,7 +23,7 @@ $ docker exec -it $(docker ps -aqf "name=pp-db") mongosh --username root --authe
 
 The password is password
 
-test> use preciousPricer
+preciousPricer> db.products.find()
 
 ### To run production build locally with nginx proxy in front (NOT FOR PROF / TA as you don't have production credentials):
 
