@@ -231,17 +231,6 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://canadianpmx.com/product/silver-valcambi-suisse-cast-1-kilo-bar-999/",
-		title: "Silver Valcambi Suisse 1 Kilo Cast Bar .999",
-		productType: "silver",
-		productSpecifics: ["not_government_issued", "999"],
-		weight: 1000,
-		mint: "Valcambi Suisse",
-		dealer: "CanadianPMX",
-		pricing_last_updated: 0,
-		pricing: null,
-	},
-	{
 		url: "https://www.bordergold.com/product/1-oz-silver-britannia/",
 		title: "1 oz. Silver Britannia",
 		productType: "silver",
@@ -284,7 +273,7 @@ db.products.insertMany([
 		dealer: "CanadianPMX",
 		pricing_last_updated: 0,
 		pricing: null,
-	}
+	},
 ]);
 
 db.createCollection("spot", {

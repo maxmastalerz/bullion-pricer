@@ -37,8 +37,9 @@ const scrapeBullionSites = async () => {
 					},
 				}
 			);
-		} catch {
+		} catch (err) {
 			console.error("Scraping failed for", product.url);
+			console.error(err);
 		}
 	}
 
