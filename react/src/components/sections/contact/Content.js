@@ -1,108 +1,56 @@
-import React from 'react';
-import Contacthelper from '../../../helper/Contacthelper';
-import ReCAPTCHA from "react-google-recaptcha";
-import { Alert } from 'react-bootstrap';
+import React from "react";
 
-class Content extends Contacthelper {
-    render() {
-        return (
-            <section className="contact-part pt-115 pb-115">
-                <div className="container">
-                    {/* Contact Info */}
-                    <div className="contact-info">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-4 col-sm-6 col-10">
-                                <div className="info-box">
-                                    <div className="icon">
-                                        <i className="flaticon-home" />
-                                    </div>
-                                    <div className="desc">
-                                        <h4>Office Address</h4>
-                                        <p>19/A, Cirikon City hall Tower New York, NYC</p>
-                                    </div>
+
+function Content() {
+    return (
+        <section className="contact-part pt-115 pb-115">
+            <div className="container">
+                {/* Contact Form */}
+                <div className="contact-form">
+                    <form action = "https://formsubmit.co/ec551042a0e5cced810d1642ceafc85f" method="POST">
+                        <div className ="input-group mb-30">
+                            <label >Your contact information:</label>
+                        </div>
+                        <div className = "row">
+                            <div className ="col-md-6">
+                                <div className="input-group mb-30">
+                                    <span className="icon"><i className="far fa-user" /></span>
+                                    <input type="text" id="customerName" name = "name" placeholder="Your full name" required />
                                 </div>
                             </div>
-                            <div className="col-lg-4 col-sm-6 col-10">
-                                <div className="info-box">
-                                    <div className="icon">
-                                        <i className="flaticon-phone" />
-                                    </div>
-                                    <div className="desc">
-                                        <h4>Phone Number</h4>
-                                        <p>+ 97656 8675 7864 7 <br /> + 876 766 8675 765 6</p>
-                                    </div>
+                            <div className ="col-md-6">
+                                <div className="input-group mb-30">
+                                    <span className="icon"><i className="far fa-envelope" /></span>
+                                    <input type="text" id="customerEmail" name = "email" placeholder="Your email address" required />
                                 </div>
                             </div>
-                            <div className="col-lg-4 col-sm-6 col-10">
-                                <div className="info-box">
-                                    <div className="icon">
-                                        <i className="flaticon-message" />
-                                    </div>
-                                    <div className="desc">
-                                        <h4>Email Address</h4>
-                                        <p>info@webmail.com <br /> jobs.webmail@mail.com</p>
-                                    </div>
+                            <div className ="col-md-12">
+                                <div className="input-group mb-30">
+                                    <span className="icon"><i className="far fa-book" /></span>
+                                    <label htmlFor="subject">How can we help you?</label>
+                                    <select name="subject" id="subject">
+                                        <option value="generalinquiry">General Inquiry</option>
+                                        <option value="helpme">I'm having some issues</option>
+                                        <option value="suggestion">I'd like to suggest a product or website to index</option>
+                                    </select>                                       
                                 </div>
+                            </div>
+                            <div className="col-md-12">
+                                <div className="input-group textarea mb-30">
+                                    <span className="icon"><i className="far fa-pen"/></span>
+                                    <input type="text" id="customerConcern" name="concern" placeholder="Your concern"/>
+                                </div>
+                            </div>
+                            <div className="col-md-12 text-center">
+                                <button  type="submit" className = "main-btn btn-filled" >Submit</button>
                             </div>
                         </div>
-                    </div>
-                    {/* Contact Form */}
-                    <div className="contact-form">
-                        <form onSubmit={this.handleSubmit} method="GET">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="input-group mb-30">
-                                        <span className="icon"><i className="far fa-user" /></span>
-                                        <input type="text" placeholder="Your full name" name="name" value={this.state.name} onChange={this.onNameChange} required />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="input-group mb-30">
-                                        <span className="icon"><i className="far fa-envelope" /></span>
-                                        <input type="email" placeholder="Enter email address" name="email" value={this.state.email} onChange={this.onEmailChange} required />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="input-group mb-30">
-                                        <span className="icon"><i className="far fa-phone" /></span>
-                                        <input type="text" placeholder="Add phone number" name="phone" value={this.state.phone} onChange={this.onPhoneChange} required />
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="input-group mb-30">
-                                        <span className="icon"><i className="far fa-book" /></span>
-                                        <input type="text" placeholder="Select Subject" name="subject" value={this.state.subject} onChange={this.onSubjectChange} required />
-                                    </div>
-                                </div>
-                                <div className="col-12">
-                                    <div className="input-group textarea mb-30">
-                                        <span className="icon"><i className="far fa-pen" /></span>
-                                        <textarea placeholder="Enter messages" name="message" value={this.state.message} onChange={this.onMessageChange} required />
-                                    </div>
-                                </div>
-                                <div className="col-12 text-center">
-                                    <ReCAPTCHA
-                                        sitekey="6LdxUhMaAAAAAIrQt-_6Gz7F_58S4FlPWaxOh5ib"
-                                        onChange={this.reCaptchaLoaded.bind(this)}
-                                        size="invisible"
-                                    />
-                                    <button type="submit" className="main-btn btn-filled">Get Free Quote</button>
-                                    {/* Form Messages */}
-                                    <Alert variant="success" className="d-none mt-3 mb-0" id="server_response_success">
-                                        <strong>Success!</strong> Contact form has been successfully submitted.
-                                    </Alert>
-                                    <Alert variant="danger" className="d-none mt-3 mb-0" id="server_response_danger">
-                                        <strong>Oops!</strong> Something bad happened. Please try again later.
-                                    </Alert>
-                                    {/* Form Messages */}
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                    </form>
                 </div>
-            </section>
-        );
-    }
+            </div>
+        </section>
+    );
 }
+
 
 export default Content;

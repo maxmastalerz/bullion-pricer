@@ -1,20 +1,14 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import About from './About';
-import Core from './Core';
-import Counter from './Counter';
-import News from './News';
+import ContactRedirect from './ContactRedirect';
 
-class Content extends Component {
-    render() {
-        return (
-            <Fragment>
-                <About/>
-                <Core/>
-                <Counter/>
-                <News/>
-            </Fragment>
-        );
-    }
+function Content() {
+    return (
+        <Fragment>
+            <About/>
+            <ContactRedirect/>
+        </Fragment>
+    );
 }
 
 export default Content;

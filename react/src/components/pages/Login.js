@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import MetaTags from "react-meta-tags";
 import Header from '../layouts/Header';
 import Breadcrumb from '../layouts/Breadcrumbs';
-import Instafeeds from '../layouts/Instafeeds';
 import Footer from '../layouts/Footer';
 import Content from '../sections/login/Content';
 
@@ -20,7 +19,6 @@ class Login extends Component {
                 <Header/>
                 <Breadcrumb breadcrumb={{pagename:'Login'}}/>
                 <Content/>
-                <Instafeeds/>
                 <Footer/>
             </Fragment>
         );
