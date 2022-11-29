@@ -32,6 +32,7 @@ router.post("/subscribeToNewsletter", async (req, res) => {
 				message: `Sorry, please input a valid email address.`
 			}
 		});
+		return;
 	}
 
 	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
@@ -43,23 +44,22 @@ router.post("/subscribeToNewsletter", async (req, res) => {
 
 	try {
 		subscriptionsCollection.insertOne({ emailAddress: emailAddress });
-
-		console.log(`Subscribed ${emailAddress} to newsletter.`);
-
-		res.send({
-			"data": {
-				message: `Thanks for subscribing! Stay tuned for news on the best deals.`
-			}
-		});
-
 	} catch(err) {
-		res.status(500).send({
+		res.status(500);
+		res.send({
 			"error": {
 				message: err.message
 			}
 		});
 	}
 
+	console.log(`Subscribed ${emailAddress} to newsletter.`);
+
+	res.send({
+		"data": {
+			message: `Thanks for subscribing! Stay tuned for news on the best deals.`
+		}
+	});
 });
 
 router.get("/spotPrices", async (req, res) => {
@@ -80,6 +80,7 @@ router.get("/spotPrices", async (req, res) => {
 			}
 		});
 	} else {
+		res.status(400);
 		res.send({
 			"error": {
 				message: "ERROR: Please select a valid currency."
