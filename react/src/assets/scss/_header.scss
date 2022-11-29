@@ -486,12 +486,8 @@ header {
 				background-color: #1c1b19;
 			}
 
-			@media #{$md} {
-				padding-bottom: 60px;
-			}
 			@media #{$sm} {
 				text-align: center;
-				padding-bottom: 50px;
 			}
 			@media #{$tiny} {
 				display: none;
@@ -501,9 +497,6 @@ header {
 				color: $white;
 			}
 			ul.header-top-info {
-				@media #{$sm} {
-					margin-top: 10px;
-				}
 				li {
 					display: inline-block;
 					margin-left: 15px;
@@ -1299,10 +1292,7 @@ background-color: #353530;
 	.sigma-mobile-menu,	
 	.sigma-mobile-header {	
 		display: block;	
-	}	
-	header.header-three .header-top {	
-		padding-bottom: 10px;
-	}	
+	}
 	header.header-two .site-logo {	
 		margin: 0;	
 	}
