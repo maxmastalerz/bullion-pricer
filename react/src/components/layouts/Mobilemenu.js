@@ -7,7 +7,7 @@ const navigationmenu = [
         linkText: 'Home',
         link: '/'
     },
-    {
+    /*{
         id: 2,
         linkText: 'Dealer Reviews',
         link: '/dealer-reviews'
@@ -16,7 +16,7 @@ const navigationmenu = [
         id: 3,
         linkText: 'Charts',
         link: '/charts',
-    },
+    },*/
     {
         id: 4,
         linkText: 'About Us',

@@ -12,6 +12,32 @@ router.get("/", function (req, res, next) {
 	res.send(`<h1>PreciousPricer API Working</h1>`);
 });
 
+router.get("/spotPrices", async (req, res) => {
+	// PP-TODO: Moe, can you finish this off.
+
+	let currency = null;
+
+	if(req.query.currency === "USD") {
+		currency = "USD";
+	}
+
+	if(currency === "USD") {
+		res.send({
+			"data": {
+				gold: null, // example : send null if you can't get data for the metal.
+				silver: 200,
+				platinum: 300
+			}
+		});
+	} else {
+		res.send({
+			"error": {
+				message: "ERROR: Please select a valid currency."
+			}
+		});
+	}
+});
+
 router.get("/products", async (req, res) => {
 	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
 	await client.connect();
