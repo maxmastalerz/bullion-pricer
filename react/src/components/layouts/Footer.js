@@ -1,5 +1,4 @@
 import React, { Fragment, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import Backtotop from './Backtotop';
 
 const Footer = () => {
@@ -57,9 +56,9 @@ const Footer = () => {
                             </div>
                             <div className="col-md-7 order-1 order-md-2">
                                 <div className="social-links">
-                                    <Link to="https://facebook.com/preciousPricer"><i className="fab fa-facebook-f" /></Link>
-                                    <Link to="https://twitter.com/preciousPricer"><i className="fab fa-twitter" /></Link>
-                                    <Link to="https://instagram.com/preciousPricer"><i className="fab fa-instagram" /></Link>
+                                    <a href="https://facebook.com/preciousPricer"><i className="fab fa-facebook-f" /></a>
+                                    <a href="https://twitter.com/preciousPricer"><i className="fab fa-twitter" /></a>
+                                    <a href="https://instagram.com/preciousPricer"><i className="fab fa-instagram" /></a>
                                 </div>
                             </div>
                         </div>
