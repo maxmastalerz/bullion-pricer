@@ -282,3 +282,5 @@ db.createCollection("spot", {
 		granularity: "hours",
 	},
 });
+
+db.createCollection("subscriptions");
