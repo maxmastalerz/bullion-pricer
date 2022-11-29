@@ -88,11 +88,17 @@ new CronJob({
 		try {
 			await spot.updateSpotPrices();
 		} catch (err) {
-			console.log(
-				"ERROR: There's been an issue with fetching metal spot prices"
-			);
-			console.log(err);
-			// Handle error
+			if (err.type === "invalid-json") {
+				console.log(
+					"Spot price fetch missed. Falling back to the latest successfully fetched spot price"
+				);
+			} else {
+				// Handle error
+				console.log(
+					"ERROR: There's been an issue with fetching metal spot prices"
+				);
+				console.log(err);
+			}
 		}
 	},
 	start: true,
