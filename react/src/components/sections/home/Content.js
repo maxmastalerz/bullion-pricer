@@ -3,7 +3,21 @@ import Pagination from '../../layouts/Pagination';
 import ProductFilterLeft from '../../layouts/ProductFilterLeft';
 import ProductFilterTop from '../../layouts/ProductFilterTop';
 
-import img1 from '../../../assets/img/shop/01.jpg';
+import goldCanadianPMX from '../../../assets/img/shop/gold-canadianPMX.png';
+import silverCanadianPMX from '../../../assets/img/shop/silver-canadianPMX.png';
+import platinumCanadianPMX from '../../../assets/img/shop/platinum-canadianPMX.png';
+import goldBorderGold from '../../../assets/img/shop/gold-borderGold.png';
+import silverBorderGold from '../../../assets/img/shop/silver-borderGold.png';
+import platinumBorderGold from '../../../assets/img/shop/platinum-borderGold.png';
+
+const imageMapping = {
+    "goldCanadianPMX": goldCanadianPMX,
+    "silverCanadianPMX": silverCanadianPMX,
+    "platinumCanadianPMX": platinumCanadianPMX,
+    "goldBorder Gold": goldBorderGold,
+    "silverBorder Gold": silverBorderGold,
+    "platinumBorder Gold": platinumBorderGold
+}
 
 const productTypes = [
     { id: 'gold', text: 'Gold'},
@@ -256,7 +270,7 @@ function Content() {
                                                 <div className="food-box shop-box">
                                                     <div className="thumb">
                                                         <a href={item.url}>
-                                                            <img src={img1} alt="" />
+                                                            <img src={imageMapping[item.productType+item.dealer]} alt="" />
                                                         </a>
                                                     </div>
                                                     <div className="desc">
