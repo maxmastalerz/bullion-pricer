@@ -20,7 +20,7 @@ function About() {
             <div className="container">
                 <div className="section-title about-title text-center">
                     <span className="title-tag">since <span>2022</span></span>
-                    <h2>Precious Pricer is your #1 source for the best deals on all bullions.</h2>
+                    <h2>Precious Pricer is your #1 source for the best deals on all bullion.</h2>
                 </div>
                 <ul className="about-features">
                     {featuresposts.map((item,i) => (
@@ -68,7 +68,7 @@ function About() {
                             <br/>
                             <div className = "text-center">
                                 <h4>
-                                    Our mission is to ensure that whoever wants bullions
+                                    Our mission is to ensure that whoever wants bullion
                                     has access to finding the best price.
                                 </h4>
                             </div>
