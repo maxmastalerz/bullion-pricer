@@ -1,4 +1,3 @@
-require("dotenv-flow").config();
 var CronJob = require("cron").CronJob;
 const { MongoClient } = require("mongodb");
 const spot = require("./spot");

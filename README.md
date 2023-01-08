@@ -1,11 +1,8 @@
-# precious-pricer
-Group Project for 9549/4471
+### precious-pricer
 
-### Where to find the project ( THIS SECTION IS FOR THE PROF / TA )
+Originally this application was made as a group project for 9549/4471 at Western. This repo is a continuation of the project.
 
-You may find the deployed version of this code at https://metals.xactweb.com/
-
-### To run locally ( THIS SECTION IS FOR THE PROF / TA ):
+### To run locally
 
 $ DOCKER_BUILDKIT=1 docker-compose --env-file .env.dev -f docker-compose-dev.yml build
 
@@ -25,7 +22,7 @@ The password is password
 
 preciousPricer> db.products.find()
 
-### To run production build locally with nginx proxy in front (NOT FOR PROF / TA as you don't have production credentials):
+### To run production build locally with nginx proxy in front
 
 To deploy a production build, you will need a mongodb database already deployed on the cloud.
 
@@ -44,3 +41,21 @@ $ DOCKER_BUILDKIT=1 docker-compose --env-file .env.prod -f docker-compose-prod.y
 $ docker-compose --env-file .env.prod -f docker-compose-prod.yml up
 
 Go to http://localhost
+
+
+### CURRENT TO DO:
+
+Find all the PP-TODO lines
+Look into npm ci vs npm install. When to use which. Different envs?
+Fix the bordergold parser to get real values
+Make proper contact page
+Replace spot price calls? Make sure these never fail.
+Implement more scrapers
+Decide on whether or not to have product images.
+etc.
+
+### FUTURE TODO:
+
+Re-enable header links like "Dealer Reviews". Implement them.
+Add currency support for spot and product prices.
+Deploy app somehow w/ CI/CD.
