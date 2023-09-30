@@ -1129,6 +1129,34 @@ div.product-filter-top .slider.slider-horizontal .slider-handle {
   margin: 15px 0;
   border: 1px solid #fff;
 }
+.product-filter-left .widget.tag-widget h5.widget-title {
+  display: inline-block;
+}
+.product-filter-left .widget.tag-widget button.toggleLogicOperator {
+  font-size: 12px;
+  color: #fff;
+  padding: 2px 5px;
+  background-color: #272626;
+  float: right;
+  line-height: 1;
+  width: 38.64px;
+}
+.product-filter-left .widget.tag-widget ul li {
+  width: calc(50% - 2.5px);
+}
+.product-filter-left .widget.tag-widget ul li:nth-of-type(even) {
+  margin-right: 0;
+}
+.product-filter-left .widget.tag-widget ul li a {
+  width: 100%;
+  text-align: center;
+}
+.product-filter-left .widget.tag-widget .purities label {
+  width: 50%;
+}
+.product-filter-left .widget.tag-widget .purities label.checkbox {
+  display: inline-block;
+}
 
 .nav-menu {
   flex-grow: 1;
@@ -6869,25 +6897,22 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 .widget.tag-widget ul li a:hover {
   color: #000;
 }
-.widget.tag-widget ul li a[data-product-type=gold]:hover {
+.widget.tag-widget ul li a[data-product-type=gold]:hover, .widget.tag-widget ul li a[data-product-type=gold].selected {
   background-color: #fcd462;
 }
-.widget.tag-widget ul li a[data-product-type=silver]:hover {
+.widget.tag-widget ul li a[data-product-type=silver]:hover, .widget.tag-widget ul li a[data-product-type=silver].selected {
   background-color: #c0c0c0;
 }
-.widget.tag-widget ul li a[data-product-type=platinum]:hover {
+.widget.tag-widget ul li a[data-product-type=platinum]:hover, .widget.tag-widget ul li a[data-product-type=platinum].selected {
   background-color: #e5e4e2;
 }
-.widget.tag-widget ul li a[data-product-type=gold].selected {
-  background-color: #fcd462;
-  color: #000;
+.widget.tag-widget ul li a[data-product-type=palladium]:hover, .widget.tag-widget ul li a[data-product-type=palladium].selected {
+  background-color: #717171;
 }
-.widget.tag-widget ul li a[data-product-type=silver].selected {
-  background-color: #c0c0c0;
-  color: #000;
-}
-.widget.tag-widget ul li a[data-product-type=platinum].selected {
-  background-color: #e5e4e2;
+.widget.tag-widget ul li a[data-product-type=gold].selected,
+.widget.tag-widget ul li a[data-product-type=silver].selected,
+.widget.tag-widget ul li a[data-product-type=platinum].selected,
+.widget.tag-widget ul li a[data-product-type=palladium].selected {
   color: #000;
 }
 .widget.instagram-feed-widget ul li img, .widget.instagram-feed-widget img, .widget.banner-ad-widget ul li img, .widget.banner-ad-widget img {

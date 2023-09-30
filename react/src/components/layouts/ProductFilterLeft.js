@@ -8,21 +8,38 @@ function ProductFilterLeft(props) {
         <div className="product-filter-left">
             <div className="widget tag-widget mb-40">
                 <h5 className="widget-title">Product Type</h5>
+                <button className="toggleLogicOperator" data-operating-on="product-type" onClick={(e) => props.toggleLogicalOperator(e)}>XOR</button>
                 <ul>
                     {props.productTypes.map((el, i) => (
-                        <li key={i} onClick={(e) => props.productTypesChanged(e)}>
-                            <Link className={props.productTypesSelected.includes(el.id) ? 'selected' : ''} data-product-type={el.id} to="#">{el.text}</Link>
-                        </li>
+                        <React.Fragment key={i}>
+                            <li onClick={(e) => props.productTypesChanged(e)}>
+                                <Link className={props.productTypesSelected.includes(el.id) ? 'selected' : ''} data-product-type={el.id} to="#">{el.text}</Link>
+                            </li>
+                            { i%2===1 && i!==props.productTypes.length-1 && <br /> }
+                        </React.Fragment>
                     ))}
                 </ul>
 
                 <br/>
-
-                <h5 className="widget-title">Product Specifics</h5>
-                <div className="filter-color">
-                    {props.productSpecifics.map((el, i) => (
+                <h5 className="widget-title">Purity</h5>
+                <button className="toggleLogicOperator" data-operating-on="purities" onClick={(e) => props.toggleLogicalOperator(e)}>XOR</button>
+                <div className="filter-color purities">
+                    {props.purities.map((el, i) => (
                         <label key={i} className="checkbox">
-                            <input type="checkbox" name={el.id} onChange={props.updateProductSpecificsFilter} checked={props.productSpecificsSelected.includes(el.id) ? 'checked' : ''}/>
+                            <input type="checkbox" name={el.id} onChange={props.puritiesChanged} checked={props.puritiesSelected.includes(el.id) ? 'checked' : ''}/>
+                            <span className="custom-box" />
+                            {el.text}
+                        </label>
+                    ))}
+                </div>
+
+                <br/>
+                <h5 className="widget-title">Issuance</h5>
+                <button className="toggleLogicOperator" data-operating-on="issuance" onClick={(e) => props.toggleLogicalOperator(e)}>XOR</button>
+                <div className="filter-color">
+                    {props.issuance.map((el, i) => (
+                        <label key={i} className="checkbox">
+                            <input type="checkbox" name={el.id} onChange={props.issuanceChanged} checked={props.issuanceSelected.includes(el.id) ? 'checked' : ''}/>
                             <span className="custom-box" />
                             {el.text}
                         </label>

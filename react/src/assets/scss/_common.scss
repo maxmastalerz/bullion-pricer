@@ -1160,6 +1160,43 @@ div.product-filter-top {
 		margin: 15px 0;
 		border: 1px solid #fff;
 	}
+
+	.widget.tag-widget {
+		h5.widget-title {
+			display: inline-block;
+		}
+
+		button.toggleLogicOperator {
+			font-size: 12px;
+			color: #fff;
+			padding: 2px 5px;
+			background-color: #272626;
+			float: right;
+			line-height: 1;
+			width: 38.64px;
+		}
+
+		ul li {
+			width: calc(50% - 2.5px);
+
+			&:nth-of-type(even) {
+				margin-right: 0;
+			}
+
+			a {
+				width: 100%;
+				text-align: center;
+			}
+		}
+
+		.purities label {
+			width: 50%;
+		}
+
+		.purities label.checkbox {
+			display: inline-block;
+		}
+	}
 }
 
 .nav-menu {

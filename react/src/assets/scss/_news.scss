@@ -1029,25 +1029,22 @@
 					color: #000;
 				}
 			}
-			a[data-product-type="gold"]:hover {
+			a[data-product-type="gold"]:hover, a[data-product-type="gold"].selected {
 				background-color: $primary-color;
 			}
-			a[data-product-type="silver"]:hover {
+			a[data-product-type="silver"]:hover, a[data-product-type="silver"].selected {
 				background-color: $silver-color;
 			}
-			a[data-product-type="platinum"]:hover {
+			a[data-product-type="platinum"]:hover, a[data-product-type="platinum"].selected {
 				background-color: $platinum-color;
 			}
-			a[data-product-type="gold"].selected {
-				background-color: $primary-color;
-				color: #000;
+			a[data-product-type="palladium"]:hover, a[data-product-type="palladium"].selected {
+				background-color: $palladium-color;
 			}
-			a[data-product-type="silver"].selected {
-				background-color: $silver-color;
-				color: #000;
-			}
-			a[data-product-type="platinum"].selected {
-				background-color: $platinum-color;
+			a[data-product-type="gold"].selected,
+			a[data-product-type="silver"].selected,
+			a[data-product-type="platinum"].selected,
+			a[data-product-type="palladium"].selected {
 				color: #000;
 			}
 		}

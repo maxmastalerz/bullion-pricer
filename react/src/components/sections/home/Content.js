@@ -22,16 +22,20 @@ const imageMapping = {
 const productTypes = [
     { id: 'gold', text: 'Gold'},
     { id: 'silver', text: 'Silver' },
-    { id: 'platinum', text: 'Platinum' }
+    { id: 'platinum', text: 'Platinum' },
+    { id: 'palladium', text: 'Palladium' }
 ];
 
-const productSpecifics = [
+const purities = [
     { id: '99999', text: '99999' },
-    { id: '9999', text: '9999' },
-    { id: '9995', text: '9995' },
     { id: '999', text: '999' },
+    { id: '9999', text: '9999' },
     { id: '925', text: '925' },
+    { id: '9995', text: '9995' },
     { id: 'less_than_or_equal_90', text: '≤ 90' },
+]
+
+const issuance = [
     { id: 'government_issued', text: 'Government Issued' },
     { id: 'not_government_issued', text: 'Not Government Issued' }
 ];
@@ -48,8 +52,12 @@ const paymentPreferences = [
 ]
 
 function Content() {
+    const [productTypesOperator, setProductTypesOperator] = useState('XOR');
     const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
-    const [productSpecificsSelected, setProductSpecificsSelected] = useState(['9999','9995','government_issued','not_government_issued']);
+    const [puritiesOperator, setPuritiesOperator] = useState('XOR');
+    const [puritiesSelected, setPuritiesSelected] = useState(['9999','9995']);
+    const [issuanceOperator, setIssuanceOperator] = useState('XOR');
+    const [issuanceSelected, setIssuanceSelected] = useState(['government_issued','not_government_issued']);
     const [paymentPreferencesSelected, setPaymentPreferencesSelected] = useState(['check']);
     const [bulkPricingDiscounts, setBulkPricingDiscounts] = useState(false);
     const [bulkPricingCouldBuy, setBulkPricingCouldBuy] = useState(5);
@@ -61,45 +69,61 @@ function Content() {
     const [searchResults, setSearchResults] = useState([]);
     const pageSize = 3;
 
+    const toggleLogicalOperator = (e) => {
+        let logicalOperatorOn = e.target.getAttribute("data-operating-on");
+        let toggleTo;
+
+        if(e.target.innerText === "XOR") {
+            toggleTo = "AND";
+        } else {
+            toggleTo = "XOR";
+        }
+        e.target.innerText = toggleTo;
+
+        if(logicalOperatorOn === "product-type") {
+            setProductTypesOperator(toggleTo);
+        } else if(logicalOperatorOn === "purities") {
+            setPuritiesOperator(toggleTo);
+        } else if(logicalOperatorOn === "issuance") {
+            setIssuanceOperator(toggleTo);
+        }
+    };
+
     const productTypesChanged = (e) => {
         let productTypeClicked = e.target.getAttribute("data-product-type");
-        if(e.target.classList.contains('selected')) {
-            setProductTypesSelected(productTypesSelected.filter(item => item !== productTypeClicked));
+        if(e.target.classList.contains('selected')) { //if selected for unchecking
+            if(productTypesSelected.length > 1) { // and it's not the last metal type remaining, allow unchecking
+                setProductTypesSelected(productTypesSelected.filter(item => item !== productTypeClicked));
+            }
         } else {
             setProductTypesSelected([...productTypesSelected, productTypeClicked]);
         }
     };
 
-    const updateProductSpecificsFilter = (e) => {
+    const puritiesChanged = (e) => {
         if(e.target.checked) {
-            setProductSpecificsSelected([...productSpecificsSelected, e.target.name]);
+            setPuritiesSelected([...puritiesSelected, e.target.name]);
         } else {
-            let purityOptions = ['99999','9999','9995','999','925','less_than_or_equal_90'];
-            let governmentNotGovernmentOptions = ['government_issued','not_government_issued'];
-            
-            let purityOptionsSelected = productSpecificsSelected.filter(item => purityOptions.includes(item));
-            let governmentNotGovernmentOptionsSelected = productSpecificsSelected.filter(item => governmentNotGovernmentOptions.includes(item));
-
-            // If a purity option is selected for unchecking
-            if(purityOptions.includes(e.target.name)) {
-                if(purityOptionsSelected.length > 1) { // and it's not the last purity option remaining, allowing unchecking
-                    setProductSpecificsSelected(productSpecificsSelected.filter(item => item !== e.target.name));
-                }
-            } else if(governmentNotGovernmentOptions.includes(e.target.name)) { // If a government / non government option is selected for unchecking
-                if(governmentNotGovernmentOptionsSelected.length === 1) { //if last government/not government checkbox clicked, toggle
-                    let productSpecificsSel = productSpecificsSelected.slice(); // duplicate
-
-                    if(e.target.name === "government_issued") {
-                        productSpecificsSel[productSpecificsSelected.indexOf('government_issued')] = "not_government_issued";
-                    } else {
-                        productSpecificsSel[productSpecificsSelected.indexOf('not_government_issued')] = "government_issued";
-                    }
-                    
-                    setProductSpecificsSelected(productSpecificsSel);
-                    return;
-                }
-                setProductSpecificsSelected(productSpecificsSelected.filter(item => item !== e.target.name)); //uncheck
+            if(puritiesSelected.length > 1) { // if it's not the last purity option remaining, allowing unchecking
+                setPuritiesSelected(puritiesSelected.filter(item => item !== e.target.name));
             }
+        }
+    };
+
+    const issuanceChanged = (e) => {
+        if(e.target.checked) {
+            setIssuanceSelected([...issuanceSelected, e.target.name]);
+        } else { // If selected for unchecking
+            if(issuanceSelected.length === 1) { //if last government/not government checkbox clicked, toggle
+                if(e.target.name === "government_issued") {//['999','government_issued']
+                    setIssuanceSelected(['not_government_issued']);
+                } else {
+                    setIssuanceSelected(['government_issued']);
+                }
+
+                return;
+            }
+            setIssuanceSelected(issuanceSelected.filter(item => item !== e.target.name)); //uncheck
         }
     };
 
@@ -171,8 +195,12 @@ function Content() {
         let bulkPricingCouldBuyAdjusted = bulkPricingDiscounts ? bulkPricingCouldBuy : 1;
 
         const params = new URLSearchParams({
+            productTypesOperator: productTypesOperator,
             productTypesSelected: productTypesSelected,
-            productSpecificsSelected: productSpecificsSelected,
+            puritiesOperator: puritiesOperator,
+            puritiesSelected: puritiesSelected,
+            issuanceOperator: issuanceOperator,
+            issuanceSelected: issuanceSelected,
             paymentPreferencesSelected: paymentPreferencesSelected,
             bulkPricingCouldBuy: bulkPricingCouldBuyAdjusted,
             weightRange: [weightStart, weightEnd],
@@ -200,11 +228,15 @@ function Content() {
         });
 
     }, [
+        productTypesOperator,
         productTypesSelected,
+        puritiesOperator,
+        puritiesSelected,
+        issuanceOperator,
+        issuanceSelected,
+        paymentPreferencesSelected,
         bulkPricingDiscounts,
         bulkPricingCouldBuy,
-        productSpecificsSelected,
-        paymentPreferencesSelected,
         weightRange,
         sortBy,
         currentPage
@@ -217,12 +249,16 @@ function Content() {
                     {/* Shop Sidebar */}
                     <div className="col-lg-4 col-md-10 col-sm-10">
                         <ProductFilterLeft
+                            toggleLogicalOperator={toggleLogicalOperator}
                             productTypesChanged={productTypesChanged}
                             productTypes={productTypes}
                             productTypesSelected={productTypesSelected}
-                            updateProductSpecificsFilter={updateProductSpecificsFilter}
-                            productSpecifics={productSpecifics}
-                            productSpecificsSelected={productSpecificsSelected}
+                            puritiesChanged={puritiesChanged}
+                            purities={purities}
+                            puritiesSelected={puritiesSelected}
+                            issuanceChanged={issuanceChanged}
+                            issuance={issuance}
+                            issuanceSelected={issuanceSelected}
                             updatePaymentPreferences={updatePaymentPreferences}
                             paymentPreferences={paymentPreferences}
                             paymentPreferencesSelected={paymentPreferencesSelected}

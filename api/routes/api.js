@@ -95,30 +95,32 @@ router.get("/products", async (req, res) => {
 	const db = client.db();
 	const productsCollection = db.collection("products");
 
-	let purityOptions = [
+	/*let purityOptions = [
 		"99999",
 		"9999",
 		"9995",
 		"999",
 		"925",
 		"less_than_or_equal_90",
-	];
-	let governmentNotGovernmentOptions = [
+	];*/
+	/*let governmentNotGovernmentOptions = [
 		"government_issued",
 		"not_government_issued",
-	];
+	];*/
 	let nPerPage = 3;
 
+	let productTypesOperator = req.query.productTypesOperator;
 	let productTypesSelected = req.query.productTypesSelected.split(",");
-	let productSpecificsSelected =
-		req.query.productSpecificsSelected.split(",");
-	let purityOptionsSelected = productSpecificsSelected.filter((item) =>
-		purityOptions.includes(item)
-	);
-	let governmentNotGovernmentOptionsSelected =
-		productSpecificsSelected.filter((item) =>
-			governmentNotGovernmentOptions.includes(item)
-		);
+	let productTypesNotSelected = ['gold','silver','platinum','palladium'].filter(value => !productTypesSelected.includes(value));
+	
+	let puritiesOperator = req.query.puritiesOperator;
+	let puritiesSelected = req.query.puritiesSelected.split(",");
+	let purityOptionsNotSelected = ['99999','9999','9995','999','925','less_than_or_equal_90'].filter(value=> !puritiesSelected.includes(value));
+
+	let issuanceOperator = req.query.issuanceOperator;
+	let issuanceSelected = req.query.issuanceSelected.split(",");
+	let issuanceNotSelected = ['government_issued','not_government_issued'].filter(value=> !issuanceSelected.includes(value));
+
 	let paymentPreferenceSelected =
 		req.query.paymentPreferencesSelected.split(",")[0];
 	let bulkPricingCouldBuy = Number(req.query.bulkPricingCouldBuy);
@@ -139,9 +141,8 @@ router.get("/products", async (req, res) => {
 		req.query.currentPage > 0 ? (req.query.currentPage - 1) * nPerPage : 0;
 
 	console.log("productTypesSelected:" + JSON.stringify(productTypesSelected));
-	console.log(
-		"productSpecificsSelected: " + JSON.stringify(productSpecificsSelected)
-	);
+	console.log("puritiesSelected: " + JSON.stringify(puritiesSelected));
+	console.log("issuanceSelected: " + JSON.stringify(issuanceSelected));
 	console.log(
 		"paymentPreferenceSelected: " +
 			JSON.stringify(paymentPreferenceSelected)
@@ -154,16 +155,22 @@ router.get("/products", async (req, res) => {
 
 	const pipeline = [
 		{
-			$match: {
-				productType: { $in: productTypesSelected },
+			$match: {	
 				$and: [
 					{
-						productSpecifics: { $in: purityOptionsSelected },
+						$or: productTypesOperator === 'XOR' ?
+						[{ productType: { $in: productTypesSelected, $size: 1 }}] :
+						[{ productType: { $all: productTypesSelected, $size: productTypesSelected.length }}]
 					},
 					{
-						productSpecifics: {
-							$in: governmentNotGovernmentOptionsSelected,
-						},
+						$or: puritiesOperator === 'XOR' ?
+						[{ purities: { $in: puritiesSelected, $size: 1 }}] :
+						[{ purities: { $all: puritiesSelected , $size: puritiesSelected.length }}]
+					},
+					{
+						$or: issuanceOperator === 'XOR' ?
+						[{ issuance: { $in: issuanceSelected, $size: 1 }}] :
+						[{ issuance: { $all: issuanceSelected , $size: issuanceSelected.length }}]
 					},
 				],
 				weight: { $gte: weightStart, $lte: weightEnd },
@@ -187,10 +194,11 @@ router.get("/products", async (req, res) => {
 				title: 1,
 				dealer: 1,
 				mint: 1,
-				productSpecifics: 1,
+				purities: 1,
+				issuance: 1,
 				productType: 1,
 				weight: 1,
-				["pricing." + paymentPreferenceSelected]: 1,
+				["pricing." + paymentPreferenceSelected]: 1
 			},
 		},
 		{ $sort: sortByMap[sortBy] },
