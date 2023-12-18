@@ -1,8 +1,7 @@
 var CronJob = require("cron").CronJob;
 const { MongoClient } = require("mongodb");
-const spot = require("./spot");
 
-const scrapeBullionSites = async () => {
+/*const scrapeBullionSites = async () => {
 	console.log("== SCRAPING BULLION SITES ==");
 
 	let scrapers = {
@@ -43,7 +42,7 @@ const scrapeBullionSites = async () => {
 	}
 
 	console.log("== DONE SCRAPING BULLION SITES. FOR NOW... ==");
-};
+};*/
 
 console.log("INITIALIZING CRON JOB(S).");
 
@@ -54,7 +53,7 @@ If a scraping task takes more than an hour, another scrape job won't start til a
 Note: When the docker container running these cron jobs is started/restarted, it will run a cron job
 immediately rather than waiting for the spefic x:00 hour mark. This helps with development.
 */
-let job = {};
+/*let job = {};
 new CronJob({
 	cronTime: "0 0 * * * *", // Every hour, on the hour
 	onTick: async () => {
@@ -79,26 +78,14 @@ new CronJob({
 	start: true,
 	timeZone: "UTC",
 	runOnInit: true, // Runs when this cron job was first initialized, even if we're not exactly on the hour
-});
+});*/
+
+const spot = require("./spot");
 
 new CronJob({
 	cronTime: "0 0 * * * *", // Every hour, on the hour
 	onTick: async () => {
-		try {
-			await spot.updateSpotPrices();
-		} catch (err) {
-			if (err.type === "invalid-json") {
-				console.log(
-					"Spot price fetch missed. Falling back to the latest successfully fetched spot price"
-				);
-			} else {
-				// Handle error
-				console.log(
-					"ERROR: There's been an issue with fetching metal spot prices"
-				);
-				console.log(err);
-			}
-		}
+		await spot.updateSpotPrices();
 	},
 	start: true,
 	timeZone: "UTC",

@@ -70,12 +70,13 @@ router.get("/spotPrices", async (req, res) => {
 	const db = client.db();
 	const spotCollection = db.collection("spot");
 	const lastSpot = await spotCollection
-		.find({}, { limit: 1, sort: { timestamp: -1 } })
+		.find({})
+		.project({ _id: 0, symbol: 1, [`price.${req.query.currency}`]: 1})
 		.toArray();
 
-	if (currency === "USD") {
+	if (["CAD","USD"].includes(currency)) {
 		res.send({
-			data: lastSpot?.[0],
+			data: lastSpot,
 		});
 	} else {
 		res.status(400);

@@ -10,9 +10,11 @@ function Header() {
     const [classmethod, setClassmethod] = useState(false);
     const [togglemethod, setTogglemethod] = useState(false);
     const [isTop, setIsTop] = useState(false);
-    const currency = "USD"; // const [currency, setCurrency] = useState("USD"); // PP-TODO: Implement setCurrency to support multiple currencies.
-    const [goldSpotPrice, setGoldSpotPrice] = useState(0);
+    
+    const [currency, setCurrency] = useState("USD"); // PP-TODO: Implement setCurrency to support multiple currencies.
     const [silverSpotPrice, setSilverSpotPrice] = useState(0);
+    const [goldSpotPrice, setGoldSpotPrice] = useState(0);
+    const [palladiumSpotPrice, setPalladiumSpotPrice] = useState(0);
     const [platinumSpotPrice, setPlatinumSpotPrice] = useState(0);
 
     const removeClass = () => {
@@ -53,11 +55,11 @@ function Header() {
             if(results.error) {
                 console.log(results.error);
             } else if(results.data) {
-                console.log(results.data);
-
-                setGoldSpotPrice(results.data.gold);
-                setSilverSpotPrice(results.data.silver);
-                setPlatinumSpotPrice(results.data.platinum);
+                //console.log(results.data);
+                setSilverSpotPrice(Object.values(results.data.filter((el) => el.symbol==="AG")[0].price)[0]);
+                setGoldSpotPrice(Object.values(results.data.filter((el) => el.symbol==="AU")[0].price)[0]);
+                setPalladiumSpotPrice(Object.values(results.data.filter((el) => el.symbol==="PD")[0].price)[0]);
+                setPlatinumSpotPrice(Object.values(results.data.filter((el) => el.symbol==="PT")[0].price)[0]);
             }            
         });
     }, [currency]);
@@ -69,8 +71,9 @@ function Header() {
                     <div className="container-fluid container-custom-three">
                         <div className="d-md-flex align-items-center justify-content-center">
                             <ul className="header-top-info">
-                                { (goldSpotPrice !== null) && <li>Gold {goldSpotPrice} {currency}</li> }
                                 { (silverSpotPrice !== null) && <li>Silver {silverSpotPrice} {currency}</li> }
+                                { (goldSpotPrice !== null) && <li>Gold {goldSpotPrice} {currency}</li> }
+                                { (palladiumSpotPrice !== null) && <li>Palladium {palladiumSpotPrice} {currency}</li> }
                                 { (platinumSpotPrice !== null) && <li>Platinum {platinumSpotPrice} {currency}</li> }
                             </ul>
                         </div>
