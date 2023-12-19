@@ -5,13 +5,14 @@ import $ from 'jquery'
 
 import Canvas from './Canvas';
 import Mobilemenu from './Mobilemenu';
+import SelectCurrency from '../SelectCurrency';
 
 function Header() {
     const [classmethod, setClassmethod] = useState(false);
     const [togglemethod, setTogglemethod] = useState(false);
     const [isTop, setIsTop] = useState(false);
     
-    const [currency, setCurrency] = useState("USD"); // PP-TODO: Implement setCurrency to support multiple currencies.
+    const [currency, setCurrency] = useState(window.localStorage.getItem('currencySelected') || 'USD');
     const [silverSpotPrice, setSilverSpotPrice] = useState(0);
     const [goldSpotPrice, setGoldSpotPrice] = useState(0);
     const [palladiumSpotPrice, setPalladiumSpotPrice] = useState(0);
@@ -25,6 +26,10 @@ function Header() {
     }
     const onScroll = () => {
         setIsTop(window.scrollY > 110);
+    }
+    const onChangeCurrency = (e) => {
+        setCurrency(e.target.value);
+        window.localStorage.setItem('currencySelected', e.target.value);
     }
 
     useEffect(() => {
@@ -63,20 +68,19 @@ function Header() {
             }            
         });
     }, [currency]);
-    
+
     return (
         <>
             <header className={`header-three header-absolute sticky-header sigma-header ${isTop ? 'sticky-active' : ''}`} id="header">
                 <div className="header-top">
                     <div className="container-fluid container-custom-three">
-                        <div className="d-md-flex align-items-center justify-content-center">
-                            <ul className="header-top-info">
-                                { (silverSpotPrice !== null) && <li>Silver {silverSpotPrice} {currency}</li> }
-                                { (goldSpotPrice !== null) && <li>Gold {goldSpotPrice} {currency}</li> }
-                                { (palladiumSpotPrice !== null) && <li>Palladium {palladiumSpotPrice} {currency}</li> }
-                                { (platinumSpotPrice !== null) && <li>Platinum {platinumSpotPrice} {currency}</li> }
-                            </ul>
-                        </div>
+                        <ul className="header-top-info" style={{width: "100%", textAlign: "center"}}>
+                            { (silverSpotPrice !== null) && <li>Silver {silverSpotPrice} {currency}</li> }
+                            { (goldSpotPrice !== null) && <li>Gold {goldSpotPrice} {currency}</li> }
+                            { (palladiumSpotPrice !== null) && <li>Palladium {palladiumSpotPrice} {currency}</li> }
+                            { (platinumSpotPrice !== null) && <li>Platinum {platinumSpotPrice} {currency}</li> }
+                        </ul>
+                        <SelectCurrency onChange={onChangeCurrency} value={currency} />
                     </div>
                 </div>
                 <div className="main-menu-area sticky-header">

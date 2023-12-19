@@ -479,8 +479,7 @@ header {
 		}
 
 		.header-top {
-			padding-top: 15px;
-			padding-bottom: 15px;
+			line-height: calc(160% + 30px);
 			font-family: $roboto;
 			@media (max-width: 992px) {
 				background-color: #1c1b19;

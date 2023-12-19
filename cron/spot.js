@@ -1,11 +1,16 @@
 const { MongoClient } = require("mongodb");
 const axios = require('axios');
+const { getCountryList } = require("country-data-codes")
+
+let countries = getCountryList().filter((value, index, self) => { // get unique currency codes.
+    return self.findIndex(v => v.currency.code === value.currency.code && v.currency.code !== "No Universal Currency") === index;
+});
 
 /*
-Currency Converter
+Takes amounts in USD and returns them with all currencies.
 */
-const currConv = async function(usdAmount, targetCurrencyCode) {
-	let usdToTargetCurrencyRatio = null;
+const currrencyConvertObj = async function(usdAmounts) {
+	let rates = null;
 
 	const currencyBeaconResponse = await axios.get(`https://api.currencybeacon.com/v1/latest`, { params: {
 		base: 'USD',
@@ -13,15 +18,26 @@ const currConv = async function(usdAmount, targetCurrencyCode) {
 	}});
 	const jsonResponse = currencyBeaconResponse.data;
 	if(jsonResponse.meta.code === 200) {
-		usdToTargetCurrencyRatio = jsonResponse.response.rates[targetCurrencyCode];
+		rates = jsonResponse.response.rates;
 	}
 
-	if(usdToTargetCurrencyRatio === null) {
+	if(rates === null) {
 		throw new Error(JSON.stringify(
 			{ error: { code: jsonResponse.meta.code, message: `${jsonResponse.meta.error_type} ${jsonResponse.meta.error_detail}`}}
 		));
 	} else {
-		return Math.round(usdAmount*usdToTargetCurrencyRatio* 100) / 100; // Round to 2 decimals
+		for(metal in usdAmounts) {
+			let usdAmount = usdAmounts[metal];
+			let usdAmountConvertedToAllCurrencies = {};
+			countries.forEach((country) => {
+				let countryRate = rates[country.currency.code];
+				usdAmountConvertedToAllCurrencies[country.currency.code] = Math.round(usdAmount*countryRate* 100) / 100; // Round to 2 decimals
+			});
+
+			usdAmounts[metal] = usdAmountConvertedToAllCurrencies;
+		};
+
+		return usdAmounts;
 	}
 }
 
@@ -66,12 +82,11 @@ module.exports.updateSpotPrices = async function() {
 		const kitcoRes = await axios.get('https://proxy.kitco.com/getPM?symbol=AG,AU,PD,PT', { headers: KitcoReqHeaders });
 		const kitcoData = kitcoRes.data;
 		const lines = kitcoData.split('\r\n').splice(0,4);
-		var spotPrices = {
-			AG: {CAD: null, USD: parseFloat(lines[0].split(',')[4])},
-			AU: {CAD: null, USD: parseFloat(lines[1].split(',')[4])},
-			PD: {CAD: null, USD: parseFloat(lines[2].split(',')[4])},
-			PT: {CAD: null, USD: parseFloat(lines[3].split(',')[4])}
-		}
+
+		var USDSpotAG = parseFloat(lines[0].split(',')[4]);
+		var USDSpotAU = parseFloat(lines[1].split(',')[4]);
+		var USDSpotPD = parseFloat(lines[2].split(',')[4]);
+		var USDSpotPT = parseFloat(lines[3].split(',')[4]);
 	} catch(error) {
 		err = error;
 		console.error(`Errored when getting kitco spot price data:`, error.message);
@@ -82,10 +97,7 @@ module.exports.updateSpotPrices = async function() {
 	//CONVERT KITCO SPOT PRICES TO OTHER CURRENCIES
 
 	try {
-		for(let symbol in spotPrices) {
-			let val = spotPrices[symbol];
-			spotPrices[symbol].CAD = await currConv(val.USD, "CAD");
-		}
+		var spotPrices = await currrencyConvertObj({AG: USDSpotAG, AU: USDSpotAU, PD: USDSpotPD, PT: USDSpotPT});
 	} catch(error) {
 		err = error;
 		console.error(`Errored converting spot price data into other currencies:`, error);

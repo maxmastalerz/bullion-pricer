@@ -70,6 +70,7 @@ services:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
             - CURRENCY_BEACON_API_TOKEN=${CRON_CURRENCY_BEACON_API_TOKEN}
             - SCRAPEOPS_API_KEY=${CRON_SCRAPEOPS_API_KEY}
+            - BABEL_DISABLE_CACHE=1
         volumes:
             - pp-cron-node_modules:/app/node_modules
             - ./cron:/app

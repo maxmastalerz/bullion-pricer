@@ -214,6 +214,15 @@ select {
 	}
 }
 
+.currency-selector {
+	display: inline-block;
+	
+	.nice-select {
+    	border: solid 1px #40403b;
+		padding: 0 40px 0px 10px;
+	}
+}
+
 .input-group {
 	input,
 	select,

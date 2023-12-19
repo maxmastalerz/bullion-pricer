@@ -38,7 +38,8 @@
 		"react-slick": "^0.27.14",
 		"react-visibility-sensor": "^5.1.1",
 		"react-wow": "^1.0.0",
-		"slick-carousel": "^1.8.1"
+		"slick-carousel": "^1.8.1",
+		"country-data-codes": "4.1.9"
 	},
 	"devDependencies": {
 		"autoprefixer": "10.4.5",

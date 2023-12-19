@@ -74,18 +74,9 @@ router.get("/spotPrices", async (req, res) => {
 		.project({ _id: 0, symbol: 1, [`price.${req.query.currency}`]: 1})
 		.toArray();
 
-	if (["CAD","USD"].includes(currency)) {
-		res.send({
-			data: lastSpot,
-		});
-	} else {
-		res.status(400);
-		res.send({
-			error: {
-				message: "ERROR: Please select a valid currency.",
-			},
-		});
-	}
+	res.send({
+		data: lastSpot,
+	});
 });
 
 router.get("/products", async (req, res) => {
