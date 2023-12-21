@@ -8,8 +8,9 @@
 }
 
 html {	
-	width: 100%;	
-	overflow-x: hidden;	
+	width: 100%;
+	min-width: 320px;
+	overflow-x: hidden;
 }
 
 .circle-out {	
@@ -215,11 +216,8 @@ select {
 }
 
 .currency-selector {
-	display: inline-block;
-	
 	.nice-select {
-    	border: solid 1px #40403b;
-		padding: 0 40px 0px 10px;
+		height: 30px;
 	}
 }
 

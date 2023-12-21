@@ -445,6 +445,7 @@ header {
 		&.header-absolute {
 			position: absolute;
 			top: 0;
+			min-width: 320px; /* Matches the min-width for html tag */
 		}
 
 		.main-menu-area {
@@ -484,24 +485,19 @@ header {
 			@media (max-width: 992px) {
 				background-color: #1c1b19;
 			}
-
-			@media #{$sm} {
-				text-align: center;
-			}
 			@media #{$tiny} {
 				display: none;
 			}
-			&,
-			a {
-				color: $white;
-			}
 			ul.header-top-info {
+				text-align: center;
+				
+				li:not(:last-child) {
+					margin-right: 15px;
+				}
+
 				li {
 					display: inline-block;
-					margin-left: 15px;
-					@media #{$xsm} {
-						margin-left: 5px;
-					}
+
 					i {
 						margin-right: 10px;
 						color: $primary-color;
@@ -1048,14 +1044,14 @@ left: 100%;
 top: -0%;	
 }	
 @media(max-width:991px) {	
-.sigma-header .sigma-main-menu>.menu-item>a {
-line-height: 100px;	
-}	
-.sigma-header .sigma-main-menu .menu-item-has-children:hover>.sub-menu {	
-opacity: 1;	
-visibility: visible;	
-top: 0%;	
-}	
+	.sigma-header .sigma-main-menu>.menu-item>a {
+		line-height: 100px;	
+	}	
+	.sigma-header .sigma-main-menu .menu-item-has-children:hover>.sub-menu {	
+		opacity: 1;	
+		visibility: visible;	
+		top: 0%;	
+	}
 }	
 /*=====sigma-megamenu======*/
 .sigma-header .menu-item-has-megamenu .tab-item {	
@@ -1223,25 +1219,25 @@ transition: 0.3s;
 }	
 /*=====Sigma Mobile Menu======*/
 .sigma-mobile-menu {	
-width: 300px;	
-transform: translateX(-100%);	
-position: fixed;	
-top: 0;	
-left: 0;	
-background-color: #353530;	
-height: 100vh;	
-z-index: 10;	
-transition: 0.3s all;	
-display: none;	
-overflow-y: auto;	
-overflow-x: hidden;	
+	width: 300px;
+	transform: translateX(-100%);
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: #353530;
+	height: 100%;
+	z-index: 10;
+	transition: 0.3s all;
+	display: none;
+	overflow-y: auto;
+	overflow-x: hidden;
 }	
 .sigma-mobile-menu.active {	
 transform: translateX(0%);	
 }	
 .sigma-mobile-menu .sigma-main-menu {	
-display: block;	
-padding: 40px 0;	
+	display: block;
+	padding: 20px 0;
 }	
 .sigma-mobile-menu .sigma-main-menu>.menu-item {	
 width: 100%;	
@@ -1295,12 +1291,122 @@ background-color: #353530;
 	header.header-two .site-logo {	
 		margin: 0;	
 	}
+
+	header.header-three .header-top ul.header-top-info {
+		text-align: unset;
+	}
 }
-@media (max-width: 767px) {	
-.sigma-header .sigma-logo {	
-text-align: left;	
-}	
-}	
+
+.currency-selector-container {
+	span {
+		padding-right: 10px;
+	}
+
+	.currency-selector {
+		display: inline-block;
+
+		.nice-select {
+			border: solid 1px #40403b;
+			padding: 0 10px;
+		}
+	}
+}
+
+ul.spot-prices li {
+	color: $white;
+}
+
+@media (max-width: 767px) {
+	.sigma-header .sigma-logo {	
+		text-align: left;	
+	}
+
+	ul.spot-prices {
+		.spot-price > span:nth-of-type(2) { /*currency*/
+			display: none;
+		}
+	}
+}
+
+.spot-prices-mobile-menu-widget {
+	text-align: center;
+	padding: 20px 0 20px 0;
+	border-bottom: 1px solid #fff;
+}
+
+@media (min-width: 400px) {
+	.spot-prices-mobile-menu-widget {
+		display: none;
+	}
+}
+
+@media (max-width: 991px) {
+	.currency-selector-container > span {
+		display: none;
+	}
+}
+
+header.header-three .header-top {
+	.currency-selector-container {
+		float: right;
+		position: relative;
+		margin-bottom: calc(-22.4px - 30px);
+		bottom: calc(22.4px + 30px);
+	}
+}
+
+@media (min-width: 400px) and (max-width: 575px) {
+	ul.spot-prices {
+		.spot-price:nth-child(1):before { content: none; }
+		.spot-price:nth-child(2):before { content: none; }
+		.spot-price:nth-child(3):before { content: none; }
+		.spot-price:nth-child(4):before { content: none; }
+
+		li > span:nth-child(1) {
+			display: block;
+			text-align: center;
+		}
+	}
+}
+
+@media (max-width: 575px) {
+	header.header-three .header-top {
+		line-height: calc(( 160% + 30px )/2);
+
+		.currency-selector-container {
+			margin-bottom: calc(-15px - (52.4px / 2));
+			bottom: calc(15px + (52.4px / 2));
+		}
+	}
+}
+
+@media (max-width: 399px) {
+	.sigma-mobile-menu {
+		width: 160px;
+
+		.sigma-main-menu > .menu-item > a {
+			justify-content: center;
+		}
+
+		ul.spot-prices {
+			margin-bottom: 20px;
+		}
+	}
+}
+
+@media (max-width: 399px), (min-width: 576px) and (max-width: 991px) {	
+	ul.spot-prices {
+		.spot-price:nth-child(1):before { content: 'AG'; }
+		.spot-price:nth-child(2):before { content: 'AU'; }
+		.spot-price:nth-child(3):before { content: 'PD'; }
+		.spot-price:nth-child(4):before { content: 'PT'; }
+
+		.spot-price > span:nth-of-type(1) { /*metal*/
+			display: none;
+		}
+	}
+}
+
 @media (max-width: 576px) {	
 .sigma-header .sigma-topbar-controls.style-2>li {	
 margin-left: 10px;	

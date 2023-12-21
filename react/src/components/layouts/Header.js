@@ -6,6 +6,7 @@ import $ from 'jquery'
 import Canvas from './Canvas';
 import Mobilemenu from './Mobilemenu';
 import SelectCurrency from '../SelectCurrency';
+import { formatNumber } from '../../helper/formatting';
 
 function Header() {
     const [classmethod, setClassmethod] = useState(false);
@@ -74,11 +75,11 @@ function Header() {
             <header className={`header-three header-absolute sticky-header sigma-header ${isTop ? 'sticky-active' : ''}`} id="header">
                 <div className="header-top">
                     <div className="container-fluid container-custom-three">
-                        <ul className="header-top-info" style={{width: "100%", textAlign: "center"}}>
-                            { (silverSpotPrice !== null) && <li>Silver {silverSpotPrice} {currency}</li> }
-                            { (goldSpotPrice !== null) && <li>Gold {goldSpotPrice} {currency}</li> }
-                            { (palladiumSpotPrice !== null) && <li>Palladium {palladiumSpotPrice} {currency}</li> }
-                            { (platinumSpotPrice !== null) && <li>Platinum {platinumSpotPrice} {currency}</li> }
+                        <ul className="header-top-info spot-prices">
+                            { (silverSpotPrice !== null) && <li className="spot-price"><span>Silver</span> {formatNumber(silverSpotPrice)} <span>{currency}</span></li> }
+                            { (goldSpotPrice !== null) && <li className="spot-price"><span>Gold</span> {formatNumber(goldSpotPrice)} <span>{currency}</span></li> }
+                            { (palladiumSpotPrice !== null) && <li className="spot-price"><span>Palladium</span> {formatNumber(palladiumSpotPrice)} <span>{currency}</span></li> }
+                            { (platinumSpotPrice !== null) && <li className="spot-price"><span>Platinum</span> {formatNumber(platinumSpotPrice)} <span>{currency}</span></li> }
                         </ul>
                         <SelectCurrency onChange={onChangeCurrency} value={currency} />
                     </div>
@@ -182,7 +183,11 @@ function Header() {
                 {/* Mobile Header End */}
                 {/* Mobile Menu Start */}
                 <aside className={classNames("sigma-mobile-menu", { "active": togglemethod })}>
-                    <Mobilemenu />
+                    <Mobilemenu
+                        onChangeCurrency={onChangeCurrency}
+                        currency={currency}
+                        spotPrices={{silverSpotPrice,goldSpotPrice,palladiumSpotPrice,platinumSpotPrice}}
+                    />
                 </aside >
                 {/* Mobile Menu End */}
             </header >

@@ -56,6 +56,7 @@
 
 html {
   width: 100%;
+  min-width: 320px;
   overflow-x: hidden;
 }
 
@@ -272,12 +273,8 @@ select {
   transform: translateY(-50%);
 }
 
-.currency-selector {
-  display: inline-block;
-}
 .currency-selector .nice-select {
-  border: solid 1px #40403b;
-  padding: 0 40px 0px 10px;
+  height: 30px;
 }
 
 .input-group input,
@@ -1603,6 +1600,7 @@ header.header-three {
 header.header-three.header-absolute {
   position: absolute;
   top: 0;
+  min-width: 320px; /* Matches the min-width for html tag */
 }
 header.header-three .main-menu-area {
   position: absolute;
@@ -1637,8 +1635,6 @@ header.header-three .main-menu-area.sticky-header.sticky-active .nav-container .
   line-height: 100px;
 }
 header.header-three .header-top {
-  /*padding-top: 15px;
-  padding-bottom: 15px;*/
   line-height: calc(160% + 30px);
   font-family: "Roboto", sans-serif;
 }
@@ -1647,28 +1643,19 @@ header.header-three .header-top {
     background-color: #1c1b19;
   }
 }
-@media (max-width: 767px) {
-  header.header-three .header-top {
-    text-align: center;
-  }
-}
 @media (max-width: 399px) {
   header.header-three .header-top {
     display: none;
   }
 }
-header.header-three .header-top,
-header.header-three .header-top a {
-  color: #fff;
+header.header-three .header-top ul.header-top-info {
+  text-align: center;
+}
+header.header-three .header-top ul.header-top-info li:not(:last-child) {
+  margin-right: 15px;
 }
 header.header-three .header-top ul.header-top-info li {
   display: inline-block;
-  margin-left: 15px;
-}
-@media (max-width: 575px) {
-  header.header-three .header-top ul.header-top-info li {
-    margin-left: 5px;
-  }
 }
 header.header-three .header-top ul.header-top-info li i {
   margin-right: 10px;
@@ -2459,7 +2446,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
   top: 0;
   left: 0;
   background-color: #353530;
-  height: 100vh;
+  height: 100%;
   z-index: 10;
   transition: 0.3s all;
   display: none;
@@ -2473,7 +2460,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .sigma-mobile-menu .sigma-main-menu {
   display: block;
-  padding: 40px 0;
+  padding: 20px 0;
 }
 
 .sigma-mobile-menu .sigma-main-menu > .menu-item {
@@ -2536,10 +2523,109 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
   header.header-two .site-logo {
     margin: 0;
   }
+  header.header-three .header-top ul.header-top-info {
+    text-align: unset;
+  }
 }
+.currency-selector-container span {
+  padding-right: 10px;
+}
+.currency-selector-container .currency-selector {
+  display: inline-block;
+}
+.currency-selector-container .currency-selector .nice-select {
+  border: solid 1px #40403b;
+  padding: 0 10px;
+}
+
+ul.spot-prices li {
+  color: #fff;
+}
+
 @media (max-width: 767px) {
   .sigma-header .sigma-logo {
     text-align: left;
+  }
+  ul.spot-prices .spot-price > span:nth-of-type(2) { /*currency*/
+    display: none;
+  }
+}
+.spot-prices-mobile-menu-widget {
+  text-align: center;
+  padding: 20px 0 20px 0;
+  border-bottom: 1px solid #fff;
+}
+
+@media (min-width: 400px) {
+  .spot-prices-mobile-menu-widget {
+    display: none;
+  }
+}
+@media (max-width: 991px) {
+  .currency-selector-container > span {
+    display: none;
+  }
+}
+header.header-three .header-top .currency-selector-container {
+  float: right;
+  position: relative;
+  margin-bottom: -52.4px;
+  bottom: 52.4px;
+}
+
+@media (min-width: 400px) and (max-width: 575px) {
+  ul.spot-prices .spot-price:nth-child(1):before {
+    content: none;
+  }
+  ul.spot-prices .spot-price:nth-child(2):before {
+    content: none;
+  }
+  ul.spot-prices .spot-price:nth-child(3):before {
+    content: none;
+  }
+  ul.spot-prices .spot-price:nth-child(4):before {
+    content: none;
+  }
+  ul.spot-prices li > span:nth-child(1) {
+    display: block;
+    text-align: center;
+  }
+}
+@media (max-width: 575px) {
+  header.header-three .header-top {
+    line-height: calc((160% + 30px) / 2);
+  }
+  header.header-three .header-top .currency-selector-container {
+    margin-bottom: -41.2px;
+    bottom: 41.2px;
+  }
+}
+@media (max-width: 399px) {
+  .sigma-mobile-menu {
+    width: 160px;
+  }
+  .sigma-mobile-menu .sigma-main-menu > .menu-item > a {
+    justify-content: center;
+  }
+  .sigma-mobile-menu ul.spot-prices {
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 399px), (min-width: 576px) and (max-width: 991px) {
+  ul.spot-prices .spot-price:nth-child(1):before {
+    content: "AG";
+  }
+  ul.spot-prices .spot-price:nth-child(2):before {
+    content: "AU";
+  }
+  ul.spot-prices .spot-price:nth-child(3):before {
+    content: "PD";
+  }
+  ul.spot-prices .spot-price:nth-child(4):before {
+    content: "PT";
+  }
+  ul.spot-prices .spot-price > span:nth-of-type(1) { /*metal*/
+    display: none;
   }
 }
 @media (max-width: 576px) {

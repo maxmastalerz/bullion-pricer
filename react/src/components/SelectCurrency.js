@@ -7,11 +7,11 @@ let countries = getCountryList().filter((value, index, self) => { // get unique 
 
 const SelectCurrency = ({ onChange, value = 'USD' }) => {
 	return (
-        <div style={{float: "right", position: "relative", marginBottom: "calc(-22.4px - 30px)", bottom: "calc(22.4px + 30px)"}}>
-            <span style={{paddingRight: "10px"}}>Currency</span>
+        <div className="currency-selector-container">
+            <span>Currency</span>
             
             <div className="currency-selector">
-                <select className="nice-select" style={{ height: '30px'}} onChange={onChange} value={value}>
+                <select className="nice-select" onChange={onChange} value={value}>
                     {countries.map(function(country, i) {
                         return (<option key={i} value={country.currency.code}>{country.currency.code}</option>);
                     })}
