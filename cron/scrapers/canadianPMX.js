@@ -5,8 +5,12 @@ function parsePrice(strPrice) {
 	return parseFloat(strPrice.replace(/^\$|(\sCAD)$|,/g, ""));
 }
 
-module.exports = async (scrapeUrl) => {
-	console.log("Scraping: " + scrapeUrl);
+function scrapeForProductLinks() {
+	return ["c","d"];
+}
+
+async function scrapeProductPage(url) {
+	console.log("Scraping: " + url);
 	const priceLine = [];
 	const pricing = {
 		cash: [],
@@ -19,7 +23,7 @@ module.exports = async (scrapeUrl) => {
 	// send request with headers mimicking a user browser
 	let html;
 	try {
-		const response = await axios.get(scrapeUrl, {
+		const response = await axios.get(url, {
 			headers: {
 				accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
 				"accept-language": "en-US,en;q=0.9",
@@ -80,4 +84,9 @@ module.exports = async (scrapeUrl) => {
 	}
 
 	return { pricing };
+};
+
+module.exports = {
+	scrapeProductPage,
+	scrapeForProductLinks,
 };

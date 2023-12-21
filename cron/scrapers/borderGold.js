@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { parse } = require("node-html-parser");
 
-// PP-TODO: Get PID like the one here: https://www.bordergold.com/?p=10246 from the scrapeURL, then send a request to
+// PP-TODO: Get PID like the one here: https://www.bordergold.com/?p=10246 from the url, then send a request to
 // https://www.bordergold.com/wp-content/plugins/istpricecontroller/cache/products/Retail_10246_CAD_tiers.json?_=1668453682180
 // replacing the PID and the timestamp with now, to get the current price
 
@@ -9,8 +9,12 @@ function parsePrice(strPrice) {
 	return parseFloat(strPrice.replace(/^\$|(\sCAD)$|,/g, ""));
 }
 
-module.exports = async (scrapeUrl) => {
-	console.log("Scraping: " + scrapeUrl);
+function scrapeForProductLinks() {
+	return ["a","b"];
+}
+
+async function scrapeProductPage(url) {
+	console.log("Scraping: " + url);
 	const priceLine = [];
 	const pricing = {
 		check: [],
@@ -22,7 +26,7 @@ module.exports = async (scrapeUrl) => {
 	// send request with headers mimicking a user browser
 	let html;
 	try {
-		const res = await axios.get(scrapeUrl, {
+		const res = await axios.get(url, {
 			headers: {
 				accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
 				"accept-language": "en-US,en;q=0.9",
@@ -87,4 +91,9 @@ module.exports = async (scrapeUrl) => {
 	}
 
 	return { pricing };
+};
+
+module.exports = {
+	scrapeProductPage,
+	scrapeForProductLinks,
 };
