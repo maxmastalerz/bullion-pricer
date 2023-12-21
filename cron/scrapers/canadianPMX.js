@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const axios = require('axios');
 const { parse } = require("node-html-parser");
 
 function parsePrice(strPrice) {
@@ -17,28 +17,32 @@ module.exports = async (scrapeUrl) => {
 	};
 
 	// send request with headers mimicking a user browser
-	const res = await fetch(scrapeUrl, {
-		headers: {
-			accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-			"accept-language": "en-US,en;q=0.9",
-			"sec-ch-ua":
-				'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-			"sec-ch-ua-mobile": "?0",
-			"sec-ch-ua-platform": '"macOS"',
-			"sec-fetch-dest": "document",
-			"sec-fetch-mode": "navigate",
-			"sec-fetch-site": "none",
-			"sec-fetch-user": "?1",
-			"upgrade-insecure-requests": "1",
-			cookie: "storeclosing=Mon, 1 Jan 2099 00:00:00 GMT",
-			"user-agent":
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
-		},
-		referrerPolicy: "strict-origin-when-cross-origin",
-	});
-
-	const html = await res.text();
-
+	let html;
+	try {
+		const response = await axios.get(scrapeUrl, {
+			headers: {
+				accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+				"accept-language": "en-US,en;q=0.9",
+				"sec-ch-ua":
+					'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+				"sec-ch-ua-mobile": "?0",
+				"sec-ch-ua-platform": '"macOS"',
+				"sec-fetch-dest": "document",
+				"sec-fetch-mode": "navigate",
+				"sec-fetch-site": "none",
+				"sec-fetch-user": "?1",
+				"upgrade-insecure-requests": "1",
+				cookie: "storeclosing=Mon, 1 Jan 2099 00:00:00 GMT",
+				"user-agent":
+					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+			}
+		});
+		html = response.data;
+	} catch (error) {
+		console.error("Error fetching data:", error.message);
+		throw error;
+	}
+	
 	const document = parse(html);
 	const catalogTable = document.querySelector(".nfs_catalog_plugin_table");
 	const catalogRows = catalogTable.querySelectorAll("tr").slice(1);
