@@ -1,6 +1,6 @@
-const { MongoClient } = require("mongodb");
 const axios = require('axios');
-const { getCountryList } = require("country-data-codes")
+const { getCountryList } = require("country-data-codes");
+const { client } = require('./db');
 
 let countries = getCountryList().filter((value, index, self) => { // get unique currency codes.
     return self.findIndex(v => v.currency.code === value.currency.code && v.currency.code !== "No Universal Currency") === index;
@@ -53,10 +53,8 @@ const getRandomUserAgent = async function() {
 	return userAgentList[Math.floor(Math.random()*userAgentList.length)];
 };
 
-module.exports.updateSpotPrices = async function() {
+module.exports = async function() {
 	console.log("== COLLECTING SPOT DATA ==");
-	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
-	await client.connect();
 	const db = client.db();
 	const spotCollection = db.collection("spot");
 	let err = false;

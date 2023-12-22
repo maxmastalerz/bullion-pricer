@@ -1,6 +1,6 @@
 db.products.insertMany([
 	{
-		url: "https://www.bordergold.com/product/1-oz-2023-canadian-gold-maple-leaf-coin/",
+		url: "https://bordergold.com/product/1-oz-2023-canadian-gold-maple-leaf-coin/",
 		title: "1 oz 2023 Canadian Gold Maple Leaf Coin",
 		productType: ["gold"],
 		purities: ["9999"],
@@ -24,7 +24,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/1-oz-2022-canadian-silver-maple-leaf-coin/",
+		url: "https://bordergold.com/product/1-oz-2022-canadian-silver-maple-leaf-coin/",
 		title: "1 oz 2022 Canadian Silver Maple Leaf Coin",
 		productType: ["silver"],
 		purities: ["9999"],
@@ -48,7 +48,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/1-oz-platinum-maple-leaf/",
+		url: "https://bordergold.com/product/1-oz-platinum-maple-leaf/",
 		title: "1 oz Canadian Maple Leaf Platinum Coin (Random Year)",
 		productType: ["platinum"],
 		purities: ["9995"],
@@ -72,7 +72,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/10-oz-rcm-silver-bar/",
+		url: "https://bordergold.com/product/10-oz-rcm-silver-bar/",
 		title: "10 oz RCM Silver Bar",
 		productType: ["silver"],
 		purities: ["9999"],
@@ -96,7 +96,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/100-oz-rcm-silver-bar/",
+		url: "https://bordergold.com/product/100-oz-rcm-silver-bar/",
 		title: "100 oz RCM Silver Bar",
 		productType: ["silver"],
 		purities: ["9999"],
@@ -120,7 +120,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/10-oz-gold-bar/",
+		url: "https://bordergold.com/product/10-oz-gold-bar/",
 		title: "10 oz Gold Bar",
 		productType: ["gold"],
 		purities: ["9999"],
@@ -132,7 +132,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/5-gram-gold-bar/",
+		url: "https://bordergold.com/product/5-gram-gold-bar/",
 		title: "5 gram Gold Bar",
 		productType: ["gold"],
 		purities: ["9999"],
@@ -156,7 +156,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/10-gram-gold-bar/",
+		url: "https://bordergold.com/product/10-gram-gold-bar/",
 		title: "10 Gram Gold Bar",
 		productType: ["gold"],
 		purities: ["9999"],
@@ -180,7 +180,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/1-oz-platinum-bar/",
+		url: "https://bordergold.com/product/1-oz-platinum-bar/",
 		title: "1 oz Platinum Bar",
 		productType: ["platinum"],
 		purities: ["9995"],
@@ -192,7 +192,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/1-oz-gold-bar/",
+		url: "https://bordergold.com/product/1-oz-gold-bar/",
 		title: "1 oz Gold Bar (Various Refiners)",
 		productType: ["gold"],
 		purities: ["9999"],
@@ -204,7 +204,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/1-kilo-pamp-silver-bar/",
+		url: "https://bordergold.com/product/1-kilo-pamp-silver-bar/",
 		title: "1 Kilo PAMP Silver Bar",
 		productType: ["silver"],
 		purities: ["999"],
@@ -216,7 +216,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/1-oz-silver-britannia/",
+		url: "https://bordergold.com/product/1-oz-silver-britannia/",
 		title: "1 oz. Silver Britannia",
 		productType: ["silver"],
 		purities: ["999"],
@@ -228,7 +228,7 @@ db.products.insertMany([
 		pricing: null,
 	},
 	{
-		url: "https://www.bordergold.com/product/5-oz-silver-bar/",
+		url: "https://bordergold.com/product/5-oz-silver-bar/",
 		title: "5 oz Silver Bar",
 		productType: ["silver"],
 		purities: ["999"],
