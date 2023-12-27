@@ -6,17 +6,23 @@ import ProductFilterTop from '../../layouts/ProductFilterTop';
 import goldCanadianPMX from '../../../assets/img/shop/gold-canadianPMX.png';
 import silverCanadianPMX from '../../../assets/img/shop/silver-canadianPMX.png';
 import platinumCanadianPMX from '../../../assets/img/shop/platinum-canadianPMX.png';
+import palladiumCanadianPMX from '../../../assets/img/shop/palladium-canadianPMX.png';
+
 import goldBorderGold from '../../../assets/img/shop/gold-borderGold.png';
 import silverBorderGold from '../../../assets/img/shop/silver-borderGold.png';
 import platinumBorderGold from '../../../assets/img/shop/platinum-borderGold.png';
+import palladiumBorderGold from '../../../assets/img/shop/palladium-borderGold.png';
 
 const imageMapping = {
     "goldCanadianPMX": goldCanadianPMX,
     "silverCanadianPMX": silverCanadianPMX,
     "platinumCanadianPMX": platinumCanadianPMX,
+    "palladiumCanadianPMX": palladiumCanadianPMX,
+
     "goldBorder Gold": goldBorderGold,
     "silverBorder Gold": silverBorderGold,
-    "platinumBorder Gold": platinumBorderGold
+    "platinumBorder Gold": platinumBorderGold,
+    "palladiumBorder Gold": palladiumBorderGold
 }
 
 const productTypes = [

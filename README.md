@@ -6,7 +6,7 @@ Originally this application was made as a group project for 9549/4471 at Western
 
 $ DOCKER_BUILDKIT=1 docker-compose --env-file .env.dev -f docker-compose-dev.yml build
 
-$ docker-compose --env-file .env.dev -f docker-compose-dev.yml up
+$ docker-compose --env-file .env.dev -f docker-compose-dev.yml up --scale pp-product-scraper=2
 
 Please wait(about 55 seconds for scraping to finish), then:
 

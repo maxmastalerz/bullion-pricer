@@ -61,7 +61,6 @@ module.exports = async function() {
 
 	//GET RANDOM USER AGENT
 	const randomUserAgent = await getRandomUserAgent();
-	console.log(randomUserAgent);
 
 	//GET KITCO SPOT PRICES USING RANDOM USER AGENT
 	try {

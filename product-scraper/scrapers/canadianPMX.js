@@ -1,0 +1,257 @@
+const axios = require('axios');
+const { parse } = require("node-html-parser");
+
+const notMints = ['Maple Leaf', 'Hand Poured'];
+const listOfMints = {
+	government_issued: [
+		[['Royal Canadian Mint'],'Royal Canadian Mint'],
+		[['Perth Mint Products', 'Perth Mint Gold'],'Perth Mint'],
+		[['The Royal Mint'],'The Royal Mint'],
+		[['United States Mint'],'United States Mint'],
+		[['South African Mint'],'South African Mint'],
+	],
+	not_government_issued: [
+		[['Pamp Suisse'],'Pamp Suisse'],
+		[['Engelhard'],'Engelhard'],
+		[['Johnson Matthey'],'Johnson Matthey'],
+		[['Republic Metals Corp.','RMC'],'Republic Metals Corp.'],
+		[['Scotiabank'],'Scotiabank'],
+		[['Austrian Mint'],'Austrian Mint'],
+		[['Argentia Precious Metals','Argentia'],'Argentia Precious Metals'],
+		[['Canadian PMX Inc.'],'Canadian PMX Inc.'],
+		[['Scottsdale Mint'],'Scottsdale Mint'],
+		[['Sunshine Mint'],'Sunshine Mint'],
+		[['First Majestic'],'First Majestic'],
+		[['NTR Metals'],'NTR Metals'],
+		[['OPM Metals'],'Ohio Precious Metals'],
+		[['CCR'],'Canadian Copper Refinery'],
+		[['Beaver Bullion'],'Beaver Bullion'],
+		[['Asahi','Asahi Refining'],'Asahi Refining'],
+		[['Geiger Edelmetalle'],'Geiger Edelmetalle']
+	]
+};
+
+function parsePrice(strPrice) {
+	return parseFloat(strPrice.replace(/^\$|(\sCAD)$|,/g, ""));
+}
+
+function parseMint(tags) {
+	//Removing tags that we know for sure aren't dealers. We are not interested in them.
+	tags = tags.filter(tag => !notMints.includes(tag));
+
+	let matchingMints = [];
+
+	for (const category in listOfMints) {
+		matchingMints = matchingMints.concat(listOfMints[category].filter(entry =>
+			entry[0].some(tag => tags.includes(tag))
+		));
+	}
+
+	if (tags.some(tag => !matchingMints.some(entry => entry[0].includes(tag)))) { // Unknown tag found	
+		return 'Various';
+	} else if (matchingMints.length === 1) { // Single matching mint found
+		return matchingMints[0][1];
+	} else if (matchingMints.length > 1) { // Multiple matching mints found
+		return 'Various';//PP-TO: If the multiple mints like Argentia/Canadian PMX are all not_government_issued, we could try to store info like that versus leaving it as MANUAL_REVIEW
+	} else { // No matching mint found
+		return false;
+	}
+}
+
+/*Tries to parse the weight from the weight string*/
+function parseWeight({weight, title}) {
+	const wordsToGramMap = [
+		[["0.0321 tr oz", "1 gram"],1],
+		[["0.0643 tr oz"],2],
+		[["0.10 tr oz"],3.11],
+		[["0.1607 tr oz"],5],
+		[["0.25 tr oz"],7.78],
+		[["0.3215 tr oz"],10],
+		[["0.50 tr oz"],15.55],
+		[["1 tr oz"],31.1],
+		[["5 Tr Oz","5 oz"],155.52],
+		[["10 Tr Oz","10 oz"],311.04],
+		[["32.15 tr oz"],1000],
+		[["100 tr oz"],3110.35],
+		[["1000 tr oz"],31103.5]
+	];
+
+	//PP-TODO:
+	//Think what to do about weird products like : 20 x 5 Tr Oz = 100 Troy Ounces
+	//https://canadianpmx.com/product/silver-argentia-precious-metals-5-oz-9999-cast-bar-box-of-20-x-5-oz-100-ounces/
+	//I think they should be classified as 5oz, but then their bulk pricing should be scaled by 20 in this case.
+
+	for (const [patterns, grams] of wordsToGramMap) {
+		if(title) {
+			title = title.toLowerCase();
+			if (patterns.some(pattern => title.includes(pattern))) {
+				return grams;
+			}
+		} else if(weight) {
+			weight = weight.toLowerCase();
+			if (patterns.some(pattern => pattern===weight)) {
+				return grams;
+			}
+		}
+	}
+
+	return false;
+}
+
+function parsePurities(fineness) {
+	const wordsToPuritiesMap = [
+		[[],["99999"]],
+		[[".9999"],["9999"]],
+		[[".9995"],["9995"]],
+		[[".999"],["999"]],
+		[[],["925"]],
+		[[],["less_than_or_equal_90"]],
+	];
+
+	for (const [patterns, purities] of wordsToPuritiesMap) {
+		fineness = fineness.toLowerCase();
+		if (patterns.some(pattern => pattern===fineness)) {
+			return purities;
+		}
+	}
+
+	return false;
+}
+
+function getTags(document) {
+	let tags = [];
+	let tagEls = document.querySelectorAll('div.product_meta > span.tagged_as a');
+	for(let tag of tagEls) {
+		tags.push(tag.innerText.trim());
+	}
+	return tags;
+}
+
+function parseIssuance(mintToSearch) {
+	for (const [tags, mint] of listOfMints.government_issued) { // Check government-issued mints
+		if (mint === mintToSearch) {
+			return ['government_issued'];
+		}
+	}
+
+	for (const [tags, mint] of listOfMints.not_government_issued) { // Check not government-issued mints
+		if (mint === mintToSearch) {
+			return ['not_government_issued'];
+		}
+	}
+
+	return 'MANUAL_REVIEW';
+}
+
+
+function getPricing(document) {
+	const priceLine = [];
+	const pricing = {
+		cash: [],
+		check: [],
+		wire: [],
+		creditcard: [],
+		paypal: [],
+	};
+	const catalogTable = document.querySelector(".nfs_catalog_plugin_table");
+	const catalogRows = catalogTable.querySelectorAll("tr").slice(1);
+
+	for (const catalogRow of catalogRows) {
+		const quantityStep = parseInt(
+			catalogRow.firstChild.text.replace("+", "")
+		);
+		const cashPrice = parsePrice(catalogRow.childNodes[1].text);
+		const creditPrice = parsePrice(catalogRow.childNodes[2].text);
+		priceLine.push([quantityStep, cashPrice, creditPrice]);
+	}
+
+	for (let i = 0; i < priceLine.length; i++) {
+		const [quantityStep, cashPrice, creditPrice] = priceLine[i];
+		const nextQuantityStep = priceLine?.[i + 1]?.[0] - 1 || Infinity;
+		const qtyRange = [quantityStep, nextQuantityStep];
+
+		const cashPricing = {
+			qtyRange: qtyRange,
+			price: cashPrice,
+		};
+
+		pricing.cash.push(cashPricing);
+		pricing.wire.push(cashPricing);
+		pricing.check.push(cashPricing);
+
+		const creditPricing = {
+			qtyRange: qtyRange,
+			price: creditPrice,
+		};
+
+		pricing.creditcard.push(creditPricing);
+		pricing.paypal.push(creditPricing);
+	}
+
+	return pricing;
+}
+
+async function scrapeProductPage(url) {
+	console.log("Scraping: " + url);
+
+	// send request with headers mimicking a user browser
+	let html;
+	try {
+		const response = await axios.get(url, {
+			headers: {
+				accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+				"accept-language": "en-US,en;q=0.9",
+				"sec-ch-ua":
+					'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+				"sec-ch-ua-mobile": "?0",
+				"sec-ch-ua-platform": '"macOS"',
+				"sec-fetch-dest": "document",
+				"sec-fetch-mode": "navigate",
+				"sec-fetch-site": "none",
+				"sec-fetch-user": "?1",
+				"upgrade-insecure-requests": "1",
+				cookie: "storeclosing=Mon, 1 Jan 2099 00:00:00 GMT",
+				"user-agent":
+					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+			}
+		});
+		html = response.data;
+	} catch (error) {
+		console.error("Error fetching data:", error.message);
+		throw error;
+	}
+	
+	let purities='MANUAL_REVIEW',issuance='MANUAL_REVIEW',weight='MANUAL_REVIEW',mint='MANUAL_REVIEW',pricing='MANUAL_REVIEW';
+
+	const document = parse(html);
+
+	let productTitle = document.querySelector('div.product .summary h1.product_title').innerText.trim();
+	let tags = getTags(document);
+
+	let foundMint = parseMint(tags);
+	if(foundMint) { mint=foundMint; issuance = parseIssuance(foundMint); }
+
+	let foundWeight = parseWeight({weight: null, title: productTitle}); //could be overwritten below by the weight table as that is pretty accurate if its there
+	if(foundWeight) { weight=foundWeight; }
+
+	let thElements = document.querySelectorAll('#tab-additional_information table th');
+	for(let thElement of thElements) {
+		if (thElement.innerText.trim().match(/^Fineness:?$/)) {
+			let finenessStr = thElement.nextElementSibling.innerText.trim(); // Get the next sibling <td> element and its text content.
+			let foundPurities = parsePurities(finenessStr);
+			if(foundPurities) { purities=foundPurities; }
+		} else if (thElement.innerText.trim().match(/^Bullion Weight:?$/)) {
+			let weightStr = thElement.nextElementSibling.innerText.trim(); // Get the next sibling <td> element and its text content.
+			foundWeight = parseWeight({weight: weightStr, title: null});
+			if(foundWeight) { weight=foundWeight; }
+		}
+	}
+
+	pricing = getPricing(document);
+
+	return { purities, issuance, weight, mint, pricing };
+};
+
+module.exports = {
+	scrapeProductPage
+};

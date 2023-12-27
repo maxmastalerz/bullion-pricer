@@ -172,12 +172,25 @@ router.get("/products", async (req, res) => {
 		{ $unwind: "$pricing." + paymentPreferenceSelected },
 		{
 			$match: {
-				["pricing." + paymentPreferenceSelected + ".qtyRange.0"]: {
-					$lte: bulkPricingCouldBuy,
-				},
-				["pricing." + paymentPreferenceSelected + ".qtyRange.1"]: {
-					$gte: bulkPricingCouldBuy,
-				},
+				$and: [
+					{
+						["pricing." + paymentPreferenceSelected + ".qtyRange.0"]: {
+							$lte: bulkPricingCouldBuy,
+						},
+					},
+					{
+						$or: [
+							{
+								["pricing." + paymentPreferenceSelected + ".qtyRange.1"]: {
+									$gte: bulkPricingCouldBuy,
+								},
+							},
+							{
+								["pricing." + paymentPreferenceSelected + ".qtyRange.1"]: null,
+							},
+						]
+					}
+				]
 			},
 		},
 		{

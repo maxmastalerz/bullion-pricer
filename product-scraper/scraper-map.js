@@ -1,6 +1,6 @@
 /*
 =IMPORTANT=
-Whatever you do in this file, do it also in scraper-map.js in ./product-scraper
+Whatever you do in this file, do it also in scraper-map.js in ./cron
 =IMPORTANT=
 */
 
