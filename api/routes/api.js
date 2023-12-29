@@ -217,12 +217,33 @@ router.get("/products", async (req, res) => {
 				productType: 1,
 				weight: 1,
 				["pricing." + paymentPreferenceSelected]: {
-					qtyRange: "$pricing." + paymentPreferenceSelected + ".qtyRange",
-					price: {
-						$round: [ {$multiply: [
-							"$pricing." + paymentPreferenceSelected + ".price",
-							{ $arrayElemAt: [ "$currencyInfo.rate", 0 ] }
-						]}, 2]
+					$cond: {
+						if: {
+							$gte: [ {
+								$indexOfArray: [
+									{ $map: { input: { $objectToArray: "$pricing." + paymentPreferenceSelected + ".price" }, as: "entry", in: "$$entry.k" } },
+									currency
+								],
+							}, 0]
+						},
+						then: {
+							qtyRange: "$pricing." + paymentPreferenceSelected + ".qtyRange",
+							price: "$pricing." + paymentPreferenceSelected+".price."+currency
+						},
+						else: {
+							qtyRange: "$pricing." + paymentPreferenceSelected + ".qtyRange",
+							price: {
+								$round: [
+									{
+										$multiply: [
+											"$pricing." + paymentPreferenceSelected + ".price.USD",
+											{ $arrayElemAt: [ "$currencyInfo.rate", 0 ] }
+										]
+									},
+									2
+								]
+							}
+						}
 					}
 				}
 			},

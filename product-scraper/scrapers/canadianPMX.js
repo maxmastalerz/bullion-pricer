@@ -2,22 +2,6 @@ const axios = require('axios');
 const { parse } = require("node-html-parser");
 const { adjustPricingIfBox } = require('../scraper-helpers.js');
 
-const headers = {
-	accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-	"accept-language": "en-US,en;q=0.9",
-	"sec-ch-ua":
-		'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-	"sec-ch-ua-mobile": "?0",
-	"sec-ch-ua-platform": '"macOS"',
-	"sec-fetch-dest": "document",
-	"sec-fetch-mode": "navigate",
-	"sec-fetch-site": "none",
-	"sec-fetch-user": "?1",
-	"upgrade-insecure-requests": "1",
-	cookie: "storeclosing=Mon, 1 Jan 2099 00:00:00 GMT; aelia_cs_selected_currency=USD",
-	"user-agent":
-		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
-};
 const notMints = ['Maple Leaf', 'Hand Poured', '9999'];
 const listOfMints = {
 	government_issued: [
@@ -47,6 +31,25 @@ const listOfMints = {
 		[['Geiger Edelmetalle'],'Geiger Edelmetalle']
 	]
 };
+
+function getHeaders(currency) {
+	return {
+		accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+		"accept-language": "en-US,en;q=0.9",
+		"sec-ch-ua":
+			'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+		"sec-ch-ua-mobile": "?0",
+		"sec-ch-ua-platform": '"macOS"',
+		"sec-fetch-dest": "document",
+		"sec-fetch-mode": "navigate",
+		"sec-fetch-site": "none",
+		"sec-fetch-user": "?1",
+		"upgrade-insecure-requests": "1",
+		cookie: `storeclosing=Mon, 1 Jan 2099 00:00:00 GMT; aelia_cs_selected_currency=${currency}`,
+		"user-agent":
+			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+	};
+}
 
 function parsePrice(strPrice) {
 	return parseFloat(strPrice.replace(/^\$|(\sUSD)$|,/g, ""));
@@ -155,8 +158,11 @@ function parseIssuance(mintToSearch) {
 	return 'MANUAL_REVIEW';
 }
 
-
-function getPricing(document) {
+/*
+pages is an object of currnecies the site supports
+{CAD: [url, headers]|document, USD: [url, headers]|document}. The value under the currency can be a [url, headers] or document.
+*/
+/*function getPricingFromPages(pages) {
 	const priceLine = [];
 	const pricing = {
 		cash: [],
@@ -175,6 +181,88 @@ function getPricing(document) {
 		const cashPrice = parsePrice(catalogRow.childNodes[1].text);
 		const creditPrice = parsePrice(catalogRow.childNodes[2].text);
 		priceLine.push([quantityStep, cashPrice, creditPrice]);
+	}
+
+	for (let i = 0; i < priceLine.length; i++) {
+		const [quantityStep, cashPrice, creditPrice] = priceLine[i];
+		const nextQuantityStep = priceLine?.[i + 1]?.[0] - 1 || Infinity;
+		const qtyRange = [quantityStep, nextQuantityStep];
+
+		const cashPricing = {
+			qtyRange: qtyRange,
+			price: cashPrice,
+		};
+
+		pricing.cash.push(JSON.parse(JSON.stringify(cashPricing)));
+		pricing.wire.push(JSON.parse(JSON.stringify(cashPricing)));
+		pricing.check.push(JSON.parse(JSON.stringify(cashPricing)));
+
+		const creditPricing = {
+			qtyRange: qtyRange,
+			price: creditPrice,
+		};
+
+		pricing.creditcard.push(JSON.parse(JSON.stringify(creditPricing)));
+		pricing.paypal.push(JSON.parse(JSON.stringify(creditPricing)));
+	}
+
+	return pricing;
+}*/
+
+async function getPricingFromPages(pages) {
+	/*
+	CAD: [url,headers],
+	USD: document
+	*/
+
+	const priceLine = [];
+	const pricing = {
+		cash: [],
+		check: [],
+		wire: [],
+		creditcard: [],
+		paypal: [],
+	};
+
+	for (const currency in pages) {
+		let page = pages[currency];
+		let document;
+
+		if(Array.isArray(page)) {
+			const [url, headers] = page;
+
+			const res = await axios.get(url, { headers: headers, body: null, method: "GET" });
+			let html = res.data;
+			document = parse(html);
+		} else {
+			document = page;
+		}
+
+		const catalogTable = document.querySelector(".nfs_catalog_plugin_table");
+		const catalogRows = catalogTable.querySelectorAll("tr").slice(1);
+		
+		for (const catalogRow of catalogRows) {
+			const quantityStep = parseInt(
+				catalogRow.firstChild.text.replace("+", "")
+			);
+			/*const qtyRangeText = catalogRow.firstChild.text;
+			const quantityRange = qtyRangeText.includes(" - ")
+				? qtyRangeText.split(" - ").map((s) => parseInt(s))
+				: [parseInt(qtyRangeText.replace("+", "")), Infinity];*/
+
+			const cashPrice = parsePrice(catalogRow.childNodes[1].text);
+			const creditPrice = parsePrice(catalogRow.childNodes[2].text);
+
+			const indexOfQuantityStep = priceLine.findIndex(([existingQuantityStep]) => existingQuantityStep === quantityStep);
+
+			//FYI: We just assume that the quantity ranges are the same across currencies. If they weren't this probably wouldn't work.
+			if (indexOfQuantityStep === -1) { // qtyRange not found, so push in
+				priceLine.push([quantityStep, { [currency]: cashPrice}, { [currency]: creditPrice } ]);
+			} else { // it's an update
+				priceLine[indexOfQuantityStep][1][currency] = cashPrice; //cash
+				priceLine[indexOfQuantityStep][2][currency] = creditPrice; //credit
+			}
+		}
 	}
 
 	for (let i = 0; i < priceLine.length; i++) {
@@ -220,7 +308,7 @@ async function scrapeProductPage(url) {
 
 	let html;
 	try {
-		const response = await axios.get(url, { headers });
+		const response = await axios.get(url, { headers: getHeaders('USD') });
 		html = response.data;
 	} catch (error) {
 		console.error("Error fetching data:", error.message);
@@ -254,7 +342,7 @@ async function scrapeProductPage(url) {
 		}
 	}
 
-	pricing = getPricing(document);
+	pricing = await getPricingFromPages({ USD: document, CAD: [url, getHeaders('CAD')] });
 	adjustPricingIfBox(pricing, boxSize);
 
 	return { purities, issuance, weight, mint, pricing, boxSize };

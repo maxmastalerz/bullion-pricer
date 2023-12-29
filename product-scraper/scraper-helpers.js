@@ -10,11 +10,13 @@ const adjustPricingIfBox = (pricing, boxSize) => {
 
 			// Multiply the first index of qtyRange by the box size
 			entry.qtyRange[0] = entry.qtyRange[0]*boxSize;
-			entry.price = Math.round((entry.price / boxSize) * 100) / 100;
-
 			// Update the second index based on the next below's first index
 			if (i + 1 < pricing[method].length) { //If not last row, updated 2nd val of qtyRange
 				entry.qtyRange[1] = pricing[method][i + 1].qtyRange[0] - 1;
+			}
+
+			for(currency in entry.price) {
+				entry.price[currency] = Math.round((entry.price[currency] / boxSize) * 100) / 100;
 			}
 		}
 	}

@@ -37,8 +37,15 @@ async function updateCurrencies() {
 			{ error: { code: jsonResponse.meta.code, message: `${jsonResponse.meta.error_type} ${jsonResponse.meta.error_detail}`}}
 		));
 	} else {
-		const documents = Object.entries(rates).map(([currency, rate]) => ({ currency, rate }));
-		await currencies.insertMany(documents);
+		const bulkOps = Object.entries(rates).map(([currency, rate]) => ({
+			updateOne: {
+				filter: { currency },
+				update: { $set: { rate } },
+				upsert: true  // Set to true to insert new documents if the currency doesn't exist
+			}
+		}));
+
+		await currencies.bulkWrite(bulkOps);
 	}
 }
 

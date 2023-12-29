@@ -2,26 +2,24 @@ const axios = require('axios');
 const { parse } = require("node-html-parser");
 const { adjustPricingIfBox } = require('../scraper-helpers.js');
 
-const headers = {
-	accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-	"accept-language": "en-US,en;q=0.9",
-	"sec-ch-ua": '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-	"sec-ch-ua-mobile": "?0",
-	"sec-ch-ua-platform": '"macOS"',
-	"sec-fetch-dest": "document",
-	"sec-fetch-mode": "navigate",
-	"sec-fetch-site": "same-origin",
-	"sec-fetch-user": "?1",
-	"upgrade-insecure-requests": "1",
-	cookie: "_istrd=https%3A%2F%2Fwww.google.com%2F; initialcurrency=USD",
-	Referer: "https://www.bordergold.com",
-	"Referrer-Policy": "strict-origin-when-cross-origin",
-	"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
-};
-
-// PP-TODO: Get PID like the one here: https://www.bordergold.com/?p=10246 from the url, then send a request to
-// https://www.bordergold.com/wp-content/plugins/istpricecontroller/cache/products/Retail_10246_CAD_tiers.json?_=1668453682180
-// replacing the PID and the timestamp with now, to get the current price
+function getHeaders(currency) {
+	return {
+		accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+		"accept-language": "en-US,en;q=0.9",
+		"sec-ch-ua": '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+		"sec-ch-ua-mobile": "?0",
+		"sec-ch-ua-platform": '"macOS"',
+		"sec-fetch-dest": "document",
+		"sec-fetch-mode": "navigate",
+		"sec-fetch-site": "same-origin",
+		"sec-fetch-user": "?1",
+		"upgrade-insecure-requests": "1",
+		cookie: `_istrd=https%3A%2F%2Fwww.google.com%2F; initialcurrency=${currency}`,
+		Referer: "https://www.bordergold.com",
+		"Referrer-Policy": "strict-origin-when-cross-origin",
+		"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+	};
+}
 
 function parsePrice(strPrice) {
 	return parseFloat(strPrice.replace(/^\$|,/g, ""));
@@ -114,7 +112,7 @@ function parseIssuance(mint) {
 In the html response of our first request is a piece of javascript code that makes an ajax call to border gold's price controller.
 Lets get the link they use for pricing the metals in USD.
 */
-function getPricingLinkFromHTML(document) {
+function getPricingLinksFromHTML(document) {
 	const scriptTags = document.querySelectorAll('script');
 	let targetScriptContent = null;
 
@@ -129,7 +127,10 @@ function getPricingLinkFromHTML(document) {
 	const match = targetScriptContent.match(/productView=(\d+);/);
 	if (match && match[1]) {
 		const productViewVal = parseInt(match[1], 10);
-		return `https://bordergold.com/wp-content/plugins/istpricecontroller/cache_1/products/Retail_${productViewVal}_USD_tiers.json`;
+		return {
+			USD: [`https://bordergold.com/wp-content/plugins/istpricecontroller/cache_1/products/Retail_${productViewVal}_USD_tiers.json`, getHeaders('USD')],
+			CAD: [`https://bordergold.com/wp-content/plugins/istpricecontroller/cache_1/products/Retail_${productViewVal}_CAD_tiers.json`, getHeaders('CAD')]
+		};
 	} else {
 		throw Error("Couldn't Generate Border Gold Pricing Link for Pricing Request");
 	}
@@ -138,19 +139,16 @@ function getPricingLinkFromHTML(document) {
 /*
 Gets the same pricing a user would see visiting the website.
 The pricing a user sees comes from a backend javascript ajax link call
-*/
-async function getPricing(pricingLink) {
-	let html;
-	try {
-		const res = await axios.get(pricingLink, { headers, body: null, method: "GET" });
-		let json = res.data;
-		html = json.data;
-	} catch (error) {
-		console.error("Error fetching data:", error.message);
-		throw error;
-	}
 
-	const document = parse(html);
+pages is an object of currnecies the site supports
+{CAD: [url, headers]|document, USD: [url, headers]|document}. The value under the currency can be a [url, headers] or document.
+
+*/
+async function getPricingFromPages(pages) {
+	/*
+	CAD: [`https://bordergold.com/wp-content/plugins/istpricecontroller/cache_1/products/Retail_${productViewVal}_CAD_tiers.json`,headers],
+	USD: [`https://bordergold.com/wp-content/plugins/istpricecontroller/cache_1/products/Retail_${productViewVal}_USD_tiers.json`,headers]
+	*/
 
 	const priceLine = [];
 	const pricing = {
@@ -159,18 +157,47 @@ async function getPricing(pricingLink) {
 		creditcard: [],
 		paypal: [],
 	};
-	const catalogTable = document.querySelector(".nfprod-prices.all");
-	const catalogRows = catalogTable.querySelectorAll("tr.nfprice-row");
 
-	for (const catalogRow of catalogRows) {
-		const qtyRangeText = catalogRow.firstChild.text;
-		const quantityRange = qtyRangeText.includes(" - ")
-			? qtyRangeText.split(" - ").map((s) => parseInt(s))
-			: [parseInt(qtyRangeText.replace("+", "")), Infinity];
+	for (const currency in pages) {
+		let page = pages[currency];
+		let document;
 
-		const cashPrice = parsePrice(catalogRow.childNodes[1].text);
-		const creditPrice = parsePrice(catalogRow.childNodes[2].text);
-		priceLine.push([quantityRange, cashPrice, creditPrice]);
+		if(Array.isArray(page)) {
+			const [url, headers] = page;
+
+			const res = await axios.get(url, { headers: headers, body: null, method: "GET" });
+			let json = res.data;
+			let html = json.data;
+			document = parse(html);
+		} else {
+			document = page;
+		}
+
+		const catalogTable = document.querySelector(".nfprod-prices.all");
+		const catalogRows = catalogTable.querySelectorAll("tr.nfprice-row");
+		
+		for (const catalogRow of catalogRows) {
+			const qtyRangeText = catalogRow.firstChild.text;
+			const quantityRange = qtyRangeText.includes(" - ")
+				? qtyRangeText.split(" - ").map((s) => parseInt(s))
+				: [parseInt(qtyRangeText.replace("+", "")), Infinity];
+
+			const cashPrice = parsePrice(catalogRow.childNodes[1].text);
+			const creditPrice = parsePrice(catalogRow.childNodes[2].text);
+
+			const indexOfQtyRange = priceLine.findIndex(([existingQuantityRange]) => {
+				return ( existingQuantityRange[0] === quantityRange[0] && existingQuantityRange[1] === quantityRange[1] );
+			});
+
+			//FYI: We just assume that the quantity ranges are the same across currencies. If they weren't this probably wouldn't work.
+			if (indexOfQtyRange === -1) { // qtyRange not found, so push in
+				priceLine.push([quantityRange, { [currency]: cashPrice}, { [currency]: creditPrice } ]);
+			} else { // it's an update
+				priceLine[indexOfQtyRange][1][currency] = cashPrice; //cash
+				priceLine[indexOfQtyRange][2][currency] = creditPrice; //credit
+			}
+		}
+
 	}
 
 	for (let i = 0; i < priceLine.length; i++) {
@@ -214,7 +241,7 @@ async function scrapeProductPage(url) {
 	// send request with headers mimicking a user browser
 	let html;
 	try {
-		const res = await axios.get(url, { headers, body: null, method: "GET" });
+		const res = await axios.get(url, { headers: getHeaders('USD'), body: null, method: "GET" });
 		html = res.data;
 	} catch (error) {
 		console.error("Error fetching data:", error.message);
@@ -256,7 +283,7 @@ async function scrapeProductPage(url) {
 	let foundPurities = parsePurities({composition: null, description: description});
 	if(foundPurities) { purities=foundPurities; }
 
-	pricing = await getPricing(getPricingLinkFromHTML(document));
+	pricing = await getPricingFromPages(getPricingLinksFromHTML(document));
 	adjustPricingIfBox(pricing, boxSize);
 
 	return { purities, issuance, weight, mint, pricing, boxSize };
