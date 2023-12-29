@@ -1,12 +1,30 @@
 const axios = require('axios');
 const { parse } = require("node-html-parser");
+const { adjustPricingIfBox } = require('../scraper-helpers.js');
+
+const headers = {
+	accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+	"accept-language": "en-US,en;q=0.9",
+	"sec-ch-ua": '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+	"sec-ch-ua-mobile": "?0",
+	"sec-ch-ua-platform": '"macOS"',
+	"sec-fetch-dest": "document",
+	"sec-fetch-mode": "navigate",
+	"sec-fetch-site": "same-origin",
+	"sec-fetch-user": "?1",
+	"upgrade-insecure-requests": "1",
+	cookie: "_istrd=https%3A%2F%2Fwww.google.com%2F; initialcurrency=USD",
+	Referer: "https://www.bordergold.com",
+	"Referrer-Policy": "strict-origin-when-cross-origin",
+	"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+};
 
 // PP-TODO: Get PID like the one here: https://www.bordergold.com/?p=10246 from the url, then send a request to
 // https://www.bordergold.com/wp-content/plugins/istpricecontroller/cache/products/Retail_10246_CAD_tiers.json?_=1668453682180
 // replacing the PID and the timestamp with now, to get the current price
 
 function parsePrice(strPrice) {
-	return parseFloat(strPrice.replace(/^\$|(\sCAD)$|,/g, ""));
+	return parseFloat(strPrice.replace(/^\$|,/g, ""));
 }
 
 function parseMint(mintStr) {
@@ -92,7 +110,48 @@ function parseIssuance(mint) {
 	return 'MANUAL_REVIEW';
 }
 
-function getPricing(document) {
+/*
+In the html response of our first request is a piece of javascript code that makes an ajax call to border gold's price controller.
+Lets get the link they use for pricing the metals in USD.
+*/
+function getPricingLinkFromHTML(document) {
+	const scriptTags = document.querySelectorAll('script');
+	let targetScriptContent = null;
+
+	for(const scriptTag of scriptTags) {
+		const scriptContent = scriptTag.innerHTML;
+		if (scriptContent.includes("customerGroup='Retail';")) {
+			targetScriptContent = scriptContent;
+			break;
+		}
+	}
+
+	const match = targetScriptContent.match(/productView=(\d+);/);
+	if (match && match[1]) {
+		const productViewVal = parseInt(match[1], 10);
+		return `https://bordergold.com/wp-content/plugins/istpricecontroller/cache_1/products/Retail_${productViewVal}_USD_tiers.json`;
+	} else {
+		throw Error("Couldn't Generate Border Gold Pricing Link for Pricing Request");
+	}
+}
+
+/*
+Gets the same pricing a user would see visiting the website.
+The pricing a user sees comes from a backend javascript ajax link call
+*/
+async function getPricing(pricingLink) {
+	let html;
+	try {
+		const res = await axios.get(pricingLink, { headers, body: null, method: "GET" });
+		let json = res.data;
+		html = json.data;
+	} catch (error) {
+		console.error("Error fetching data:", error.message);
+		throw error;
+	}
+
+	const document = parse(html);
+
 	const priceLine = [];
 	const pricing = {
 		check: [],
@@ -122,19 +181,31 @@ function getPricing(document) {
 			price: cashPrice,
 		};
 
-		pricing.wire.push(cashPricing);
-		pricing.check.push(cashPricing);
+		pricing.wire.push(JSON.parse(JSON.stringify(cashPricing)));
+		pricing.check.push(JSON.parse(JSON.stringify(cashPricing)));
 
 		const creditPricing = {
 			qtyRange: qtyRange,
 			price: creditPrice,
 		};
 
-		pricing.creditcard.push(creditPricing);
-		pricing.paypal.push(creditPricing);
+		pricing.creditcard.push(JSON.parse(JSON.stringify(creditPricing)));
+		pricing.paypal.push(JSON.parse(JSON.stringify(creditPricing)));
 	}
 
 	return pricing;
+}
+
+const getBoxSizeIfBox = (productTitle) => {
+	if(productTitle.match(/box|tube/i)) {
+		const boxSizeRegex = /\((\d+)\s*(?:Coins)/i;
+		const match = productTitle.match(boxSizeRegex);
+		if(match[1]) {
+			return Number(match[1]);
+		}
+	}
+
+	return false; //not a box
 }
 
 async function scrapeProductPage(url) {
@@ -143,29 +214,7 @@ async function scrapeProductPage(url) {
 	// send request with headers mimicking a user browser
 	let html;
 	try {
-		const res = await axios.get(url, {
-			headers: {
-				accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-				"accept-language": "en-US,en;q=0.9",
-				"sec-ch-ua":
-					'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-				"sec-ch-ua-mobile": "?0",
-				"sec-ch-ua-platform": '"macOS"',
-				"sec-fetch-dest": "document",
-				"sec-fetch-mode": "navigate",
-				"sec-fetch-site": "same-origin",
-				"sec-fetch-user": "?1",
-				"upgrade-insecure-requests": "1",
-				cookie: "_istrd=https%3A%2F%2Fwww.google.com%2F; initialcurrency=CAD",
-				Referer: "https://www.bordergold.com/product-category/gold/",
-				"Referrer-Policy": "strict-origin-when-cross-origin",
-				"user-agent":
-					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
-			},
-			body: null,
-			method: "GET",
-		});
-
+		const res = await axios.get(url, { headers, body: null, method: "GET" });
 		html = res.data;
 	} catch (error) {
 		console.error("Error fetching data:", error.message);
@@ -177,6 +226,7 @@ async function scrapeProductPage(url) {
 	const document = parse(html);
 
 	let productTitle = document.querySelector('div.product .summary h1.product_title').innerText.trim();
+	const boxSize = getBoxSizeIfBox(productTitle); //Set for items like monster boxes/tubes. Example: boxSize is usually 25 for tubes.
 	let description = document.querySelector('#tab-description').innerText.trim();
 
 	let foundWeight = parseWeight({weight: null, title: productTitle}); //could be overwritten below by the weight table as that may be more accurate.
@@ -206,9 +256,10 @@ async function scrapeProductPage(url) {
 	let foundPurities = parsePurities({composition: null, description: description});
 	if(foundPurities) { purities=foundPurities; }
 
-	pricing = getPricing(document);
+	pricing = await getPricing(getPricingLinkFromHTML(document));
+	adjustPricingIfBox(pricing, boxSize);
 
-	return { purities, issuance, weight, mint, pricing };
+	return { purities, issuance, weight, mint, pricing, boxSize };
 };
 
 module.exports = {

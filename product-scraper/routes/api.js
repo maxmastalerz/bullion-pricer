@@ -23,6 +23,7 @@ async function scrapeProductsAsync(productsToScrape) {
 			product.mint = scrapeResults.mint;
 			product.pricing = scrapeResults.pricing;
 			product.pricing_last_updated = new Date().getTime();
+			product.boxSize = scrapeResults.boxSize;
 
 		} catch (err) {
 			console.error("Scraping failed for", product.url);

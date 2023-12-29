@@ -7,11 +7,22 @@ let countries = getCountryList().filter((value, index, self) => { // get unique 
 });
 
 /*
-Takes amounts in USD and returns them with all currencies.
+Gets random user agents list from Scrape Ops.
 */
-const currrencyConvertObj = async function(usdAmounts) {
-	let rates = null;
+const getRandomUserAgent = async function() {
+	const sopsResponse = await axios.get(`http://headers.scrapeops.io/v1/user-agents`, { params: {
+		api_key: process.env.SCRAPEOPS_API_KEY
+	}});
+	const jsonResponse = sopsResponse.data;
+	const userAgentList = jsonResponse['result'];
+	return userAgentList[Math.floor(Math.random()*userAgentList.length)];
+};
 
+async function updateCurrencies() {
+	const db = client.db();
+	const currencies = db.collection("currencies");
+
+	let rates = null;
 	const currencyBeaconResponse = await axios.get(`https://api.currencybeacon.com/v1/latest`, { params: {
 		base: 'USD',
 		api_key: process.env.CURRENCY_BEACON_API_TOKEN
@@ -26,34 +37,50 @@ const currrencyConvertObj = async function(usdAmounts) {
 			{ error: { code: jsonResponse.meta.code, message: `${jsonResponse.meta.error_type} ${jsonResponse.meta.error_detail}`}}
 		));
 	} else {
-		for(metal in usdAmounts) {
-			let usdAmount = usdAmounts[metal];
-			let usdAmountConvertedToAllCurrencies = {};
-			countries.forEach((country) => {
-				let countryRate = rates[country.currency.code];
-				usdAmountConvertedToAllCurrencies[country.currency.code] = Math.round(usdAmount*countryRate* 100) / 100; // Round to 2 decimals
-			});
-
-			usdAmounts[metal] = usdAmountConvertedToAllCurrencies;
-		};
-
-		return usdAmounts;
+		const documents = Object.entries(rates).map(([currency, rate]) => ({ currency, rate }));
+		await currencies.insertMany(documents);
 	}
 }
 
 /*
-Gets random user agents list from Scrape Ops.
+Takes amounts in USD and returns them with all currencies.
 */
-const getRandomUserAgent = async function() {
-	const sopsResponse = await axios.get(`http://headers.scrapeops.io/v1/user-agents`, { params: {
-		api_key: process.env.SCRAPEOPS_API_KEY
-	}});
-	const jsonResponse = sopsResponse.data;
-	const userAgentList = jsonResponse['result'];
-	return userAgentList[Math.floor(Math.random()*userAgentList.length)];
+const currencyConvertObj = async function(usdAmounts) {
+	let rates = null;
+
+	// Assuming you have a MongoDB client and connection available in your code
+	const db = client.db();
+	const currencies = db.collection("currencies");
+
+	// Fetch all currency data from MongoDB
+	const currencyData = await currencies.find({}).toArray();
+
+	if (currencyData.length > 0) {
+		// Merge rates from all documents, assuming each document has a 'rates' field
+		rates = Object.assign({}, ...currencyData.map(doc => ({ [doc.currency]: doc.rate })));
+	}
+
+	if (rates === null) {
+		throw new Error("Currency data not available in MongoDB.");
+	} else {
+		for (const metal in usdAmounts) {
+			let usdAmount = usdAmounts[metal];
+			let usdAmountConvertedToAllCurrencies = {};
+
+			Object.keys(rates).forEach((currencyCode) => {
+				let countryRate = rates[currencyCode];
+				usdAmountConvertedToAllCurrencies[currencyCode] =
+				Math.round(usdAmount * countryRate * 100) / 100; // Round to 2 decimals
+			});
+
+			usdAmounts[metal] = usdAmountConvertedToAllCurrencies;
+		}
+
+		return usdAmounts;
+	}
 };
 
-module.exports = async function() {
+async function updateSpotPrices() {
 	console.log("== COLLECTING SPOT DATA ==");
 	const db = client.db();
 	const spotCollection = db.collection("spot");
@@ -94,7 +121,7 @@ module.exports = async function() {
 	//CONVERT KITCO SPOT PRICES TO OTHER CURRENCIES
 
 	try {
-		var spotPrices = await currrencyConvertObj({AG: USDSpotAG, AU: USDSpotAU, PD: USDSpotPD, PT: USDSpotPT});
+		var spotPrices = await currencyConvertObj({AG: USDSpotAG, AU: USDSpotAU, PD: USDSpotPD, PT: USDSpotPT});
 	} catch(error) {
 		err = error;
 		console.error(`Errored converting spot price data into other currencies:`, error);
@@ -110,3 +137,5 @@ module.exports = async function() {
 	spotCollection.updateOne({ symbol: 'PD'}, { $set:{ price: spotPrices.PD, updatedAt: t}});
 	spotCollection.updateOne({ symbol: 'PT'}, { $set:{ price: spotPrices.PT, updatedAt: t}});
 };
+
+module.exports = { updateSpotPrices, updateCurrencies };

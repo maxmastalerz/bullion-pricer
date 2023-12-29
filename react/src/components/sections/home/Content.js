@@ -57,7 +57,7 @@ const paymentPreferences = [
     { id: 'paypal', text: 'PayPal'},
 ]
 
-function Content() {
+function Content({currency}) {
     const [productTypesOperator, setProductTypesOperator] = useState('XOR');
     const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
     const [puritiesOperator, setPuritiesOperator] = useState('XOR');
@@ -211,7 +211,8 @@ function Content() {
             bulkPricingCouldBuy: bulkPricingCouldBuyAdjusted,
             weightRange: [weightStart, weightEnd],
             sortBy: sortBy,
-            currentPage: currentPage
+            currentPage: currentPage,
+            currency: currency
         });
         console.log(params.toString());
 
@@ -245,7 +246,8 @@ function Content() {
         bulkPricingCouldBuy,
         weightRange,
         sortBy,
-        currentPage
+        currentPage,
+        currency
     ]);
 
     return (

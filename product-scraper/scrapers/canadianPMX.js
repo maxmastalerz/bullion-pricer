@@ -1,7 +1,24 @@
 const axios = require('axios');
 const { parse } = require("node-html-parser");
+const { adjustPricingIfBox } = require('../scraper-helpers.js');
 
-const notMints = ['Maple Leaf', 'Hand Poured'];
+const headers = {
+	accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+	"accept-language": "en-US,en;q=0.9",
+	"sec-ch-ua":
+		'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+	"sec-ch-ua-mobile": "?0",
+	"sec-ch-ua-platform": '"macOS"',
+	"sec-fetch-dest": "document",
+	"sec-fetch-mode": "navigate",
+	"sec-fetch-site": "none",
+	"sec-fetch-user": "?1",
+	"upgrade-insecure-requests": "1",
+	cookie: "storeclosing=Mon, 1 Jan 2099 00:00:00 GMT; aelia_cs_selected_currency=USD",
+	"user-agent":
+		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+};
+const notMints = ['Maple Leaf', 'Hand Poured', '9999'];
 const listOfMints = {
 	government_issued: [
 		[['Royal Canadian Mint'],'Royal Canadian Mint'],
@@ -32,7 +49,7 @@ const listOfMints = {
 };
 
 function parsePrice(strPrice) {
-	return parseFloat(strPrice.replace(/^\$|(\sCAD)$|,/g, ""));
+	return parseFloat(strPrice.replace(/^\$|(\sUSD)$|,/g, ""));
 }
 
 function parseMint(tags) {
@@ -75,11 +92,6 @@ function parseWeight({weight, title}) {
 		[["100 tr oz"],3110.35],
 		[["1000 tr oz"],31103.5]
 	];
-
-	//PP-TODO:
-	//Think what to do about weird products like : 20 x 5 Tr Oz = 100 Troy Ounces
-	//https://canadianpmx.com/product/silver-argentia-precious-metals-5-oz-9999-cast-bar-box-of-20-x-5-oz-100-ounces/
-	//I think they should be classified as 5oz, but then their bulk pricing should be scaled by 20 in this case.
 
 	for (const [patterns, grams] of wordsToGramMap) {
 		if(title) {
@@ -175,57 +187,52 @@ function getPricing(document) {
 			price: cashPrice,
 		};
 
-		pricing.cash.push(cashPricing);
-		pricing.wire.push(cashPricing);
-		pricing.check.push(cashPricing);
+		pricing.cash.push(JSON.parse(JSON.stringify(cashPricing)));
+		pricing.wire.push(JSON.parse(JSON.stringify(cashPricing)));
+		pricing.check.push(JSON.parse(JSON.stringify(cashPricing)));
 
 		const creditPricing = {
 			qtyRange: qtyRange,
 			price: creditPrice,
 		};
 
-		pricing.creditcard.push(creditPricing);
-		pricing.paypal.push(creditPricing);
+		pricing.creditcard.push(JSON.parse(JSON.stringify(creditPricing)));
+		pricing.paypal.push(JSON.parse(JSON.stringify(creditPricing)));
 	}
 
 	return pricing;
 }
 
+const getBoxSizeIfBox = (productTitle) => {
+	if(productTitle.match(/box|tube/i)) {
+		const boxSizeRegex = /(\d+)\s*[xX]\s*\d+\s*(?:oz|tr\s*oz)/i;
+		const match = productTitle.match(boxSizeRegex);
+		if(match[1]) {
+			return Number(match[1]);
+		}
+	}
+
+	return false; //not a box
+}
+
 async function scrapeProductPage(url) {
 	console.log("Scraping: " + url);
 
-	// send request with headers mimicking a user browser
 	let html;
 	try {
-		const response = await axios.get(url, {
-			headers: {
-				accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-				"accept-language": "en-US,en;q=0.9",
-				"sec-ch-ua":
-					'"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-				"sec-ch-ua-mobile": "?0",
-				"sec-ch-ua-platform": '"macOS"',
-				"sec-fetch-dest": "document",
-				"sec-fetch-mode": "navigate",
-				"sec-fetch-site": "none",
-				"sec-fetch-user": "?1",
-				"upgrade-insecure-requests": "1",
-				cookie: "storeclosing=Mon, 1 Jan 2099 00:00:00 GMT",
-				"user-agent":
-					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
-			}
-		});
+		const response = await axios.get(url, { headers });
 		html = response.data;
 	} catch (error) {
 		console.error("Error fetching data:", error.message);
 		throw error;
 	}
 	
-	let purities='MANUAL_REVIEW',issuance='MANUAL_REVIEW',weight='MANUAL_REVIEW',mint='MANUAL_REVIEW',pricing='MANUAL_REVIEW';
+	let purities = 'MANUAL_REVIEW',issuance='MANUAL_REVIEW',weight='MANUAL_REVIEW',mint='MANUAL_REVIEW',pricing='MANUAL_REVIEW';
 
 	const document = parse(html);
 
 	let productTitle = document.querySelector('div.product .summary h1.product_title').innerText.trim();
+	const boxSize = getBoxSizeIfBox(productTitle); //Set for items like monster boxes/tubes. Example: boxSize is usually 25 for tubes.
 	let tags = getTags(document);
 
 	let foundMint = parseMint(tags);
@@ -248,8 +255,9 @@ async function scrapeProductPage(url) {
 	}
 
 	pricing = getPricing(document);
+	adjustPricingIfBox(pricing, boxSize);
 
-	return { purities, issuance, weight, mint, pricing };
+	return { purities, issuance, weight, mint, pricing, boxSize };
 };
 
 module.exports = {

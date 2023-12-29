@@ -8,12 +8,11 @@ import Mobilemenu from './Mobilemenu';
 import SelectCurrency from '../SelectCurrency';
 import { formatNumber } from '../../helper/formatting';
 
-function Header() {
+function Header({onChangeCurrency, currency}) {
     const [classmethod, setClassmethod] = useState(false);
     const [togglemethod, setTogglemethod] = useState(false);
     const [isTop, setIsTop] = useState(false);
     
-    const [currency, setCurrency] = useState(window.localStorage.getItem('currencySelected') || 'USD');
     const [silverSpotPrice, setSilverSpotPrice] = useState(0);
     const [goldSpotPrice, setGoldSpotPrice] = useState(0);
     const [palladiumSpotPrice, setPalladiumSpotPrice] = useState(0);
@@ -27,10 +26,6 @@ function Header() {
     }
     const onScroll = () => {
         setIsTop(window.scrollY > 110);
-    }
-    const onChangeCurrency = (e) => {
-        setCurrency(e.target.value);
-        window.localStorage.setItem('currencySelected', e.target.value);
     }
 
     useEffect(() => {

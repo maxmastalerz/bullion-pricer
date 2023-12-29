@@ -4,13 +4,14 @@ const bodyParser = require('body-parser');
 const os = require('os');
 const axios = require('axios');
 const { connectToDatabase, client } = require('./db');
-const updateSpotPrices = require('./update-spot-prices');
+const { updateSpotPrices, updateCurrencies } = require('./update-spot-and-currencies');
 const getUpdatedProductList = require('./get-updated-product-list');
 
 const app = express();
 const port = 8000;
 app.use(bodyParser.json());
 
+const doScraping = process.env.DO_SCRAPING === '1' ? true : false;
 let productScraperNodes = [];
 let numProductScraperNodes = 0;
 let numProductScraperNodesDone = 0;
@@ -153,7 +154,6 @@ async function divideAndConquerProductSubmitter(productList) {
 	//console.log("NEWEST PRODUCT LIST:");
 	//console.log(JSON.stringify(productList));
 
-
 	let productListByDomain = groupProductsByDomain(productList);
 	let distributionToScrapers = distributeProductsByDomainEvenlyToScrapers(productListByDomain);
 
@@ -173,6 +173,7 @@ async function initCron() {
 	new CronJob({
 		cronTime: "0 0 * * * *", // Every hour, on the hour
 		onTick: async () => {
+			await updateCurrencies();
 			await updateSpotPrices();
 		},
 		start: true,
@@ -188,7 +189,7 @@ async function initCron() {
 	const job = new CronJob({
 		cronTime: "0 0 * * * *", // Every hour, on the hour
 		onTick: async () => {
-			if(!process.env.DO_SCRAPING) {
+			if(!doScraping) {
 				return;
 			}
 

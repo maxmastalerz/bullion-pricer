@@ -120,6 +120,7 @@ router.get("/products", async (req, res) => {
 	let weightStart = Number(weightRange[0]);
 	let weightEnd = Number(weightRange[1]);
 	let sortBy = Number(req.query.sortBy);
+	let currency = req.query.currency;
 	let sortByMap = [
 		// 0:priceLowToHigh 1:priceHighToLow 2:dealerAsc 3:dealerDsc 4:mintAsc 5:mintDsc
 		{ ["pricing." + paymentPreferenceSelected + ".price"]: 1 },
@@ -144,6 +145,7 @@ router.get("/products", async (req, res) => {
 	console.log("weightEnd: " + weightEnd);
 	console.log("sortBy: " + sortBy);
 	console.log("skip: " + skip);
+	console.log("currency: "+currency);
 
 	const pipeline = [
 		{
@@ -194,6 +196,17 @@ router.get("/products", async (req, res) => {
 			},
 		},
 		{
+			$lookup: {
+				from: "currencies",
+				let: { currency: { $literal: currency } },
+				pipeline: [
+					{ $match: { $expr: { $eq: ["$currency", "$$currency"] } } },
+					{ $project: { rate: 1 } }
+				],
+				as: "currencyInfo"
+			}
+		},
+		{
 			$project: {
 				url: 1,
 				title: 1,
@@ -203,7 +216,15 @@ router.get("/products", async (req, res) => {
 				issuance: 1,
 				productType: 1,
 				weight: 1,
-				["pricing." + paymentPreferenceSelected]: 1
+				["pricing." + paymentPreferenceSelected]: {
+					qtyRange: "$pricing." + paymentPreferenceSelected + ".qtyRange",
+					price: {
+						$round: [ {$multiply: [
+							"$pricing." + paymentPreferenceSelected + ".price",
+							{ $arrayElemAt: [ "$currencyInfo.rate", 0 ] }
+						]}, 2]
+					}
+				}
 			},
 		},
 		{ $sort: sortByMap[sortBy] },
@@ -218,7 +239,7 @@ router.get("/products", async (req, res) => {
 	const products = await toArray(productsCollection.aggregate(pipeline));
 
 	console.log("Returning products:");
-	console.log(products);
+	console.log(JSON.stringify(products));
 
 	res.send(products);
 });
