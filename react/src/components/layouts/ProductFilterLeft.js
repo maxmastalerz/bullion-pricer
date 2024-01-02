@@ -36,7 +36,7 @@ function ProductFilterLeft(props) {
                 <br/>
                 <h5 className="widget-title">Issuance</h5>
                 <button className="toggleLogicOperator" data-operating-on="issuance" onClick={(e) => props.toggleLogicalOperator(e)}>XOR</button>
-                <div className="filter-color">
+                <div className="filter-color issuance">
                     {props.issuance.map((el, i) => (
                         <label key={i} className="checkbox">
                             <input type="checkbox" name={el.id} onChange={props.issuanceChanged} checked={props.issuanceSelected.includes(el.id) ? 'checked' : ''}/>
@@ -49,7 +49,7 @@ function ProductFilterLeft(props) {
                 <br/>
 
                 <h5 className="widget-title">Payment Preferences</h5>
-                <div className="filter-color">
+                <div className="filter-color payment-preferences">
                     {props.paymentPreferences.map((el, i) => (
                         <label key={i} className="checkbox">
                             <input type="checkbox" name={el.id} onChange={props.updatePaymentPreferences} checked={props.paymentPreferencesSelected.includes(el.id) ? 'checked' : ''}/>

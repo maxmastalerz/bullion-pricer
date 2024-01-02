@@ -622,13 +622,81 @@ about
 .food-box.shop-box {
   overflow: hidden;
 
+  fieldset {
+      
+    &.gold {
+      border-top: 3px solid $primary-color;
+    }
+    &.silver {
+      border-top: 3px solid $silver-color;
+    }
+    &.platinum {
+      border-top: 3px solid #fff;
+    }
+    &.palladium {
+      border-top: 3px solid #000;
+    }
+
+    position: relative;
+    bottom: 30px;
+    margin-bottom: -30px;
+
+    legend {
+      width: unset;
+      margin: auto;
+      padding: 0 10px;
+      font-size: 15px;
+      line-height: 30px;
+    }
+  }
+
   &:hover .thumb img {
     transform: scale(1.1);
   }
 }
 
+.product-wrapper.restaurant-tab-area {
+  min-height: 470px;
+}
+
+@media (max-width: 1199px) {
+  .product-wrapper.restaurant-tab-area {
+    min-height: 525px;
+  }
+}
+
+@media (max-width: 991px) {
+  .product-wrapper.restaurant-tab-area {
+    min-height: 620px;
+  }
+}
+
+@media (max-width: 767px) {
+  .product-wrapper.restaurant-tab-area {
+    min-height: 635px;
+  }
+}
+
+@media (max-width: 575px) {
+  .product-wrapper.restaurant-tab-area {
+    min-height: 910px;
+  }
+}
+
+@media #{$xsm} {
+  .food-box.shop-box fieldset {
+    bottom: 15px;
+    margin-bottom: -15px;
+
+    legend {
+      font-size: 12px;
+      line-height: 15px;
+    }
+  }
+}
+
 .desc .price {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   display: block;
   color: #fcd462;
@@ -642,9 +710,14 @@ about
 }
 
 .food-box.shop-box {
-  .desc h4 {
-    margin-bottom: 10px;
-    font-size: 18px;
+  .desc {
+    h4 {
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+    span.mint, span.dealer {
+      font-size: 12px;
+    }
   }
 
   .thumb .badges {
@@ -841,7 +914,7 @@ about
     margin-bottom: 10px;
     cursor: pointer;
     line-height: 1.4;
-    font-size: 15px;
+    font-size: 14px;
 
     input {
       position: absolute;
@@ -899,7 +972,7 @@ about
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 
   .sorting-box .nice-select {
     border: solid 1px #40403b;

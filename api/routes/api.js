@@ -99,7 +99,7 @@ router.get("/products", async (req, res) => {
 		"government_issued",
 		"not_government_issued",
 	];*/
-	let nPerPage = 3;
+	let nPerPage = 6;
 
 	let productTypesOperator = req.query.productTypesOperator;
 	let productTypesSelected = req.query.productTypesSelected.split(",");

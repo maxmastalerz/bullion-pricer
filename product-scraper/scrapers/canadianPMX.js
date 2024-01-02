@@ -158,57 +158,6 @@ function parseIssuance(mintToSearch) {
 	return 'MANUAL_REVIEW';
 }
 
-/*
-pages is an object of currnecies the site supports
-{CAD: [url, headers]|document, USD: [url, headers]|document}. The value under the currency can be a [url, headers] or document.
-*/
-/*function getPricingFromPages(pages) {
-	const priceLine = [];
-	const pricing = {
-		cash: [],
-		check: [],
-		wire: [],
-		creditcard: [],
-		paypal: [],
-	};
-	const catalogTable = document.querySelector(".nfs_catalog_plugin_table");
-	const catalogRows = catalogTable.querySelectorAll("tr").slice(1);
-
-	for (const catalogRow of catalogRows) {
-		const quantityStep = parseInt(
-			catalogRow.firstChild.text.replace("+", "")
-		);
-		const cashPrice = parsePrice(catalogRow.childNodes[1].text);
-		const creditPrice = parsePrice(catalogRow.childNodes[2].text);
-		priceLine.push([quantityStep, cashPrice, creditPrice]);
-	}
-
-	for (let i = 0; i < priceLine.length; i++) {
-		const [quantityStep, cashPrice, creditPrice] = priceLine[i];
-		const nextQuantityStep = priceLine?.[i + 1]?.[0] - 1 || Infinity;
-		const qtyRange = [quantityStep, nextQuantityStep];
-
-		const cashPricing = {
-			qtyRange: qtyRange,
-			price: cashPrice,
-		};
-
-		pricing.cash.push(JSON.parse(JSON.stringify(cashPricing)));
-		pricing.wire.push(JSON.parse(JSON.stringify(cashPricing)));
-		pricing.check.push(JSON.parse(JSON.stringify(cashPricing)));
-
-		const creditPricing = {
-			qtyRange: qtyRange,
-			price: creditPrice,
-		};
-
-		pricing.creditcard.push(JSON.parse(JSON.stringify(creditPricing)));
-		pricing.paypal.push(JSON.parse(JSON.stringify(creditPricing)));
-	}
-
-	return pricing;
-}*/
-
 async function getPricingFromPages(pages) {
 	/*
 	CAD: [url,headers],

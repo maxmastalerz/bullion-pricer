@@ -153,7 +153,7 @@ async function getPricingFromPages(pages) {
 	const priceLine = [];
 	const pricing = {
 		check: [],
-		wire: [],
+		billpayment: [],
 		creditcard: [],
 		paypal: [],
 	};
@@ -208,7 +208,7 @@ async function getPricingFromPages(pages) {
 			price: cashPrice,
 		};
 
-		pricing.wire.push(JSON.parse(JSON.stringify(cashPricing)));
+		pricing.billpayment.push(JSON.parse(JSON.stringify(cashPricing)));
 		pricing.check.push(JSON.parse(JSON.stringify(cashPricing)));
 
 		const creditPricing = {

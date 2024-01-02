@@ -454,7 +454,7 @@ header {
 			width: 100%;
 			z-index: 99;
 			height: auto;
-			bottom: -120px;
+			bottom: -90px;
 			@media #{$tiny} {
 				position: relative;
 				bottom: 0;
@@ -480,7 +480,7 @@ header {
 		}
 
 		.header-top {
-			line-height: calc(160% + 30px);
+			padding: 15px 0;
 			font-family: $roboto;
 			@media (max-width: 992px) {
 				background-color: #1c1b19;
@@ -783,7 +783,7 @@ header {
 			background-color: transparent;
 		}
 		&.header-three .main-menu-area {
-			bottom: -60px;
+			bottom: -30px;
 		}
 	}
 }
@@ -967,7 +967,7 @@ display: flex;
 align-items: center;		
 justify-content: center;		
 padding: 0 48px;		
-line-height: 120px;		
+line-height: 90px;		
 font-size: 14px;		
 font-weight: 700;		
 font-family: "Prata", sans-serif;		
@@ -1172,10 +1172,7 @@ display: flex;
 align-items: center;	
 justify-content: space-between;	
 padding-bottom: 10px;	
-}	
-.sigma-mobile-header .sigma-mobile-header-inner .site-logo {	
-width: 200px;	
-}	
+}
 .sigma-mobile-header .sigma-hamburger-menu {	
 display: flex;	
 align-items: center;	
@@ -1277,7 +1274,9 @@ position: relative;
 padding: 0 0px 0 6px;	
 }	
 .sigma-mobile-header {	
-background-color: #353530;	
+	background-color: #353530;
+    position: relative;
+    top: -1px;
 }	
 @media (max-width: 991px) {
 	header.header-three .main-menu-area,	
@@ -1350,8 +1349,8 @@ header.header-three .header-top {
 	.currency-selector-container {
 		float: right;
 		position: relative;
-		margin-bottom: calc(-22.4px - 30px);
-		bottom: calc(22.4px + 30px);
+		margin-bottom: - calc( ( ( 14px * 1.6 ) + 15px + 15px ) / 2 );
+		bottom: calc( ( ( 14px * 1.6 ) + 15px + 15px ) / 2 );
 	}
 }
 
@@ -1371,6 +1370,7 @@ header.header-three .header-top {
 
 @media (max-width: 575px) {
 	header.header-three .header-top {
+		padding: 0;
 		line-height: calc(( 160% + 30px )/2);
 
 		.currency-selector-container {
@@ -1684,14 +1684,10 @@ display: none;
 }
 
 .header-offset {
-	margin-top: calc(120px + 52.4px);
+	margin-top: calc(90px + 52.4px);
 
 	@media (max-width: 991px) {
-		margin-top: calc(80px + 22.398px + 15px + 10px);
-	}
-
-	@media #{$sm} {
-		margin-top: calc(80px + 54.797px + 15px + 10px);
+		margin-top: calc(80px + 52.4px);
 	}
 
 	@media #{$tiny} {

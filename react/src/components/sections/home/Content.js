@@ -3,28 +3,6 @@ import Pagination from '../../layouts/Pagination';
 import ProductFilterLeft from '../../layouts/ProductFilterLeft';
 import ProductFilterTop from '../../layouts/ProductFilterTop';
 
-import goldCanadianPMX from '../../../assets/img/shop/gold-canadianPMX.png';
-import silverCanadianPMX from '../../../assets/img/shop/silver-canadianPMX.png';
-import platinumCanadianPMX from '../../../assets/img/shop/platinum-canadianPMX.png';
-import palladiumCanadianPMX from '../../../assets/img/shop/palladium-canadianPMX.png';
-
-import goldBorderGold from '../../../assets/img/shop/gold-borderGold.png';
-import silverBorderGold from '../../../assets/img/shop/silver-borderGold.png';
-import platinumBorderGold from '../../../assets/img/shop/platinum-borderGold.png';
-import palladiumBorderGold from '../../../assets/img/shop/palladium-borderGold.png';
-
-const imageMapping = {
-    "goldCanadianPMX": goldCanadianPMX,
-    "silverCanadianPMX": silverCanadianPMX,
-    "platinumCanadianPMX": platinumCanadianPMX,
-    "palladiumCanadianPMX": palladiumCanadianPMX,
-
-    "goldBorder Gold": goldBorderGold,
-    "silverBorder Gold": silverBorderGold,
-    "platinumBorder Gold": platinumBorderGold,
-    "palladiumBorder Gold": palladiumBorderGold
-}
-
 const productTypes = [
     { id: 'gold', text: 'Gold'},
     { id: 'silver', text: 'Silver' },
@@ -42,17 +20,16 @@ const purities = [
 ]
 
 const issuance = [
-    { id: 'government_issued', text: 'Government Issued' },
-    { id: 'not_government_issued', text: 'Not Government Issued' }
+    { id: 'government_issued', text: 'Government' },
+    { id: 'not_government_issued', text: 'Private' }
 ];
 
 const paymentPreferences = [
     { id: 'check', text: 'Check'},
     { id: 'wire', text: 'Wire'},
-    { id: 'cash', text: 'Cash (In-person)'},
-    { id: 'electronicbill', text: 'Electronic Bill'},
+    { id: 'cash', text: 'Physical Cash'},
+    { id: 'billpayment', text: 'Bill Payment'},
     { id: 'bankdraft', text: 'Bank Draft'},
-    { id: 'crypto', text: 'Crypto'},
     { id: 'creditcard', text: 'Credit Card'},
     { id: 'paypal', text: 'PayPal'},
 ]
@@ -73,7 +50,7 @@ function Content({currency}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [searchResults, setSearchResults] = useState([]);
-    const pageSize = 3;
+    const pageSize = 6;
 
     const toggleLogicalOperator = (e) => {
         let logicalOperatorOn = e.target.getAttribute("data-operating-on");
@@ -255,7 +232,7 @@ function Content({currency}) {
             <div className="container">
                 <div className="row justify-content-center">
                     {/* Shop Sidebar */}
-                    <div className="col-lg-4 col-md-10 col-sm-10">
+                    <div className="col-lg-4 col-md-10">
                         <ProductFilterLeft
                             toggleLogicalOperator={toggleLogicalOperator}
                             productTypesChanged={productTypesChanged}
@@ -285,7 +262,7 @@ function Content({currency}) {
                         <div className="shop-products-wrapper pt-shop-section">
                             <div className="shop-product-top">
                                 { (totalCount!==0) ? (
-                                    <p>Showing page {currentPage} of {Math.ceil(totalCount/pageSize)}</p>
+                                    <p><span className="less-than-equal-575">Pg.</span><span className="more-than-575">Showing page</span> {currentPage} of {Math.ceil(totalCount/pageSize)}</p>
                                 ) :
                                 <p></p>
                                 }
@@ -310,13 +287,8 @@ function Content({currency}) {
                                         </div>)
                                     :
                                         searchResults.map((item, i) => (
-                                            <div key={i} className="col-lg-4 col-md-6 mb-4">
-                                                <div className="food-box shop-box">
-                                                    <div className="thumb">
-                                                        <a href={item.url}>
-                                                            <img src={imageMapping[item.productType+item.dealer]} alt="" />
-                                                        </a>
-                                                    </div>
+                                            <div key={i} className="col-lg-4 col-sm-6 mb-4">
+                                                <div className="food-box shop-box ">
                                                     <div className="desc">
                                                         <h4>
                                                             <a href={item.url}>{item.title}</a>
@@ -325,13 +297,16 @@ function Content({currency}) {
                                                             <a href={item.url}>${item.pricing[Object.keys(item.pricing)[0]].price}</a>
                                                         </span>
                                                         <span className="mint">
-                                                            <span>Mint: {item.mint}</span>
+                                                            Mint: {item.mint}
                                                         </span><br/>
                                                         <span className="dealer">
-                                                            <span>Dealer: {item.dealer}</span>
+                                                            Dealer: {item.dealer}
                                                         </span>
                                                         <a href={item.url} className="link"><i className="fal fa-arrow-right" /></a>
                                                     </div>
+                                                    <fieldset className={item.productType}>
+                                                        <legend>{(item.productType+"").toUpperCase()}</legend>
+                                                    </fieldset>
                                                 </div>
                                             </div>
                                         ))

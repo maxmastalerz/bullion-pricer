@@ -25,7 +25,7 @@ function Header({onChangeCurrency, currency}) {
         setTogglemethod(!togglemethod);
     }
     const onScroll = () => {
-        setIsTop(window.scrollY > 110);
+        setIsTop(window.scrollY > (52.4+(90/2)) );
     }
 
     useEffect(() => {
