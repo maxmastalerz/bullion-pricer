@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import Pagination from '../../layouts/Pagination';
 import ProductFilterLeft from '../../layouts/ProductFilterLeft';
 import ProductFilterTop from '../../layouts/ProductFilterTop';
@@ -34,11 +36,11 @@ const paymentPreferences = [
     { id: 'paypal', text: 'PayPal'},
 ]
 
-function Content({currency}) {
+function Content() {
     const [productTypesOperator, setProductTypesOperator] = useState('XOR');
-    const [productTypesSelected, setProductTypesSelected] = useState(['gold']);
+    const [productTypesSelected, setProductTypesSelected] = useState(['gold','silver','platinum','palladium']);
     const [puritiesOperator, setPuritiesOperator] = useState('XOR');
-    const [puritiesSelected, setPuritiesSelected] = useState(['9999','9995']);
+    const [puritiesSelected, setPuritiesSelected] = useState(['99999','9999','9995','999','925','less_than_or_equal_90']);
     const [issuanceOperator, setIssuanceOperator] = useState('XOR');
     const [issuanceSelected, setIssuanceSelected] = useState(['government_issued','not_government_issued']);
     const [paymentPreferencesSelected, setPaymentPreferencesSelected] = useState(['check']);
@@ -50,6 +52,7 @@ function Content({currency}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [searchResults, setSearchResults] = useState([]);
+    const currency = useSelector((state) => state.spotSettings.currencyCode);
     const pageSize = 6;
 
     const toggleLogicalOperator = (e) => {

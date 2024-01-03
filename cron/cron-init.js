@@ -129,6 +129,10 @@ function distributeProductsByDomainEvenlyToScrapers(productListByDomain) {
 	let productScrapeDistribution = {};
 	let productI = 0;
 
+	if(numProductScraperNodes === 0) {
+		return productScrapeDistribution;
+	}
+
 	for(let productListForDomain of productListByDomain) {
 		productListForDomain.forEach((product, i) => {
 			if(!productScrapeDistribution[productScraperNodes[productI%numProductScraperNodes]]) {//to avoid index not found

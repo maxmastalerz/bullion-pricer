@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames'
 import $ from 'jquery'
@@ -7,8 +8,11 @@ import Canvas from './Canvas';
 import Mobilemenu from './Mobilemenu';
 import SelectCurrency from '../SelectCurrency';
 import { formatNumber } from '../../helper/formatting';
+import { changeCurrency } from '../../features/spotSettings/spotSettingsSlice';
 
-function Header({onChangeCurrency, currency}) {
+function Header() {
+    const dispatch = useDispatch();
+
     const [classmethod, setClassmethod] = useState(false);
     const [togglemethod, setTogglemethod] = useState(false);
     const [isTop, setIsTop] = useState(false);
@@ -17,6 +21,13 @@ function Header({onChangeCurrency, currency}) {
     const [goldSpotPrice, setGoldSpotPrice] = useState(0);
     const [palladiumSpotPrice, setPalladiumSpotPrice] = useState(0);
     const [platinumSpotPrice, setPlatinumSpotPrice] = useState(0);
+
+    const currency = useSelector((state) => state.spotSettings.currencyCode);
+
+    const onChangeCurrency = (e) => {
+        dispatch(changeCurrency(e.target.value));
+        window.localStorage.setItem('currencySelected', e.target.value);
+    }
 
     const removeClass = () => {
         setClassmethod(false);

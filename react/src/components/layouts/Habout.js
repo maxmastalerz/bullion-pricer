@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import Masonry from 'react-masonry-component';
-import ReactWOW from 'react-wow';
+//import { Link } from 'react-router-dom'
+//import Masonry from 'react-masonry-component';
+//import ReactWOW from 'react-wow';
 
 // About img
-import aboutimg1 from '../../assets/img/feature/04.jpg';
-import aboutimg2 from '../../assets/img/feature/05.jpg';
+//import aboutimg1 from '../../assets/img/feature/04.jpg';
+//import aboutimg2 from '../../assets/img/feature/05.jpg';
 import aboutbottomimg from '../../assets/img/bg/03.jpg';
 
 class Habout extends Component {
     render() {
-        const imagesLoadedOptions = {
+        /*const imagesLoadedOptions = {
             itemSelector: '.col-sm-6',
             percentPosition: false,
             resize: true,
             fitWidth: true
-        };
+        };*/
         return (
             <section className="about-section pt-115 pb-115">
                 <div className="container">
                     <div className="row align-items-center justify-content-center">
-                        <ReactWOW animation='fadeInLeft' data-delay=".3s">
+                        {/*<ReactWOW animation='fadeInLeft' data-delay=".3s">
                             <div className="col-lg-6 col-md-10">
                                 <Masonry className="row about-features-boxes fetaure-masonary" imagesLoadedOptions={imagesLoadedOptions}>
                                     <div className="col-sm-6">
@@ -69,7 +69,7 @@ class Habout extends Component {
                                     <Link to="/contact" className="main-btn btn-filled mt-40"> Know More</Link>
                                 </div>
                             </div>
-                        </ReactWOW>
+                        </ReactWOW>*/}
                     </div>
                 </div>
                 <div className="about-right-bottom">

@@ -29,15 +29,15 @@ const Footer = () => {
         <Fragment>
             <Backtotop />
             <footer>
-                <div className="footer-subscibe-area pt-120 pb-120">
+                <div className="footer-subscibe-area pb-45">
                     <div className="container">
                         <div className="row justify-content-center">
                             <div className="col-lg-8">
                                 <div className="subscribe-text text-center">
-                                    <div className="footer-logo mb-45">
+                                    <div className="footer-logo mt-45">
                                     </div>
                                     <p>
-                                        Looking for the latest info on the market or special offers. Subscribe to our newsletter for a chance to win a 5oz silver bar. Prizes are drawn monthly.
+                                        Looking for the latest info on the market or special offers?<br/>Subscribe to our newsletter for a chance to win a 5 oz silver bar. Prizes are drawn quarterly.
                                     </p>
                                     <form onSubmit={subscribeToNewsletter} className="subscribe-form mt-50">
                                         <input type="email" placeholder="Enter your email address" ref={emailAddressRef} />
