@@ -12,7 +12,7 @@ function Contact() {
                 <title>BullionPricer | Contact Us</title>
                 <meta
                     name="description"
-                    content="#"
+                    content="Contact us about indexing new gold, silver, platinum, or palladium products. We are also happy to answer any other questions you may have."
                 />
             </MetaTags>
             <Header/>

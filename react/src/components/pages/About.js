@@ -12,7 +12,7 @@ function AboutUs(){
                 <title>BullionPricer | About</title>
                 <meta
                     name="description"
-                    content="#"
+                    content="All you need to know about BullionPricer. Here you can find out how to use the search tool and a little bit about your history."
                 />
             </MetaTags>
             <Header/>

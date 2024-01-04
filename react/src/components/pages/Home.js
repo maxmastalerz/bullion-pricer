@@ -11,7 +11,7 @@ function Home() {
                 <title>BullionPricer | Find the cheapest gold, silver, platinum, and palladium products.</title>
                 <meta
                     name="description"
-                    content="#"
+                    content="Find the cheapest Gold, Silver, Platinum, & Palladium products across online dealers! Hourly pricing updates let you compare products and find the best deals."
                 />
             </MetaTags>
             <Header />

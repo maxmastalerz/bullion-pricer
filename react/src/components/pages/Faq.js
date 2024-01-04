@@ -13,7 +13,7 @@ class Faq extends Component {
                     <title>BullionPricer | Frequently Asked Questions</title>
                     <meta
                         name="description"
-                        content="#"
+                        content="Not sure how to use Bullion Pricer and already read the About page? Please check out this FAQ before contacting us."
                     />
                 </MetaTags>
                 <Header/>
