@@ -10,14 +10,14 @@ class Faq extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | FAQ's</title>
+                    <title>BullionPricer | Frequently Asked Questions</title>
                     <meta
                         name="description"
                         content="#"
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:"FAQ's"}}/>
+                <Breadcrumb breadcrumb={{pagename:"FAQ"}}/>
                 <Content/>
                 <Footer/>
             </Fragment>

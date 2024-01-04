@@ -2,31 +2,20 @@ import React from 'react';
 import CountUp from "react-countup";
 import VisibilitySensor from "react-visibility-sensor";
 
-// Galklery
-import gallimg1 from '../../../assets/img/gallery/09.jpg';
-import gallimg2 from '../../../assets/img/gallery/10.jpg';
-
 const counterposts = [
-    { icon: 'flaticon-user-1', number: '8000', title: 'Happy Users' },
-    { icon: 'flaticon-like', number: '10', prefix: 'M', title: 'Reviews & Appriciate' },
-    { icon: 'flaticon-suitcase', number: '100', title: 'Country Coverage' },
+    { icon: 'flaticon-menu-1', number: '79', title: 'Classified Products' },
+    { icon: 'flaticon-globe', number: '2', title: 'Supported Dealer Sites' },
+    { icon: 'flaticon-search', number: '6', title: 'Unique Filters' },
 ];
-
 
 export default function Counter() {
     const [focus, setFocus] = React.useState(false);
     return (
-        <section className="counter-section pt-115">
+        <section className="counter-section pt-45">
             <div className="container">
-                {/* Section Title */}
-                <div className="section-title mb-80">
-                    <span className="title-tag">COUNTER</span>
-                    <h2>Feedback At Glance</h2>
-                </div>
-                {/* Counter */}
                 <div className="row justify-content-center">
                     {counterposts.map((item, i) => (
-                        <div key={i} className="col-lg-4 col-6">
+                        <div key={i} className="col-lg-4 col-12">
                             <div className="counter-box counter-box-two">
                                 <div className="icon">
                                     <i className={item.icon} />
@@ -54,19 +43,6 @@ export default function Counter() {
                             </div>
                         </div>
                     ))}
-                </div>
-                {/* Gallery */}
-                <div className="row">
-                    <div className="col-sm-6 wow fadeInUp" data-wow-delay=".3s">
-                        <div className="image mt-30">
-                            <img src={gallimg1} alt="" />
-                        </div>
-                    </div>
-                    <div className="col-sm-6 wow fadeInUp" data-wow-delay=".5s">
-                        <div className="image mt-30">
-                            <img src={gallimg2} alt="" />
-                        </div>
-                    </div>
                 </div>
             </div>
         </section >

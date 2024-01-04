@@ -20,12 +20,17 @@ const navigationmenu = [
         link: '/charts',
     },*/
     {
-        id: 4,
-        linkText: 'About Us',
+        id: 2,
+        linkText: 'About',
         link: '/about'
     },
     {
-        id: 5,
+        id: 3,
+        linkText: 'FAQ',
+        link: '/faq'
+    },
+    {
+        id: 4,
         linkText: 'Contact',
         link: '/contact'
     }

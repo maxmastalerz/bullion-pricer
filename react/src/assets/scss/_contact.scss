@@ -45,7 +45,7 @@
 
 	.contact-form {	
 		background-color: #353530;
-		padding: 100px;
+		padding: 100px 100px 50px 100px;
 		@media #{$md} {
 			padding: 50px;
 		}
@@ -55,6 +55,19 @@
 		.main-btn.btn-filled {	
 			-webkit-box-shadow: none;
 			box-shadow: none;
+		}
+
+		.alert-container {
+			margin-top: 20px;
+			height: 50px;
+
+			@media #{$sm} {
+				height: 100px;
+			}
+
+			.alert {
+				transition: opacity 2s ease-in-out;
+			}
 		}
 	}
 }

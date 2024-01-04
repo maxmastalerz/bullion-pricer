@@ -23,6 +23,7 @@ services:
         image: pp-api
         environment:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
+            - POSTMARK_SERVER_TOKEN=${API_POSTMARK_SERVER_TOKEN}
         expose:
             - 5000
         command: "npm start"

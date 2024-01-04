@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
+//import $ from 'jquery';
 
 import aboutimg1 from '../../../assets/img/bg/about-1.png';
 import aboutimg2 from '../../../assets/img/bg/about-2.png';
 
 class About extends Component {
     componentDidMount() {
-        function parallaxscroll() {
+        /*function parallaxscroll() {
             $(document).ready(function () {
                 //parallax scroll
                 $(window).on("scroll", function () {
@@ -43,7 +43,7 @@ class About extends Component {
                 });
             });
         }
-        parallaxscroll();
+        parallaxscroll();*/
     }
     render() {
         return (

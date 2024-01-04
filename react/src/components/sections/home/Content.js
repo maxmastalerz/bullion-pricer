@@ -199,18 +199,21 @@ function Content() {
         fetch(`/api/products?${params.toString()}`)
         .then((response) => response.json())
         .then((results) => {
-            console.log(results);
+            if(results.data) {
+                let products = results.data;
+                console.log(products);
 
-            let totalCountToSet = (results[0].totalCount.length === 1) ? results[0].totalCount[0].count : 0;
-            setTotalCount(totalCountToSet);
-            results = convertQtyRangeNullToInfinity(results[0].totalData); // JSON doesn't support Infinity, let's add it back.
-            setSearchResults(results);
+                let totalCountToSet = (products[0].totalCount.length === 1) ? products[0].totalCount[0].count : 0;
+                setTotalCount(totalCountToSet);
+                products = convertQtyRangeNullToInfinity(products[0].totalData); // JSON doesn't support Infinity, let's add it back.
+                setSearchResults(products);
 
-            // If someone was viewing their results on page 3, then changed their filter to something with less results
-            // where two pages are available, we force set them to the last page of search results.
-            let maxPage = Math.max(Math.ceil(totalCountToSet/pageSize),1);
-            if(maxPage < currentPage) {
-                setCurrentPage(maxPage);
+                // If someone was viewing their results on page 3, then changed their filter to something with less results
+                // where two pages are available, we force set them to the last page of search results.
+                let maxPage = Math.max(Math.ceil(totalCountToSet/pageSize),1);
+                if(maxPage < currentPage) {
+                    setCurrentPage(maxPage);
+                }
             }
         });
 
@@ -231,7 +234,7 @@ function Content() {
     ]);
 
     return (
-        <section className="Shop-section pt-shop-section pb-120">
+        <section className="Shop-section pt-shop-section pb-45">
             <div className="container">
                 <div className="row justify-content-center">
                     {/* Shop Sidebar */}

@@ -12,6 +12,7 @@ services:
             - PORT=${REACT_PORT}
             - BROWSER=${REACT_BROWSER}
             - CHOKIDAR_USEPOLLING=true
+            - REACT_APP_HCAPTCHA_SITE_KEY=${REACT_HCAPTCHA_SITE_KEY}
         volumes:
             - pp-react-node_modules:/app/react/node_modules
             - ./react:/app/react
@@ -26,6 +27,8 @@ services:
         image: pp-api
         environment:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
+            - HCAPTCHA_SECRET_KEY=${API_HCAPTCHA_SECRET_KEY}
+            - POSTMARK_SERVER_TOKEN=${API_POSTMARK_SERVER_TOKEN}
         volumes:
             - pp-api-node_modules:/app/node_modules
             - ./api:/app

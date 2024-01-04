@@ -16,10 +16,10 @@ const Footer = () => {
         })
         .then((response) => response.json())
         .then((results) => {
+            emailAddressRef.current.value = "";
             if(results.error) {
-                console.log(results.error);
+                alert(results.error.message);
             } else if(results.data) {
-                emailAddressRef.current.value = "";
                 alert(results.data.message);
             }
         });
@@ -52,13 +52,11 @@ const Footer = () => {
                     <div className="container">
                         <div className="row align-items-center">
                             <div className="col-md-5 order-2 order-md-1">
-                                <p className="copyright-text">©{new Date().getFullYear()} preciouspricer.com</p>
+                                <p className="copyright-text">©{new Date().getFullYear()} bullionpricer.com</p>
                             </div>
                             <div className="col-md-7 order-1 order-md-2">
                                 <div className="social-links">
-                                    <a href="https://facebook.com/preciousPricer"><i className="fab fa-facebook-f" /></a>
-                                    <a href="https://twitter.com/preciousPricer"><i className="fab fa-twitter" /></a>
-                                    <a href="https://instagram.com/preciousPricer"><i className="fab fa-instagram" /></a>
+                                    <a href="https://instagram.com/BullionPricer" target="_blank" rel="noreferrer"><i className="fab fa-instagram" /></a>
                                 </div>
                             </div>
                         </div>

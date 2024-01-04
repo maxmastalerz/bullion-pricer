@@ -8,7 +8,7 @@ function Home() {
     return (
         <Fragment>
             <MetaTags>
-                <title>PreciousPricer</title>
+                <title>BullionPricer | Find the cheapest gold, silver, platinum, and palladium products.</title>
                 <meta
                     name="description"
                     content="#"

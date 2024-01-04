@@ -184,6 +184,17 @@ a, a:hover {
   color: #fcd462;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 35px #1c1b19 inset !important;
+}
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: #a3a3a3 !important;
+}
+
 input,
 select,
 textarea,
@@ -192,7 +203,7 @@ select {
   width: 100%;
   height: 70px;
   background-color: #1c1b19;
-  padding: 0 40px;
+  padding: 0 20px;
 }
 
 textarea {
@@ -281,7 +292,7 @@ select {
 .input-group select,
 .input-group textarea,
 .input-group select {
-  padding-left: 80px;
+  padding-left: 50px;
 }
 .input-group label {
   font-size: 14px;
@@ -292,7 +303,7 @@ select {
 }
 .input-group .icon {
   position: absolute;
-  left: 40px;
+  left: 20px;
   bottom: 35px;
   color: #fcd462;
   -webkit-transform: translateY(-50%);
@@ -393,7 +404,7 @@ select {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  padding: 0 48px;
+  padding: 0 24px;
   font-size: 14px;
   line-height: 60px;
   border-radius: 0px;
@@ -2821,7 +2832,7 @@ header.header-three .header-top .currency-selector-container {
   background-position: center;
   position: relative;
   z-index: 1;
-  margin-top: 130px;
+  margin-top: -45px;
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .breadcrumb-area {
@@ -2892,6 +2903,8 @@ header.header-three .header-top .currency-selector-container {
 }
 .breadcrumb-area .breadcrumb-text .breadcrumb-nav {
   position: absolute;
+  width: 100%;
+  max-width: max-content;
   left: 50%;
   bottom: -32px;
   background-color: #353530;
@@ -3383,7 +3396,7 @@ header.header-three .header-top .currency-selector-container {
 }
 .about-section .about-features {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-template-rows: 1fr;
   grid-column-gap: 35px;
   margin-top: 100px;
@@ -3636,7 +3649,8 @@ header.header-three .header-top .currency-selector-container {
   }
 }
 .about-section .about-text-box .about-text {
-  font-size: 14px;
+  color: #ebebeb;
+  font-size: 15px;
   padding-left: 20px;
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -3704,6 +3718,12 @@ header.header-three .header-top .currency-selector-container {
   content: "";
   background-size: cover;
   background-position: center;
+}
+.about-section .about-img {
+  text-align: center;
+}
+.about-section .about-img img {
+  width: 50%;
 }
 
 /*=======  ROOM Tab CSS  =======*/
@@ -5633,10 +5653,11 @@ header.header-three .header-top .currency-selector-container {
 }
 @media (max-width: 767px) {
   .counter-section .counter-box.counter-box-two {
-    padding: 110px 25px 30px;
+    padding: 30px 25px;
   }
 }
 .counter-section .counter-box.counter-box-two h4 {
+  margin-top: 11.2px;
   color: #fff;
   letter-spacing: -1px;
   font-family: "Prata", serif;
@@ -5655,10 +5676,14 @@ header.header-three .header-top .currency-selector-container {
     left: 30px;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .counter-section .counter-box.counter-box-two .icon {
-    top: 30px;
-    left: 25px;
+    position: unset;
+  }
+}
+@media (max-width: 991px) {
+  .counter-section .counter-box {
+    text-align: center;
   }
 }
 
@@ -5838,7 +5863,7 @@ header.header-three .header-top .currency-selector-container {
 }
 .contact-part .contact-form {
   background-color: #353530;
-  padding: 100px;
+  padding: 100px 100px 50px 100px;
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .contact-part .contact-form {
@@ -5853,6 +5878,18 @@ header.header-three .header-top .currency-selector-container {
 .contact-part .contact-form .main-btn.btn-filled {
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+.contact-part .contact-form .alert-container {
+  margin-top: 20px;
+  height: 50px;
+}
+@media (max-width: 767px) {
+  .contact-part .contact-form .alert-container {
+    height: 100px;
+  }
+}
+.contact-part .contact-form .alert-container .alert {
+  transition: opacity 2s ease-in-out;
 }
 
 /*=======  News   =======*/
@@ -9228,7 +9265,7 @@ td.has-title {
   position: absolute;
   top: 50%;
   margin-top: -3px;
-  right: 1.25rem;
+  right: -0.75rem;
   width: 10px;
   height: 2px;
   background-color: #fff;
@@ -9242,7 +9279,7 @@ td.has-title {
   position: absolute;
   top: 50%;
   margin-top: -3px;
-  right: 1.25rem;
+  right: -0.75rem;
   width: 10px;
   height: 2px;
   background-color: #fff;

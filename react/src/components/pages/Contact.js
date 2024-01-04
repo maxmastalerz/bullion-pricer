@@ -9,7 +9,7 @@ function Contact() {
     return (
         <Fragment>
             <MetaTags>
-                <title>PreciousPricer | Contact Us</title>
+                <title>BullionPricer | Contact Us</title>
                 <meta
                     name="description"
                     content="#"

@@ -1,6 +1,9 @@
 var express = require("express");
-var router = express.Router();
+const { verify } = require('hcaptcha');
 const { MongoClient } = require("mongodb");
+const axios = require("axios");
+
+var router = express.Router();
 
 async function toArray(asyncIterator) {
 	const arr = [];
@@ -11,7 +14,7 @@ async function toArray(asyncIterator) {
 // PP-TODO: For all the routes that use the database, see if closing the db connection is explicitly required.
 
 router.get("/", function (req, res, next) {
-	res.send(`<h1>PreciousPricer API Working</h1>`);
+	res.status(200).send('<h1>BullionPricer API Working</h1>');
 });
 
 const validEmailAddress = (emailAddress) => {
@@ -23,16 +26,73 @@ const validEmailAddress = (emailAddress) => {
 	return true;
 };
 
+const sendEmail = async(emailInfo) => {
+	const emailData = {
+		From: 'contact@bullionpricer.com',
+		To: 'contact@bullionpricer.com',
+		Subject: '[BullionPricer]: '+emailInfo.subject,
+		TextBody: 'This email was sent via the bullionpricer.com contact form\nFrom: '+emailInfo.name+'\nEmail: '+emailInfo.email+'\n\nMessage:\n'+emailInfo.message,
+		HtmlBody: '<u>This email was sent via the bullionpricer.com contact form</u><br><b>From:</b> '+emailInfo.name+'<br><b>Email:</b> '+emailInfo.email+'<br><br><b>Message:</b><br>'+emailInfo.message.replace(/\n/g, '<br>'),
+		ReplyTo: emailInfo.email,
+	};
+
+	try {
+		const response = await axios.post('https://api.postmarkapp.com/email', emailData, {
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Postmark-Server-Token': process.env.POSTMARK_SERVER_TOKEN
+			},
+		});
+
+		console.log('Email sent successfully:', response.data);
+
+		return {
+			statusCode: 200,
+			data: {
+				message: "Your message has been sent."
+			}
+		};
+	} catch(error) {
+		console.error('Error sending email:', JSON.stringify(error));
+
+		return {
+			statusCode: 400,
+			error: {
+				message: "Error sending email:"+JSON.stringify(error)
+			}
+		};
+	}
+};
+
+router.post("/contact", async (req, res) => {
+	const { name, email, subject, message, hCaptchaValue } = req.body;
+
+	//Verify captcha
+	let { success } = await verify(process.env.HCAPTCHA_SECRET_KEY, hCaptchaValue);
+
+	if(success) {
+		const response = await sendEmail({ name, email, subject, message });
+		res.status(response.statusCode).json(response);
+	} else {
+		res.status(400).json({
+			statusCode: 400,
+			error: {
+				message: "Your message couldn't be sent due to a captcha verification issue."
+			}
+		});
+	}
+});
+
 router.post("/subscribeToNewsletter", async (req, res) => {
 	let emailAddress = req.body.emailAddress;
 
 	if (!validEmailAddress(emailAddress)) {
-		res.send({
-			data: {
+		res.status(400).json({
+			statusCode: 400,
+			error: {
 				message: `Sorry, please input a valid email address.`,
 			},
 		});
-		return;
 	}
 
 	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
@@ -45,17 +105,19 @@ router.post("/subscribeToNewsletter", async (req, res) => {
 	try {
 		subscriptionsCollection.insertOne({ emailAddress: emailAddress });
 	} catch (err) {
-		res.status(500);
-		res.send({
+		console.log(err.message);
+		res.status(500).json({
+			statusCode: 500,
 			error: {
-				message: err.message,
+				message: 'Sorry, due to technical issues, we were unable to subscribe you.',
 			},
 		});
 	}
 
 	console.log(`Subscribed ${emailAddress} to newsletter.`);
 
-	res.send({
+	res.status(200).json({
+		statusCode: 200,
 		data: {
 			message: `Thanks for subscribing! Stay tuned for news on the best deals.`,
 		},
@@ -74,7 +136,8 @@ router.get("/spotPrices", async (req, res) => {
 		.project({ _id: 0, symbol: 1, [`price.${req.query.currency}`]: 1})
 		.toArray();
 
-	res.send({
+	res.status(200).json({
+		statusCode: 200,
 		data: lastSpot,
 	});
 });
@@ -262,7 +325,10 @@ router.get("/products", async (req, res) => {
 	console.log("Returning products:");
 	console.log(JSON.stringify(products));
 
-	res.send(products);
+	res.status(200).json({
+		statusCode: 200,
+		data: products
+	});
 });
 
 module.exports = router;
