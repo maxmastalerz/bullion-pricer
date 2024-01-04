@@ -10,11 +10,21 @@ import SelectCurrency from '../SelectCurrency';
 import { formatNumber } from '../../helper/formatting';
 import { changeCurrency } from '../../features/spotSettings/spotSettingsSlice';
 
+
+// Cart loop
+/*const cartposts = [
+    { img: 'http://via.placeholder.com/80x80', title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
+    { img: 'http://via.placeholder.com/80x80', title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
+    { img: 'http://via.placeholder.com/80x80', title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
+    { img: 'http://via.placeholder.com/80x80', title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
+];*/
+
 function Header() {
     const dispatch = useDispatch();
 
     const [classmethod, setClassmethod] = useState(false);
     const [togglemethod, setTogglemethod] = useState(false);
+    //const [togglecart, setTogglecart] = useState(false);
     const [isTop, setIsTop] = useState(false);
     
     const [silverSpotPrice, setSilverSpotPrice] = useState(0);
@@ -38,6 +48,13 @@ function Header() {
     const onScroll = () => {
         setIsTop(window.scrollY > (52.4+(90/2)) );
     }
+
+    /*const addClass = () => {
+        setClassmethod(true);
+    }
+    const toggleCartm = () => {
+        setTogglecart(!togglecart);
+    }*/
 
     useEffect(() => {
 
@@ -141,7 +158,59 @@ function Header() {
                                     </div>
                                 </div>
                             </div>
-                            
+                            {/*
+                            <div className="menu-right-buttons">
+                                <div className="login-btn">
+                                    <Link to="/login" id="loginBtn"><i className="fal fa-user" /></Link>
+                                </div>
+                                <div className="search">
+                                    <Link to="#" className="search-icon" id="searchBtn">
+                                        <i className="fal fa-search open-icon" />
+                                        <i className="fal fa-times close-icon" />
+                                    </Link>
+                                    <div className="search-form">
+                                        <form action="#">
+                                            <input type="text" placeholder="Search your keyword..." />
+                                            <button type="submit"><i className="far fa-search" /></button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div className="toggle">
+                                    <Link to="#" id="offCanvasBtn" onClick={addClass}> <i className="fal fa-bars" /></Link>
+                                </div>
+                                <div className="toggle dropdown-btn">
+                                    <span className="sigma-notification">0</span>
+                                    <Link to="#" onClick={toggleCartm}><i className="fal fa-shopping-bag" /></Link>
+                                    <div className={classNames("dropdown-menu cart-dropdown-menu", { "show": togglecart })}>
+                                        <ul className="cart-items-box">
+                                            {cartposts.map((item, i) => (
+                                                <li key={i} className="cart-item">
+                                                    <div className="img">
+                                                        <img src={item.img} alt="img" />
+                                                    </div>
+                                                    <div className="content">
+                                                        <h5><Link to="#">{item.title}</Link></h5>
+                                                        <p>{item.price}</p>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <div className="cart-items-box">
+                                            <div className="cart-item">
+                                                <span>Subtotal</span>
+                                                <span>20,0000</span>
+                                            </div>
+                                            <div className="cart-item actions">
+                                                <button type="button" className="main-btn btn-filled">Checkout</button>
+                                                <button type="button" className="main-btn btn-borderd">View Cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="navbar-toggler">
+                                    <span /><span /><span />
+                                </div>
+                            </div>*/}
                         </div >
                     </div >
                 </div >
