@@ -86,7 +86,7 @@ function Header() {
                             {/* Site Logo */}
                             <div className="site-logo site-logo-text">
                                 <Link to="/">
-                                    <img src={logo} style={{ height: '70px' }}/>
+                                    <img src={logo} alt="The logo of BullionPricer featuring a spider and gold" style={{ height: '70px' }}/>
                                     <div className="site-logo-text">
                                         <h3>BullionPricer</h3>
                                         <h6>Gold, Silver, and More</h6>

@@ -47,7 +47,8 @@ function Headertwo(props) {
 
     useEffect(() => {
         const megamenu = () => {
-            const megamenuNavItems = megamenuRef.current.querySelectorAll('.sigm-megamenu-nav>li');
+            const currentMegamenuRef = megamenuRef.current;
+            const megamenuNavItems = currentMegamenuRef.querySelectorAll('.sigm-megamenu-nav>li');
             megamenuNavItemsRef.current = megamenuNavItems;
 
             megamenuNavItems.forEach(item => {
@@ -60,12 +61,13 @@ function Headertwo(props) {
 
         return () => {
             window.removeEventListener('scroll', onScroll, false);
-            const megamenuNavItems = megamenuRef.current.querySelectorAll('.sigm-megamenu-nav>li');
+            const currentMegamenuRef = megamenuRef.current;
+            const megamenuNavItems = currentMegamenuRef.querySelectorAll('.sigm-megamenu-nav>li');
             megamenuNavItems.forEach(item => {
                 item.removeEventListener('mouseover', handleMouseOver);
             });
         };
-    }, []);
+    }, [handleMouseOver, onScroll]);
 
     const stickyheader = isTop ? 'sticky-active' : '';
     return (
