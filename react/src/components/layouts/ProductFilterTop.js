@@ -24,7 +24,7 @@ function ProductFilterTop(props) {
                     : <span className="less-than-equal-575">: {startWeight}  &#8212; {endWeight}</span>
                     }
                 </h5>
-                <div id="testing"></div>
+                
                 <ReactBootstrapSlider
                 value={props.weightRange}
                 change={props.weightRangeChanged}

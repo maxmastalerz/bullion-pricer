@@ -6,7 +6,7 @@ var router = express.Router();
 
 //const { MongoClient } = require("mongodb");
 
-// PP-TODO: For all the routes that use the database, see if closing the db connection is explicitly required.
+// BP-TODO: For all the routes that use the database, see if closing the db connection is explicitly required.
 
 async function scrapeProductsAsync(productsToScrape) {
 	
@@ -37,7 +37,7 @@ async function scrapeProductsAsync(productsToScrape) {
 		products: productsToScrape
 	};
 
-	var response = await axios.post('http://pp-cron:8000/completedScrapePart', requestData);
+	var response = await axios.post('http://bp-cron:8000/completedScrapePart', requestData);
 }
 
 router.post("/submitProductsForScraping", function (req, res, next) {

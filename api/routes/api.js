@@ -11,14 +11,14 @@ async function toArray(asyncIterator) {
 	return arr;
 }
 
-// PP-TODO: For all the routes that use the database, see if closing the db connection is explicitly required.
+// BP-TODO: For all the routes that use the database, see if closing the db connection is explicitly required.
 
 router.get("/", function (req, res, next) {
 	res.status(200).send('<h1>BullionPricer API Working</h1>');
 });
 
 const validEmailAddress = (emailAddress) => {
-	// PP-TODO: Make sure to better validate email address and sanitize it.
+	// BP-TODO: Make sure to better validate email address and sanitize it.
 
 	if (emailAddress === "") {
 		return false;
@@ -100,7 +100,7 @@ router.post("/subscribeToNewsletter", async (req, res) => {
 	const db = client.db();
 	const subscriptionsCollection = db.collection("subscriptions");
 
-	// PP-TODO: Confirm that this email address is not already subscribed before subscribing.
+	// BP-TODO: Confirm that this email address is not already subscribed before subscribing.
 
 	try {
 		subscriptionsCollection.insertOne({ emailAddress: emailAddress });
@@ -143,7 +143,7 @@ router.get("/spotPrices", async (req, res) => {
 });
 
 router.get("/products", async (req, res) => {
-	// PP-TODO: Sanitize input data.
+	// BP-TODO: Sanitize input data.
 
 	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
 	await client.connect();

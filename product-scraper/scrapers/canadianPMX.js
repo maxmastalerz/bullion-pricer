@@ -72,7 +72,7 @@ function parseMint(tags) {
 	} else if (matchingMints.length === 1) { // Single matching mint found
 		return matchingMints[0][1];
 	} else if (matchingMints.length > 1) { // Multiple matching mints found
-		return 'Various';//PP-TO: If the multiple mints like Argentia/Canadian PMX are all not_government_issued, we could try to store info like that versus leaving it as MANUAL_REVIEW
+		return 'Various';//BP-TODO: If the multiple mints like Argentia/Canadian PMX are all not_government_issued, we could try to store info like that versus leaving it as MANUAL_REVIEW
 	} else { // No matching mint found
 		return false;
 	}

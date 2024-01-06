@@ -1,37 +1,37 @@
 version: "3"
 
 services:
-    pp-react-nginx:
+    bp-react-nginx:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/react-nginx/Dockerfile
             target: prod
-        image: pp-react-nginx
+        image: bp-react-nginx
         environment:
             - PORT=${REACT_PORT}
             - BROWSER=${REACT_BROWSER}
         ports:
             - 80:80
         depends_on:
-            - pp-api
-    pp-api:
+            - bp-api
+    bp-api:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/api/Dockerfile
-        image: pp-api
+        image: bp-api
         environment:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
             - POSTMARK_SERVER_TOKEN=${API_POSTMARK_SERVER_TOKEN}
         expose:
             - 5000
         command: "npm start"
-    pp-cron:
+    bp-cron:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/cron/Dockerfile
-        image: pp-cron
+        image: bp-cron
         environment:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}

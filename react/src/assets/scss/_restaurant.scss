@@ -536,9 +536,6 @@
     margin-bottom: 20px;
   }
 
-  .header-two.header-absolute .sigma-mobile-header {
-    background-color: transparent;
-  }
 }
 
 @media (max-width: 767px) {
@@ -652,34 +649,6 @@ about
 
   &:hover .thumb img {
     transform: scale(1.1);
-  }
-}
-
-.product-wrapper.restaurant-tab-area {
-  min-height: 470px;
-}
-
-@media (max-width: 1199px) {
-  .product-wrapper.restaurant-tab-area {
-    min-height: 525px;
-  }
-}
-
-@media (max-width: 991px) {
-  .product-wrapper.restaurant-tab-area {
-    min-height: 620px;
-  }
-}
-
-@media (max-width: 767px) {
-  .product-wrapper.restaurant-tab-area {
-    min-height: 635px;
-  }
-}
-
-@media (max-width: 575px) {
-  .product-wrapper.restaurant-tab-area {
-    min-height: 910px;
   }
 }
 

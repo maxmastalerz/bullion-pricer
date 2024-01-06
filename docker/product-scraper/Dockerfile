@@ -3,9 +3,9 @@ FROM node:16.13.0-alpine
 WORKDIR /app
 
 COPY ./product-scraper/package.json /app
-COPY ./product-scraper/package-lock.json /app
+#COPY ./product-scraper/package-lock.json /app
 
-RUN npm ci
+RUN npm install
 
 COPY ./product-scraper /app
 

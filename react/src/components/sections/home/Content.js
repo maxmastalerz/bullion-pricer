@@ -5,6 +5,8 @@ import Pagination from '../../layouts/Pagination';
 import ProductFilterLeft from '../../layouts/ProductFilterLeft';
 import ProductFilterTop from '../../layouts/ProductFilterTop';
 
+import { formatNumber } from '../../../helper/formatting';
+
 const productTypes = [
     { id: 'gold', text: 'Gold'},
     { id: 'silver', text: 'Silver' },
@@ -260,11 +262,20 @@ function Content() {
                         />
                     </div>
                     <div className="col-lg-8 col-md-10">
+
                         <ProductFilterTop
                             weightRangeChanged={weightRangeChanged}
                             weightRange={weightRange}
                         />
 
+                        <div className="pagination-wrap">
+                            <Pagination
+                                currentPage={currentPage}
+                                totalCount={totalCount}
+                                pageSize={pageSize}
+                                onPageChange={page => setCurrentPage(page)}
+                            />
+                        </div>
                         <div className="shop-products-wrapper pt-shop-section">
                             <div className="shop-product-top">
                                 { (totalCount!==0) ? (
@@ -293,14 +304,14 @@ function Content() {
                                         </div>)
                                     :
                                         searchResults.map((item, i) => (
-                                            <div key={i} className="col-lg-4 col-sm-6 mb-4">
+                                            <div key={i} className="col-lg-4 col-6 mb-4">
                                                 <div className="food-box shop-box ">
                                                     <div className="desc">
                                                         <h4>
                                                             <a href={item.url}>{item.title}</a>
                                                         </h4>
                                                         <span className="price">
-                                                            <a href={item.url}>${item.pricing[Object.keys(item.pricing)[0]].price}</a>
+                                                            <a href={item.url}>${formatNumber(item.pricing[Object.keys(item.pricing)[0]].price)}</a>
                                                         </span>
                                                         <span className="mint">
                                                             Mint: {item.mint}
@@ -320,14 +331,7 @@ function Content() {
                                 </div>
                             </div>
                         </div>
-                        <div className="pagination-wrap">
-                            <Pagination
-                                currentPage={currentPage}
-                                totalCount={totalCount}
-                                pageSize={pageSize}
-                                onPageChange={page => setCurrentPage(page)}
-                            />
-                        </div>
+                        
 
                     </div>
                 </div>

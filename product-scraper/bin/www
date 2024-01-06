@@ -55,7 +55,7 @@ async function joinClusterRequest() {
 	};
 
 	// Make a POST request to register ourselves with the leader in the cluster.
-	var response = await axios.post('http://pp-cron:8000/joinCluster', requestData);
+	var response = await axios.post('http://bp-cron:8000/joinCluster', requestData);
 	console.log(response.data);
 }
 

@@ -7,9 +7,9 @@ class Error extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Error</title>
+                    <title>BullionPricer | Error</title>
                     <meta
-                        name="description"
+                        name="It appears there's been an issue. The page you are looking for does not exist."
                         content="#"
                     />
                 </MetaTags>

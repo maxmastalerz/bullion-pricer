@@ -1,7 +1,7 @@
 {
-	"name": "precious-pricer-cron",
+	"name": "bullion-pricer-cron",
 	"version": "1.0.0",
-	"description": "A collection of cron scripts for precious-pricer",
+	"description": "A collection of cron scripts for bullion-pricer",
 	"scripts": {
 		"start": "node ./cron-init.js",
 		"test": "echo \"Error: no test specified\" && exit 1"

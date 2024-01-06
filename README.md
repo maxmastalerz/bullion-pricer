@@ -1,4 +1,4 @@
-### precious-pricer
+### bullion-pricer
 
 Originally this application was made as a group project for 9549/4471 at Western. This repo is a continuation of the project.
 
@@ -6,7 +6,7 @@ Originally this application was made as a group project for 9549/4471 at Western
 
 $ DOCKER_BUILDKIT=1 docker-compose --env-file .env.dev -f docker-compose-dev.yml build
 
-$ docker-compose --env-file .env.dev -f docker-compose-dev.yml up --scale pp-product-scraper=2
+$ docker-compose --env-file .env.dev -f docker-compose-dev.yml up --scale bp-product-scraper=2
 
 Please wait(about 55 seconds for scraping to finish), then:
 
@@ -16,11 +16,11 @@ Go to http://localhost
 
 #### Connecting to local dockerized database:
 
-$ docker exec -it $(docker ps -qf "name=pp-db") mongosh --username root --authenticationDatabase admin preciousPricer
+$ docker exec -it $(docker ps -qf "name=bp-db") mongosh --username root --authenticationDatabase admin bullionPricer
 
 The password is password
 
-preciousPricer> db.products.find()
+bullionPricer> db.products.find()
 
 ### To run production build locally with nginx proxy in front
 
@@ -45,7 +45,7 @@ Go to http://localhost
 
 ### CURRENT TO DO:
 
-Find all the PP-TODO lines
+Find all the BP-TODO lines
 Look into npm ci vs npm install. When to use which. Different envs?
 Fix the bordergold parser to get real values
 Make proper contact page

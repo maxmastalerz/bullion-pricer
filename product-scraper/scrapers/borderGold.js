@@ -26,7 +26,7 @@ function parsePrice(strPrice) {
 }
 
 function parseMint(mintStr) {
-	//PP-TODO: Maybe sanitize and make sure it fits a list of pre-defined mints.
+	//BP-TODO: Maybe sanitize and make sure it fits a list of pre-defined mints.
 	//Just return as is. We don't have a search by mint functionality so for now possible slight differences are ok.
 	return mintStr;
 }
@@ -96,7 +96,7 @@ function parsePurities({composition, description}) {
 function parseIssuance(mint) {
 	let knownMints = {
 		government_issued: ['royal canadian mint', 'perth mint', 'us mint', 'royal mint uk', 'saint helena mint'],
-		not_government_issued: ['various', 'austrian mint']
+		not_government_issued: ['various', 'austrian mint', 'pamp suisse']
 	};
 
 	if(knownMints.government_issued.includes(mint)) {
@@ -136,6 +136,36 @@ function getPricingLinksFromHTML(document) {
 	}
 }
 
+async function fetchDataWithExponentialBackoff(url, headers, maxRetries = 6) {
+	let retries = 0;
+	let res;
+
+	while (retries < maxRetries) {
+		try {
+			res = await axios.get(url, { headers: headers, body: null, method: "GET" });
+			break; // Break the loop if the request is successful
+		} catch (error) {
+			if (error.response && error.response.status === 503) {
+				// Retry the request with exponential backoff
+				const delay = Math.pow(2, retries) * 1000; // Exponential backoff formula
+				console.log(`Retrying after ${delay / 1000} seconds...`);
+				await new Promise(resolve => setTimeout(resolve, delay));
+				retries++;
+			} else {
+				console.error("Error fetching data:", error.message);
+				throw error; // Throw an error if it's not a 503 status
+			}
+		}
+	}
+
+	if (retries === maxRetries) {
+		console.error("Max retries reached. Unable to fetch data.");
+		// You can choose to throw an error or handle this case as per your requirements
+	}
+
+	return res;
+}
+
 /*
 Gets the same pricing a user would see visiting the website.
 The pricing a user sees comes from a backend javascript ajax link call
@@ -165,7 +195,7 @@ async function getPricingFromPages(pages) {
 		if(Array.isArray(page)) {
 			const [url, headers] = page;
 
-			const res = await axios.get(url, { headers: headers, body: null, method: "GET" });
+			const res = await fetchDataWithExponentialBackoff(url, headers);
 			let json = res.data;
 			let html = json.data;
 			document = parse(html);
@@ -235,18 +265,23 @@ const getBoxSizeIfBox = (productTitle) => {
 	return false; //not a box
 }
 
+
+
+
 async function scrapeProductPage(url) {
 	console.log("Scraping: " + url);
 
 	// send request with headers mimicking a user browser
-	let html;
+	/*let html;
 	try {
 		const res = await axios.get(url, { headers: getHeaders('USD'), body: null, method: "GET" });
 		html = res.data;
 	} catch (error) {
 		console.error("Error fetching data:", error.message);
 		throw error;
-	}
+	}*/
+	let res = await fetchDataWithExponentialBackoff(url, getHeaders('USD'));
+	let html = res.data;
 
 	let purities='MANUAL_REVIEW',issuance='MANUAL_REVIEW',weight='MANUAL_REVIEW',mint='MANUAL_REVIEW',pricing='MANUAL_REVIEW';
 

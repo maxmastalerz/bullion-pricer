@@ -3,7 +3,7 @@ const { parse } = require("node-html-parser");
 const he = require("he");
 const metalWords = ["gold", "silver", "platinum", "palladium"];
 
-// PP-TODO: Get PID like the one here: https://www.bordergold.com/?p=10246 from the url, then send a request to
+// BP-TODO: Get PID like the one here: https://www.bordergold.com/?p=10246 from the url, then send a request to
 // https://www.bordergold.com/wp-content/plugins/istpricecontroller/cache/products/Retail_10246_CAD_tiers.json?_=1668453682180
 // replacing the PID and the timestamp with now, to get the current price
 

@@ -8,7 +8,7 @@ let countries = getCountryList().filter((value, index, self) => { // get unique 
 const SelectCurrency = ({ onChange, value = 'USD' }) => {
 	return (
         <div className="currency-selector-container">
-            <span>Currency</span>
+            <span className="d-none d-md-inline-block">Currency</span>
             
             <div className="currency-selector">
                 <select className="nice-select" onChange={onChange} value={value}>

@@ -24,7 +24,7 @@ ReactDOM.render(
       <App />
     </BrowserRouter>
   </Provider>,
-  document.getElementById('laramiss')
+  document.getElementById('bullion-pricer')
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -5,7 +5,7 @@
 	"//": "https://github.com/facebook/create-react-app/pull/11752",
 	"//": "If a new release comes out that solves this, please remove the patch and update to the newest release.",
 	"//": "",
-	"name": "precious-pricer",
+	"name": "bullion-pricer",
 	"version": "0.1.0",
 	"private": true,
 	"main": "lib/index",

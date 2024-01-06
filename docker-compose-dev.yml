@@ -1,74 +1,74 @@
 version: "3"
 
 services:
-    pp-react: #front-end web application
+    bp-react: #front-end web application
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/react-nginx/Dockerfile
             target: dev-react
-        image: pp-react
+        image: bp-react
         environment:
             - PORT=${REACT_PORT}
             - BROWSER=${REACT_BROWSER}
             - CHOKIDAR_USEPOLLING=true
             - REACT_APP_HCAPTCHA_SITE_KEY=${REACT_HCAPTCHA_SITE_KEY}
         volumes:
-            - pp-react-node_modules:/app/react/node_modules
+            - bp-react-node_modules:/app/react/node_modules
             - ./react:/app/react
         #Using ports instead of expose as CHOKIDAR_USEPOLLING (live code reloading) wouldn't work with nginx in front (was blocking port comms)
         ports:
             - 3000:3000
-    pp-api: #the web application's api
+    bp-api: #the web application's api
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/api/Dockerfile
-        image: pp-api
+        image: bp-api
         environment:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
             - HCAPTCHA_SECRET_KEY=${API_HCAPTCHA_SECRET_KEY}
             - POSTMARK_SERVER_TOKEN=${API_POSTMARK_SERVER_TOKEN}
         volumes:
-            - pp-api-node_modules:/app/node_modules
+            - bp-api-node_modules:/app/node_modules
             - ./api:/app
         expose:
             - 5000
         depends_on:
-            - pp-db
+            - bp-db
         command: "npm start"
-    pp-nginx:
+    bp-nginx:
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/react-nginx/Dockerfile
             target: dev-nginx
-        image: pp-nginx
+        image: bp-nginx
         ports:
             - 80:80
         depends_on:
-            - pp-react
-            - pp-api
-    pp-db:
+            - bp-react
+            - bp-api
+    bp-db:
         restart: unless-stopped
         build:
             context: ./docker/db
-        image: pp-db
+        image: bp-db
         environment:
             - MONGO_INITDB_ROOT_USERNAME=${DB_MONGO_INITDB_ROOT_USERNAME}
             - MONGO_INITDB_ROOT_PASSWORD=${DB_MONGO_INITDB_ROOT_PASSWORD}
             - MONGO_INITDB_DATABASE=${DB_MONGO_INITDB_DATABASE}
         volumes:
-            - pp-mongodb:/data/db
+            - bp-mongodb:/data/db
         #Having port 27017 available from the host for local development with mongodb tools
         ports:
             - 27017:27017
-    pp-cron: #Also acts as a leader for distributed tasks it schedules and distributes to workers.
+    bp-cron: #Also acts as a leader for distributed tasks it schedules and distributes to workers.
         restart: unless-stopped
         build:
             context: .
             dockerfile: ./docker/cron/Dockerfile
-        image: pp-cron
+        image: bp-cron
         environment:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
             - CURRENCY_BEACON_API_TOKEN=${CRON_CURRENCY_BEACON_API_TOKEN}
@@ -76,36 +76,36 @@ services:
             - BABEL_DISABLE_CACHE=1
             - DO_SCRAPING=${CRON_DO_SCRAPING}
         volumes:
-            - pp-cron-node_modules:/app/node_modules
+            - bp-cron-node_modules:/app/node_modules
             - ./cron:/app
         expose:
             - 8000
         depends_on:
-            - pp-db
-    pp-product-scraper: #worker which registers itself with the pp-cron leader.
+            - bp-db
+    bp-product-scraper: #worker which registers itself with the bp-cron leader.
         build:
             context: .
             dockerfile: ./docker/product-scraper/Dockerfile
-        image: pp-product-scraper
+        image: bp-product-scraper
         environment:
-            - LEADER_HOST=pp-cron
+            - LEADER_HOST=bp-cron
             - LEADER_PORT=8000
         volumes:
-            - pp-product-scraper-node_modules:/app/node_modules
+            - bp-product-scraper-node_modules:/app/node_modules
             - ./product-scraper:/app
         expose:
             - 8000
         depends_on:
-            - pp-cron #because pp-cron is our cluster leader.
+            - bp-cron #because bp-cron is our cluster leader.
 
 volumes:
-    pp-mongodb:
-        name: pp-mongodb
-    pp-react-node_modules:
-        name: pp-react-node_modules
-    pp-api-node_modules:
-        name: pp-api-node_modules
-    pp-cron-node_modules:
-        name: pp-cron-node_modules
-    pp-product-scraper-node_modules:
-        name: pp-product-scraper-node_modules
+    bp-mongodb:
+        name: bp-mongodb
+    bp-react-node_modules:
+        name: bp-react-node_modules
+    bp-api-node_modules:
+        name: bp-api-node_modules
+    bp-cron-node_modules:
+        name: bp-cron-node_modules
+    bp-product-scraper-node_modules:
+        name: bp-product-scraper-node_modules

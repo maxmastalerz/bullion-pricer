@@ -1133,6 +1133,9 @@ div.product-filter-top {
 	.slider.slider-horizontal {
 		width: calc(100% - 30px);
 		margin-left: 15px;
+		@media (max-width: 991px) {
+			margin-top: 22px;
+		}
 	}
 
 	.slider-handle, .slider-tick.in-selection {
