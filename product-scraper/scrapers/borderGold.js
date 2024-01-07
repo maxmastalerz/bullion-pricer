@@ -265,21 +265,9 @@ const getBoxSizeIfBox = (productTitle) => {
 	return false; //not a box
 }
 
-
-
-
 async function scrapeProductPage(url) {
 	console.log("Scraping: " + url);
 
-	// send request with headers mimicking a user browser
-	/*let html;
-	try {
-		const res = await axios.get(url, { headers: getHeaders('USD'), body: null, method: "GET" });
-		html = res.data;
-	} catch (error) {
-		console.error("Error fetching data:", error.message);
-		throw error;
-	}*/
 	let res = await fetchDataWithExponentialBackoff(url, getHeaders('USD'));
 	let html = res.data;
 
