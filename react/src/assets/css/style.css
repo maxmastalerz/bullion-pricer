@@ -8239,7 +8239,11 @@ about
   border-radius: 0;
   border: 1px solid #444444;
 }
-.widget .filter-color .checkbox .custom-box:after {
+.widget .filter-color .checkbox input:checked ~ .custom-box {
+  border: 1px solid #fcd462;
+  background-color: #fcd462;
+}
+.widget .filter-color .checkbox input:checked ~ .custom-box:after {
   left: 6px;
   top: 4px;
   width: 5px;
@@ -8249,13 +8253,6 @@ about
   transform: rotate(45deg);
   content: "";
   position: absolute;
-}
-.widget .filter-color .checkbox input:checked ~ .custom-box {
-  border: 1px solid #fcd462;
-  background-color: #fcd462;
-}
-.widget .filter-color .checkbox input:checked ~ .custom-box:after {
-  display: block;
 }
 
 .shop-product-top {

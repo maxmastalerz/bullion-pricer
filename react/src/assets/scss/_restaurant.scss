@@ -914,6 +914,10 @@ about
     border-radius: 0;
     border: 1px solid #444444;
 
+    
+  }
+
+  input:checked ~ .custom-box {
     &:after {
       left: 6px;
       top: 4px;
@@ -925,13 +929,6 @@ about
       content: "";
       position: absolute;
     }
-  }
-
-  input:checked ~ .custom-box {
-    &:after {
-      display: block;
-    }
-
     border: 1px solid #fcd462;
     background-color: #fcd462;
   }
