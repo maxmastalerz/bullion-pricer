@@ -1,5 +1,4 @@
-import React, { useState, useRef } from 'react';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
+import React, { useState, useEffect } from 'react';
 import { Alert } from 'react-bootstrap';
 
 function Content() {
@@ -7,10 +6,7 @@ function Content() {
     const [email, setEmail] = useState('');
     const [subject, setSubject] = useState('General Inquiry');
     const [message, setMessage] = useState('');
-
     const [loadedHCaptcha, setLoadedHCaptcha] = useState(false);
-    const captchaRef = useRef(null);
-
     const [isVisible, setIsVisible] = useState(false);
 
     const onNameChange = (event) => { setName(event.target.value); };
@@ -33,17 +29,17 @@ function Content() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         if(loadedHCaptcha === false) {
             console.log("HCaptcha hasn't finished loading....");
-            showMessage("hcaptcha_still_loading");
+            showMessage("hcaptcha_didnt_load");
         } else {
-            captchaRef.current.execute({ async: true })
+            window.hcaptcha.execute({ async: true })
             .then(({ response }) => {
                 sendContactFormForProcessing(response);
-                captchaRef.current.resetCaptcha();
-            }).catch(err => {
-                console.log(err);
+                window.hcaptcha.reset();
+            })
+            .catch(err => {
+                console.error(err);
             });
         }
     };
@@ -79,6 +75,19 @@ function Content() {
         setSubject('General Inquiry');
         setMessage('');
     };
+
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://js.hcaptcha.com/1/api.js';
+        script.onload = () => {
+            setLoadedHCaptcha(true);
+            window.hcaptcha.render('captcha');
+        };
+        document.head.appendChild(script);
+        return () => {
+            document.head.removeChild(script);
+        };
+    }, []);
 
     return (
         <section className="contact-part pt-115 pb-45">
@@ -117,12 +126,7 @@ function Content() {
                                 </div>
                             </div>
                             <div className="col-12 text-center">
-                                <HCaptcha
-                                    sitekey={process.env.REACT_APP_HCAPTCHA_SITE_KEY}
-                                    onLoad={() => { setLoadedHCaptcha(true); }}
-                                    ref={captchaRef}
-                                    size="invisible"
-                                />
+                                <div id="captcha" data-size="invisible" data-sitekey={process.env.REACT_APP_HCAPTCHA_SITE_KEY}></div>
 
                                 <button type="submit" className="main-btn btn-filled">Send Message</button>
 
@@ -134,8 +138,8 @@ function Content() {
                                     <Alert variant="danger" className="d-none mt-3 mb-0" id="server_response_danger" style={{ opacity: isVisible ? 1 : 0 }}>
                                         <strong>Sorry!</strong> Your message couldn't be delivered.
                                     </Alert>
-                                    <Alert variant="danger" className="d-none mt-3 mb-0" id="hcaptcha_still_loading" style={{ opacity: isVisible ? 1 : 0 }}>
-                                        <strong>Sorry!</strong> We were unable to pull up your captcha. You can try submitting the form again.
+                                    <Alert variant="danger" className="d-none mt-3 mb-0" id="hcaptcha_didnt_load" style={{ opacity: isVisible ? 1 : 0 }}>
+                                        <strong>Sorry!</strong> Our captcha service hasn't loaded. Please refresh and try again.
                                     </Alert>
                                 </div>
                                 {/* Form Messages */}
