@@ -13,7 +13,8 @@ services:
         environment:
             - PORT=${REACT_PORT}
             - BROWSER=${REACT_BROWSER}
-            - CHOKIDAR_USEPOLLING=true
+            - CHOKIDAR_USEPOLLING=true #Live reloading
+            - WDS_SOCKET_PORT=443 #Used for live reloading with nginx ssl in front of react.
             # REACT_APP_HCAPTCHA_SITE_KEY is also sent indirectly via args in the build step.
         volumes:
             - bp-react-node_modules:/app/react/node_modules
