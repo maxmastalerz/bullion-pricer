@@ -7,10 +7,10 @@ class Error extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>BullionPricer | Error</title>
+                    <title>BullionPricer | Ooops! Page doesn't exist!</title>
                     <meta
-                        name="It appears there's been an issue. The page you are looking for does not exist."
-                        content="#"
+                        name="description"
+                        content="It appears there's been an issue. The page you are looking for does not exist."
                     />
                 </MetaTags>
                 <Content/>

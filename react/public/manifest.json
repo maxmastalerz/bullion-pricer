@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "BullionPricer",
+  "name": "BullionPricer Gold/Silver/Platinum/Palladium",
+  "description": "Find Gold, Silver, Platinum, & Palladium products across dealers! Per hour prices let you compare products and find the best deals.",
   "icons": [
     {
       "src": "favicon.ico",
