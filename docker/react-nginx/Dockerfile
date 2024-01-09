@@ -1,5 +1,5 @@
 #Set up react app
-FROM node:20.10.0-alpine as deps
+FROM node:16.14.0-alpine as deps
 
 #This workaround is needed as production was unable to get the react env variable another way.
 ARG REACT_APP_HCAPTCHA_SITE_KEY
@@ -9,10 +9,6 @@ WORKDIR /app/react
 COPY ./react/package.json ./
 
 COPY ./react/patches ./patches
-RUN npm config set fetch-retry-mintimeout 2000000
-RUN npm config set fetch-retry-maxtimeout 12000000
-RUN npm config set fetch-timeout 300000
-RUN npm config set registry http://registry.npmjs.org/
 RUN npm install
 
 #This line is required due to stackoverflow.com/questions/67087735/eacces-permission-denied-mkdir-usr-app-node-modules-cache-how-can-i-creat
