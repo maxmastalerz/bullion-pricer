@@ -42,6 +42,15 @@ $ docker-compose --env-file .env.prod -f docker-compose-prod.yml up --scale bp-p
 
 Go to http://localhost
 
+### For production deployment on digital ocean.
+
+Just spin up a droplet, clone your repo onto it and run the docker-compose commands. Only difference is,
+
+- docker-compose up should be run with a -d flag so you can exit your ssh connection without shutting down the website.
+
+- If you're on a small server like 1GB, add some swap space like so to prevent npm/yarn install and npm run build failing.
+
+https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04
 
 ### CURRENT TO DO:
 
