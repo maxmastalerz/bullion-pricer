@@ -510,7 +510,7 @@ select {
 }
 
 .pt-shop-section {
-  padding-top: 20px;
+  padding-top: 16px;
 }
 
 .section {
@@ -6824,19 +6824,36 @@ header.header-three .header-top .currency-selector-container {
     padding: 10px 15px;
   }
 }
-.widget.tag-widget ul li a:hover {
-  color: #000;
+@media (hover: hover) and (pointer: fine) {
+  .widget.tag-widget ul li a:hover {
+    color: #000;
+  }
 }
-.widget.tag-widget ul li a[data-product-type=gold]:hover, .widget.tag-widget ul li a[data-product-type=gold].selected {
+@media (hover: hover) and (pointer: fine) {
+  .widget.tag-widget ul li a[data-product-type=gold]:hover {
+    background-color: #fcd462;
+  }
+  .widget.tag-widget ul li a[data-product-type=silver]:hover {
+    background-color: #717171;
+  }
+  .widget.tag-widget ul li a[data-product-type=platinum]:hover {
+    background-color: #FFF;
+  }
+  .widget.tag-widget ul li a[data-product-type=palladium]:hover {
+    background-color: #000;
+    color: #fff;
+  }
+}
+.widget.tag-widget ul li a[data-product-type=gold].selected {
   background-color: #fcd462;
 }
-.widget.tag-widget ul li a[data-product-type=silver]:hover, .widget.tag-widget ul li a[data-product-type=silver].selected {
+.widget.tag-widget ul li a[data-product-type=silver].selected {
   background-color: #717171;
 }
-.widget.tag-widget ul li a[data-product-type=platinum]:hover, .widget.tag-widget ul li a[data-product-type=platinum].selected {
+.widget.tag-widget ul li a[data-product-type=platinum].selected {
   background-color: #FFF;
 }
-.widget.tag-widget ul li a[data-product-type=palladium]:hover, .widget.tag-widget ul li a[data-product-type=palladium].selected {
+.widget.tag-widget ul li a[data-product-type=palladium].selected {
   background-color: #000;
   color: #fff;
 }

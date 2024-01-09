@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Pagination from '../../layouts/Pagination';
 import ProductFilterLeft from '../../layouts/ProductFilterLeft';
@@ -239,6 +240,11 @@ function Content() {
         <section className="Shop-section pt-shop-section pb-45">
             <div className="container">
                 <div className="row justify-content-center">
+                    <div className="col-lg-12 col-md-10 mb-3">
+                        <div className="widget text-center">
+                            Welcome to BullionPricer - Your Bullion Search Tool! We collect prices on gold, silver, platinum, and palladium hourly. <Link to='/about'>How it Works</Link>
+                        </div>
+                    </div>
                     {/* Shop Sidebar */}
                     <div className="col-lg-4 col-md-10">
                         <ProductFilterLeft

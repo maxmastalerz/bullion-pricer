@@ -1033,20 +1033,37 @@
 				@media #{$tiny} {
 					padding: 10px 15px;
 				}
-				&:hover {
-					color: #000;
+				@media (hover: hover) and (pointer: fine) {
+					&:hover {
+						color: #000;
+					}
 				}
 			}
-			a[data-product-type="gold"]:hover, a[data-product-type="gold"].selected {
+			@media (hover: hover) and (pointer: fine) {
+				a[data-product-type="gold"]:hover {
+					background-color: $primary-color;
+				}
+				a[data-product-type="silver"]:hover {
+					background-color: $silver-color;
+				}
+				a[data-product-type="platinum"]:hover {
+					background-color: $platinum-color;
+				}
+				a[data-product-type="palladium"]:hover {
+					background-color: $palladium-color;
+					color: #fff;
+				}
+			}
+			a[data-product-type="gold"].selected {
 				background-color: $primary-color;
 			}
-			a[data-product-type="silver"]:hover, a[data-product-type="silver"].selected {
+			a[data-product-type="silver"].selected {
 				background-color: $silver-color;
 			}
-			a[data-product-type="platinum"]:hover, a[data-product-type="platinum"].selected {
+			a[data-product-type="platinum"].selected {
 				background-color: $platinum-color;
 			}
-			a[data-product-type="palladium"]:hover, a[data-product-type="palladium"].selected {
+			a[data-product-type="palladium"].selected {
 				background-color: $palladium-color;
 				color: #fff;
 			}
