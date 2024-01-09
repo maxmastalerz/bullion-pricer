@@ -7,12 +7,14 @@ services:
             context: .
             dockerfile: ./docker/react-nginx/Dockerfile
             target: dev-react
+            args:
+                - REACT_APP_HCAPTCHA_SITE_KEY=${REACT_HCAPTCHA_SITE_KEY}
         image: bp-react
         environment:
             - PORT=${REACT_PORT}
             - BROWSER=${REACT_BROWSER}
             - CHOKIDAR_USEPOLLING=true
-            - REACT_APP_HCAPTCHA_SITE_KEY=${REACT_HCAPTCHA_SITE_KEY}
+            # REACT_APP_HCAPTCHA_SITE_KEY is also sent indirectly via args in the build step.
         volumes:
             - bp-react-node_modules:/app/react/node_modules
             - ./react:/app/react

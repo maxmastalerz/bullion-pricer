@@ -7,13 +7,15 @@ services:
             context: .
             dockerfile: ./docker/react-nginx/Dockerfile
             target: prod
+            args:
+                - REACT_APP_HCAPTCHA_SITE_KEY=${REACT_HCAPTCHA_SITE_KEY}
         image: bp-react-nginx
         volumes:
             - bp-ssl-certificates:/etc/letsencrypt
         environment:
             - PORT=${REACT_PORT}
             - BROWSER=${REACT_BROWSER}
-            - REACT_APP_HCAPTCHA_SITE_KEY=${REACT_HCAPTCHA_SITE_KEY}
+            # REACT_APP_HCAPTCHA_SITE_KEY is also sent indirectly via args in the build step.
         ports:
             - 80:80
             - 443:443

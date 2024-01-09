@@ -1,5 +1,10 @@
 #Set up react app
 FROM node:16.14.0-alpine as deps
+
+#This workaround is needed as production was unable to get the react env variable another way.
+ARG REACT_APP_HCAPTCHA_SITE_KEY
+ENV REACT_APP_HCAPTCHA_SITE_KEY=$REACT_APP_HCAPTCHA_SITE_KEY
+
 WORKDIR /app/react
 COPY ./react/package.json ./
 
