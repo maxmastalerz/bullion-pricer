@@ -11,10 +11,10 @@ RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 
 COPY ./react/ ./
 
-# ----------------
+# ------------LOCAL-DEV------------
 
 FROM deps as dev-react
-CMD npm run start
+CMD ["./dev-react-entrypoint.sh"]
 
 # --
 
@@ -23,9 +23,10 @@ COPY ./nginx/default.conf /etc/nginx/conf.d/
 RUN rm /usr/share/nginx/html/index.html
 CMD ["nginx", "-g", "daemon off;"]
 
-# ----------------
+# ------------PRODUCTION-----------
 
 FROM deps as build-prod
+RUN npm run build-sitemap
 RUN npm run build
 
 # --

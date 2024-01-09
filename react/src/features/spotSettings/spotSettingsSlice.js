@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 const initialState = {
-	currencyCode: (window.localStorage.getItem('currencySelected') || 'USD')
+	currencyCode: (((typeof window !== 'undefined') ? window.localStorage.getItem('currencySelected') : null) || 'USD')
 };
 
 export const spotSettingsSlice = createSlice({

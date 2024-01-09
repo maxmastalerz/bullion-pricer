@@ -8,8 +8,6 @@
 	"name": "bullion-pricer",
 	"version": "0.1.0",
 	"private": true,
-	"main": "lib/index",
-	"types": "lib/index",
 	"dependencies": {
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.5.0",
@@ -31,6 +29,7 @@
 		"react-meta-tags": "^0.7.4",
 		"react-moment": "^1.1.1",
 		"react-router-dom": "^5.2.0",
+		"react-router-sitemap": "^1.2.0",
 		"react-scripts": "^5.0.1",
 		"react-visibility-sensor": "^5.1.1",
 		"@reduxjs/toolkit": "1.9.6",
@@ -41,14 +40,20 @@
 	},
 	"devDependencies": {
 		"autoprefixer": "10.4.5",
-		"postcss-cli": "^8.3.1"
+		"postcss-cli": "^8.3.1",
+		"@babel/cli": "^7.2.3",
+		"@babel/core": "^7.2.2",
+		"@babel/preset-env": "^7.3.1",
+		"@babel/preset-react": "^7.0.0",
+		"@babel/register": "^7.0.0"
 	},
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"postinstall": "patch-package"
+		"postinstall": "patch-package",
+		"build-sitemap": "node ./sitemap-builder.js"
 	},
 	"eslintConfig": {
 		"extends": "react-app"

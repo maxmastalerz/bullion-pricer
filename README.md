@@ -38,7 +38,7 @@ Please ask a group member for credentials to fill in the variables above.
 
 $ DOCKER_BUILDKIT=1 docker-compose --env-file .env.prod -f docker-compose-prod.yml build
 
-$ docker-compose --env-file .env.prod -f docker-compose-prod.yml up
+$ docker-compose --env-file .env.prod -f docker-compose-prod.yml up --scale bp-product-scraper=2
 
 Go to http://localhost
 
@@ -47,9 +47,6 @@ Go to http://localhost
 
 Find all the BP-TODO lines
 Look into npm ci vs npm install. When to use which. Different envs?
-Fix the bordergold parser to get real values
-Make proper contact page
-Replace spot price calls? Make sure these never fail.
 Implement more scrapers
 Decide on whether or not to have product images.
 etc.
@@ -57,5 +54,4 @@ etc.
 ### FUTURE TODO:
 
 Re-enable header links like "Dealer Reviews". Implement them.
-Add currency support for spot and product prices.
 Deploy app somehow w/ CI/CD.

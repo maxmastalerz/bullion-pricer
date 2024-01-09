@@ -11,6 +11,7 @@ services:
         environment:
             - PORT=${REACT_PORT}
             - BROWSER=${REACT_BROWSER}
+            - REACT_APP_HCAPTCHA_SITE_KEY=${REACT_HCAPTCHA_SITE_KEY}
         ports:
             - 80:80
         depends_on:
@@ -23,6 +24,7 @@ services:
         image: bp-api
         environment:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
+            - HCAPTCHA_SECRET_KEY=${API_HCAPTCHA_SECRET_KEY}
             - POSTMARK_SERVER_TOKEN=${API_POSTMARK_SERVER_TOKEN}
         expose:
             - 5000
@@ -35,3 +37,37 @@ services:
         image: bp-cron
         environment:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
+            - CURRENCY_BEACON_API_TOKEN=${CRON_CURRENCY_BEACON_API_TOKEN}
+            - SCRAPEOPS_API_KEY=${CRON_SCRAPEOPS_API_KEY}
+            - BABEL_DISABLE_CACHE=1
+            - DO_SCRAPING=${CRON_DO_SCRAPING}
+    bp-product-scraper: #worker which registers itself with the bp-cron leader.
+        build:
+            context: .
+            dockerfile: ./docker/product-scraper/Dockerfile
+        image: bp-product-scraper
+        environment:
+            - LEADER_HOST=bp-cron
+            - LEADER_PORT=8000
+        expose:
+            - 8000
+        depends_on:
+            - bp-cron #because bp-cron is our cluster leader.
+    #Just for the time being we'll run the database in production. The only data that is permanent is user subscriptions (for now)
+    bp-db:
+        restart: unless-stopped
+        build:
+            context: ./docker/db
+        image: bp-db
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=${DB_MONGO_INITDB_ROOT_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${DB_MONGO_INITDB_ROOT_PASSWORD}
+            - MONGO_INITDB_DATABASE=${DB_MONGO_INITDB_DATABASE}
+        volumes:
+            - bp-mongodb:/data/db
+        expose:
+            - 27017
+
+volumes:
+    bp-mongodb:
+        name: bp-mongodb

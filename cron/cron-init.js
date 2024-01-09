@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const os = require('os');
 const axios = require('axios');
+const { v4: uuidv4 } = require('uuid');
 const { connectToDatabase, client } = require('./db');
 const { updateSpotPrices, updateCurrencies } = require('./update-spot-and-currencies');
 const getUpdatedProductList = require('./get-updated-product-list');
@@ -17,22 +18,93 @@ let numProductScraperNodes = 0;
 let numProductScraperNodesDone = 0;
 let scrapingProducts = false;
 let productsFromParts = [];
+let jobChunksReceived = {}; // jobId => chunks received mapping
 
-app.post('/completedScrapePart', (req, res) => {
-	const { hostname, port, products } = req.body; //the node that completed its part.
+/*
+Expects chunks to be confirmed as all present and in the proper order.
+*/
+function joinChunks(chunks) {
+    const jsonString = chunks.join('');
+    return JSON.parse(jsonString);
+}
 
-	productsFromParts = productsFromParts.concat(products);
+/*
+When we receive an ordered chunk from the host we have to place it in order as the request may have come in any order.
+Later down the road we will see if we indded did receive every chunk we expected.
 
-	numProductScraperNodesDone++;
-	if(numProductScraperNodesDone === numProductScraperNodes) {
-		syncProducts(productsFromParts); //DEEPEST STEP OF THE PROCESS.
-
-		productsFromParts = [];
-		scrapingProducts = false;
-		numProductScraperNodesDone = 0;
+Note: It's possible to get a chunk resubmitted. We should not count those.
+*/
+function saveJobChunkData(jobId, chunk) {
+	if (!jobChunksReceived[jobId]) {
+		jobChunksReceived[jobId] = [];
 	}
 
-	res.status(200).json({ message: 'Thanks.'});
+	const sameChunkPreviouslyReceived = jobChunksReceived[jobId].some(
+        existingChunk => existingChunk.order === chunk.order
+    );
+    if(!sameChunkPreviouslyReceived) { //Only save this chunk if we've never seen it before.
+		const index = jobChunksReceived[jobId].findIndex(
+			existingChunk => existingChunk.order > chunk.order
+		);
+
+		if (index === -1) { // If no chunk with higher order is found, push to the end
+			jobChunksReceived[jobId].push(chunk.data);
+		} else { // Insert the chunk at the appropriate position based on order
+			jobChunksReceived[jobId].splice(index, 0, chunk.data);
+		}
+	}
+
+    return jobChunksReceived[jobId].length;
+}
+
+function clearJob(jobId) {
+	jobChunksReceived[jobId] = [];
+}
+
+//BP-TODO: Programatically trigger this as well after a certain time that a scraper hasn't complete their scrape part.
+//They might've become uncommunicative.
+app.post('/couldntCompleteScrapePart', (req, res) => {
+	const { jobId/*, hostname*/ } = req.body;
+
+	//Maybe log which scrape parts couldn't be completed.
+
+	clearJob(jobId); //Clear their progress because we'll just reset their state.
+});
+
+/*
+If you submit all your job chunks, you're done your job!
+*/
+app.post('/submitJobChunk', (req, res) => {
+	const { jobId, hostname, chunk, totalChunksAtStart } = req.body; //the node that completed its chunk.
+
+	const expectedChunks = totalChunksAtStart;
+	const numChunksSoFar = saveJobChunkData(jobId, chunk);
+	if(numChunksSoFar === expectedChunks) {
+		const productsDataPart = joinChunks(jobChunksReceived[jobId]);
+		productsFromParts = productsFromParts.concat(productsDataPart);
+		numProductScraperNodesDone++;
+		clearJob(jobId);
+
+		//BP-TODO: If we add dynamically increasing number of scraper nodes, these variables would need to update live.
+		if(numProductScraperNodesDone === numProductScraperNodes) {
+			syncProducts(productsFromParts); //DEEPEST STEP OF THE PROCESS.
+
+			productsFromParts = [];
+			scrapingProducts = false;
+			numProductScraperNodesDone = 0;
+		}
+
+		res.status(200).json({
+			code: 'COMPLETED_JOB',
+			message: `Thank you for completing your job.${numChunksSoFar}/${expectedChunks}`,
+		});
+		return;
+	}
+
+	res.status(200).json({
+		code: 'COMPLETED_CHUNK',
+		message: `Thank you for your submission.${numChunksSoFar}/${expectedChunks}`
+	});
 });
 
 // This route lets a worker node register into the cluster
@@ -163,7 +235,13 @@ async function divideAndConquerProductSubmitter(productList) {
 
 	for(productScraperNode in distributionToScrapers) { //Send out the products a scraper has been assigned.
 		let productsAssignedToScraper = distributionToScrapers[productScraperNode];
-		await axios.post(`http://${productScraperNode}/submitProductsForScraping`, { products: productsAssignedToScraper });
+		const scrapeJobId = uuidv4();
+		const tookJob = await axios.post(`http://${productScraperNode}/submitProductsForScraping`, { scrapeJobId, products: productsAssignedToScraper });
+
+		if(!tookJob) {
+			//BP-TODO: What do I do if they didn't take the job?
+			console.log(`Scraper couldn't take job ${scrapeJobId}`);
+		}
 
 	}
 	//collect the job results.

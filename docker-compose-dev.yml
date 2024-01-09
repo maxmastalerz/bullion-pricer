@@ -49,20 +49,6 @@ services:
         depends_on:
             - bp-react
             - bp-api
-    bp-db:
-        restart: unless-stopped
-        build:
-            context: ./docker/db
-        image: bp-db
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=${DB_MONGO_INITDB_ROOT_USERNAME}
-            - MONGO_INITDB_ROOT_PASSWORD=${DB_MONGO_INITDB_ROOT_PASSWORD}
-            - MONGO_INITDB_DATABASE=${DB_MONGO_INITDB_DATABASE}
-        volumes:
-            - bp-mongodb:/data/db
-        #Having port 27017 available from the host for local development with mongodb tools
-        ports:
-            - 27017:27017
     bp-cron: #Also acts as a leader for distributed tasks it schedules and distributes to workers.
         restart: unless-stopped
         build:
@@ -97,6 +83,20 @@ services:
             - 8000
         depends_on:
             - bp-cron #because bp-cron is our cluster leader.
+    bp-db:
+        restart: unless-stopped
+        build:
+            context: ./docker/db
+        image: bp-db
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=${DB_MONGO_INITDB_ROOT_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${DB_MONGO_INITDB_ROOT_PASSWORD}
+            - MONGO_INITDB_DATABASE=${DB_MONGO_INITDB_DATABASE}
+        volumes:
+            - bp-mongodb:/data/db
+        #Having port 27017 available from the host for local development with mongodb tools
+        ports:
+            - 27017:27017
 
 volumes:
     bp-mongodb:
