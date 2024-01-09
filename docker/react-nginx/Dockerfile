@@ -19,9 +19,11 @@ CMD ["./dev-react-entrypoint.sh"]
 # --
 
 FROM nginx:stable-alpine as dev-nginx
+COPY ./nginx/nginx-with-certcheck.sh /usr/sbin
+RUN chmod +x /usr/sbin/nginx-with-certcheck.sh
 COPY ./nginx/default.conf /etc/nginx/conf.d/
 RUN rm /usr/share/nginx/html/index.html
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/usr/sbin/nginx-with-certcheck.sh"]
 
 # ------------PRODUCTION-----------
 
@@ -33,6 +35,8 @@ RUN npm run build
 
 # Copy React static files and start nginx
 FROM nginx:stable-alpine as prod
+COPY ./nginx/nginx-with-certcheck.sh /usr/sbin
+RUN chmod +x /usr/sbin/nginx-with-certcheck.sh
 COPY --from=build-prod /app/react/build /usr/share/nginx/html
 COPY ./nginx/default.conf /etc/nginx/conf.d/
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/usr/sbin/nginx-with-certcheck.sh"]

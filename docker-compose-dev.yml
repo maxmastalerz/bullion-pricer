@@ -44,11 +44,23 @@ services:
             dockerfile: ./docker/react-nginx/Dockerfile
             target: dev-nginx
         image: bp-nginx
+        volumes:
+            - bp-ssl-certificates:/etc/letsencrypt
         ports:
             - 80:80
+            - 443:443
         depends_on:
             - bp-react
             - bp-api
+    bp-certbot:
+        build:
+            context: ./docker/certbot
+            args: # This will make it into the /root/.secrets/cloudflare.ini file.
+                - DNS_CLOUDFLARE_API_TOKEN=${CERTBOT_DNS_CLOUDFLARE_API_TOKEN}
+        image: bp-certbot
+        volumes:
+            - bp-ssl-certificates:/etc/letsencrypt
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/cloudflare.ini --email contact@bullionpricer.com --agree-tos --no-eff-email -d bullionpricer.com,*.bullionpricer.com --preferred-challenges dns-01 --dns-cloudflare-propagation-seconds 60 --non-interactive; sleep 12h & wait $${!}; done;'"
     bp-cron: #Also acts as a leader for distributed tasks it schedules and distributes to workers.
         restart: unless-stopped
         build:
@@ -97,6 +109,7 @@ services:
         #Having port 27017 available from the host for local development with mongodb tools
         ports:
             - 27017:27017
+        command: mongod --quiet --logpath /dev/null
 
 volumes:
     bp-mongodb:
@@ -109,3 +122,5 @@ volumes:
         name: bp-cron-node_modules
     bp-product-scraper-node_modules:
         name: bp-product-scraper-node_modules
+    bp-ssl-certificates:
+        name: bp-ssl-certificates

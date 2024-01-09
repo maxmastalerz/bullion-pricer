@@ -8,14 +8,26 @@ services:
             dockerfile: ./docker/react-nginx/Dockerfile
             target: prod
         image: bp-react-nginx
+        volumes:
+            - bp-ssl-certificates:/etc/letsencrypt
         environment:
             - PORT=${REACT_PORT}
             - BROWSER=${REACT_BROWSER}
             - REACT_APP_HCAPTCHA_SITE_KEY=${REACT_HCAPTCHA_SITE_KEY}
         ports:
             - 80:80
+            - 443:443
         depends_on:
             - bp-api
+    bp-certbot:
+        build:
+            context: ./docker/certbot
+            args: # This will make it into the /root/.secrets/cloudflare.ini file.
+                - DNS_CLOUDFLARE_API_TOKEN=${CERTBOT_DNS_CLOUDFLARE_API_TOKEN}
+        image: bp-certbot
+        volumes:
+            - bp-ssl-certificates:/etc/letsencrypt
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/cloudflare.ini --email contact@bullionpricer.com --agree-tos --no-eff-email -d bullionpricer.com,*.bullionpricer.com --preferred-challenges dns-01 --dns-cloudflare-propagation-seconds 60 --non-interactive; sleep 12h & wait $${!}; done;'"
     bp-api:
         restart: unless-stopped
         build:
@@ -71,3 +83,5 @@ services:
 volumes:
     bp-mongodb:
         name: bp-mongodb
+    bp-ssl-certificates:
+        name: bp-ssl-certificates
