@@ -89,6 +89,9 @@ function Content() {
         };
     }, []);
 
+    console.log("testing env variable:");
+    console.log(process.env.REACT_APP_HCAPTCHA_SITE_KEY);
+
     return (
         <section className="contact-part pt-115 pb-45">
             <div className="container">
