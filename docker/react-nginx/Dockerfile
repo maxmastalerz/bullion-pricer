@@ -9,8 +9,8 @@ WORKDIR /app/react
 COPY ./react/package.json ./
 
 COPY ./react/patches ./patches
-RUN npm config set fetch-retry-mintimeout 20000
-RUN npm config set fetch-retry-maxtimeout 120000
+RUN npm config set fetch-retry-mintimeout 200000
+RUN npm config set fetch-retry-maxtimeout 1200000
 RUN npm install
 
 #This line is required due to stackoverflow.com/questions/67087735/eacces-permission-denied-mkdir-usr-app-node-modules-cache-how-can-i-creat
