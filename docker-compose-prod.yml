@@ -40,6 +40,8 @@ services:
             - POSTMARK_SERVER_TOKEN=${API_POSTMARK_SERVER_TOKEN}
         expose:
             - 5000
+        depends_on:
+            - bp-db
         command: "npm start"
     bp-cron:
         restart: unless-stopped
@@ -53,6 +55,10 @@ services:
             - SCRAPEOPS_API_KEY=${CRON_SCRAPEOPS_API_KEY}
             - BABEL_DISABLE_CACHE=1
             - DO_SCRAPING=${CRON_DO_SCRAPING}
+        expose:
+            - 8000
+        depends_on:
+            - bp-db
     bp-product-scraper: #worker which registers itself with the bp-cron leader.
         build:
             context: .
