@@ -12,6 +12,7 @@ COPY ./react/patches ./patches
 RUN npm config set fetch-retry-mintimeout 2000000
 RUN npm config set fetch-retry-maxtimeout 12000000
 RUN npm config set fetch-timeout 300000
+RUN npm config set registry http://registry.npmjs.org/
 RUN npm install
 
 #This line is required due to stackoverflow.com/questions/67087735/eacces-permission-denied-mkdir-usr-app-node-modules-cache-how-can-i-creat
