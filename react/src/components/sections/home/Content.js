@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { lookup } from "country-data-codes";
 
 import Pagination from '../../layouts/Pagination';
 import ProductFilterLeft from '../../layouts/ProductFilterLeft';
@@ -317,7 +318,7 @@ function Content() {
                                                             <a href={item.url}>{item.title}</a>
                                                         </h4>
                                                         <span className="price">
-                                                            <a href={item.url}>${formatNumber(item.pricing[Object.keys(item.pricing)[0]].price)}</a>
+                                                            <a href={item.url}>{lookup({currencyCode: currency}).currency.symbol} {formatNumber(item.pricing[Object.keys(item.pricing)[0]].price)}</a>
                                                         </span>
                                                         <span className="mint">
                                                             Mint: {item.mint}
