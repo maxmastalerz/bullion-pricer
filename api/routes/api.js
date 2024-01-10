@@ -1,3 +1,4 @@
+const { connectToDatabase } = require("../db");
 var express = require("express");
 const { verify } = require('hcaptcha');
 const { MongoClient } = require("mongodb");
@@ -93,6 +94,8 @@ router.post("/contact", async (req, res) => {
 });
 
 router.post("/subscribeToNewsletter", async (req, res) => {
+	const db = await connectToDatabase();
+
 	let emailAddress = req.body.emailAddress;
 
 	if (!validEmailAddress(emailAddress)) {
@@ -104,9 +107,6 @@ router.post("/subscribeToNewsletter", async (req, res) => {
 		});
 	}
 
-	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
-	await client.connect();
-	const db = client.db();
 	const subscriptionsCollection = db.collection("subscriptions");
 
 	// BP-TODO: Confirm that this email address is not already subscribed before subscribing.
@@ -134,11 +134,9 @@ router.post("/subscribeToNewsletter", async (req, res) => {
 });
 
 router.get("/spotPrices", async (req, res) => {
+	const db = await connectToDatabase();
 	const currency = req.query.currency || "USD";
 
-	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
-	await client.connect();
-	const db = client.db();
 	const spotCollection = db.collection("spot");
 	const lastSpot = await spotCollection
 		.find({})
@@ -151,12 +149,10 @@ router.get("/spotPrices", async (req, res) => {
 	});
 });
 
-router.get("/products", limiter.middleware(), async (req, res) => {
+router.get("/products", /*limiter.middleware(),*/ async (req, res) => {
+	const db = await connectToDatabase();
 	// BP-TODO: Sanitize input data.
 
-	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);
-	await client.connect();
-	const db = client.db();
 	const productsCollection = db.collection("products");
 
 	/*let purityOptions = [
