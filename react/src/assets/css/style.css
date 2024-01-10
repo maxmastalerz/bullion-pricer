@@ -7575,7 +7575,7 @@ header.header-three .header-top .currency-selector-container {
     font-size: 18px;
   }
 }
-.restaurant-tab-area .food-box .desc .link {
+.restaurant-tab-area .food-box .desc .r-arrow {
   color: #d2d2d2;
   position: absolute;
   right: 0;
@@ -7588,13 +7588,13 @@ header.header-three .header-top .currency-selector-container {
   visibility: hidden;
   opacity: 0;
 }
-.restaurant-tab-area .food-box:hover .desc .link {
+.restaurant-tab-area .food-box:hover .desc .r-arrow {
   visibility: visible;
   opacity: 1;
   right: 30px;
 }
 @media (max-width: 575px) {
-  .restaurant-tab-area .food-box:hover .desc .link {
+  .restaurant-tab-area .food-box:hover .desc .r-arrow {
     right: 10px;
   }
 }
@@ -8014,6 +8014,7 @@ about
 /*=======  Shop Section  =======*/
 .food-box.shop-box {
   overflow: hidden;
+  color: #a3a3a3;
 }
 .food-box.shop-box fieldset {
   position: relative;
@@ -8128,7 +8129,7 @@ about
   background-color: #fcd462;
 }
 
-.food-box.shop-box .desc .link {
+.food-box.shop-box .desc .r-arrow {
   color: #fcd462;
 }
 .food-box.shop-box.shop-box-2 {
@@ -8155,7 +8156,7 @@ about
   align-items: center;
   justify-content: space-between;
 }
-.food-box.shop-box-2 .desc .link {
+.food-box.shop-box-2 .desc .r-arrow {
   display: none;
 }
 

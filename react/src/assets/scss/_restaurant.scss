@@ -94,7 +94,7 @@
 					font-size: 18px;
 				}
 			}
-			.link {
+			.r-arrow {
 				color: #d2d2d2;
 				position: absolute;
 				right: 0;
@@ -108,7 +108,7 @@
 			}
 		}
 		&:hover {
-			.desc .link {
+			.desc .r-arrow {
 				visibility: visible;
 				opacity: 1;
 				right: 30px;
@@ -618,6 +618,7 @@ about
 
 .food-box.shop-box {
   overflow: hidden;
+  color: #a3a3a3;
 
   fieldset {
       
@@ -759,7 +760,7 @@ about
 
 .food-box {
   &.shop-box {
-    .desc .link {
+    .desc .r-arrow {
       color: #fcd462;
     }
 
@@ -791,7 +792,7 @@ about
     align-items: center;
     justify-content: space-between;
 
-    .link {
+    .r-arrow {
       display: none;
     }
   }

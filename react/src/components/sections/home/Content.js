@@ -324,13 +324,13 @@ function Content() {
                                     :
                                         searchResults.map((item, i) => (
                                             <div key={i} className="col-lg-4 col-6 mb-4">
-                                                <div className="food-box shop-box ">
+                                                <a href={item.url} className="food-box shop-box ">
                                                     <div className="desc">
                                                         <h4>
-                                                            <a href={item.url}>{item.title}</a>
+                                                            {item.title}
                                                         </h4>
                                                         <span className="price">
-                                                            <a href={item.url}>{lookup({currencyCode: currency}).currency.symbol} {formatNumber(item.pricing[Object.keys(item.pricing)[0]].price)}</a>
+                                                            {lookup({currencyCode: currency}).currency.symbol} {formatNumber(item.pricing[Object.keys(item.pricing)[0]].price)}
                                                         </span>
                                                         <span className="mint">
                                                             Mint: {item.mint}
@@ -338,12 +338,12 @@ function Content() {
                                                         <span className="dealer">
                                                             Dealer: {item.dealer}
                                                         </span>
-                                                        <a href={item.url} className="link"><i className="fal fa-arrow-right" /></a>
+                                                        <span className="r-arrow"><i className="fal fa-arrow-right" /></span>
                                                     </div>
                                                     <fieldset className={item.productType}>
                                                         <legend>{(item.productType+"").toUpperCase()}</legend>
                                                     </fieldset>
-                                                </div>
+                                                </a>
                                             </div>
                                         ))
                                     }
