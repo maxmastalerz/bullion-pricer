@@ -10,8 +10,8 @@ var router = express.Router();
 var limiter = new Limiter({
 	outerTimeLimit: 2*60*1000, // ~ 1 reqs/second
 	outerLimit: 120,           // 
-	innerTimeLimit: 10*1000,   // ~ 3 reqs/second 
-	innerLimit: 30,            // 
+	innerTimeLimit: 10*1000,   // ~ 4 reqs/second 
+	innerLimit: 40,            // 
 	db : new MemoryStore()
 });
 
@@ -20,12 +20,6 @@ async function toArray(asyncIterator) {
 	for await (const i of asyncIterator) arr.push(i);
 	return arr;
 }
-
-// BP-TODO: For all the routes that use the database, see if closing the db connection is explicitly required.
-
-router.get("/", function (req, res, next) {
-	res.status(200).send('<h1>BullionPricer API Working</h1>');
-});
 
 const validEmailAddress = (emailAddress) => {
 	// BP-TODO: Make sure to better validate email address and sanitize it.
@@ -73,6 +67,10 @@ const sendEmail = async(emailInfo) => {
 		};
 	}
 };
+
+router.get("/", function (req, res, next) {
+	res.status(200).send('<h1>BullionPricer API Working</h1>');
+});
 
 router.post("/contact", async (req, res) => {
 	const { name, email, subject, message, hCaptchaValue } = req.body;
@@ -133,7 +131,8 @@ router.post("/subscribeToNewsletter", async (req, res) => {
 	});
 });
 
-router.get("/spotPrices", async (req, res) => {
+/*Has rate limiting*/
+router.get("/spotPrices", limiter.middleware(), async (req, res) => {
 	const db = await connectToDatabase();
 	const currency = req.query.currency || "USD";
 
@@ -149,7 +148,8 @@ router.get("/spotPrices", async (req, res) => {
 	});
 });
 
-router.get("/products", /*limiter.middleware(),*/ async (req, res) => {
+/*Has rate limiting*/
+router.get("/products", limiter.middleware(), async (req, res) => {
 	const db = await connectToDatabase();
 	// BP-TODO: Sanitize input data.
 
