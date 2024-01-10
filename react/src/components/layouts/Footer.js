@@ -1,5 +1,6 @@
 import React, { Fragment, useRef } from 'react';
 import Backtotop from './Backtotop';
+import toast from 'react-hot-toast';
 
 const Footer = () => {
     const emailAddressRef = useRef();
@@ -18,9 +19,9 @@ const Footer = () => {
         .then((results) => {
             emailAddressRef.current.value = "";
             if(results.error) {
-                alert(results.error.message);
+                toast.error(results.error.message, { duration: 7500, position: 'bottom-center' });
             } else if(results.data) {
-                alert(results.data.message);
+                toast.success(results.data.message, { duration: 7500, position: 'bottom-center' });
             }
         });
     };

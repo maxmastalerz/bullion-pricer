@@ -2,8 +2,17 @@ var express = require("express");
 const { verify } = require('hcaptcha');
 const { MongoClient } = require("mongodb");
 const axios = require("axios");
+var Limiter = require('express-rate-limiter');
+var MemoryStore = require('express-rate-limiter/lib/memoryStore');
 
 var router = express.Router();
+var limiter = new Limiter({
+	outerTimeLimit: 2*60*1000, // ~ 1 reqs/second
+	outerLimit: 120,           // 
+	innerTimeLimit: 10*1000,   // ~ 3 reqs/second 
+	innerLimit: 30,            // 
+	db : new MemoryStore()
+});
 
 async function toArray(asyncIterator) {
 	const arr = [];
@@ -142,7 +151,7 @@ router.get("/spotPrices", async (req, res) => {
 	});
 });
 
-router.get("/products", async (req, res) => {
+router.get("/products", limiter.middleware(), async (req, res) => {
 	// BP-TODO: Sanitize input data.
 
 	const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING);

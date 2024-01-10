@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { lookup } from "country-data-codes";
+import toast from 'react-hot-toast';
 
 import Pagination from '../../layouts/Pagination';
 import ProductFilterLeft from '../../layouts/ProductFilterLeft';
@@ -201,8 +202,17 @@ function Content() {
         console.log(params.toString());
 
         fetch(`/api/products?${params.toString()}`)
-        .then((response) => response.json())
+        .then((response) => {
+            if(response.status === 429) {
+                toast.error(`We couldn't load what you want. Please slow down your request frequency and try again soon.`,
+                    { id: 'TOO_MANY_REQUESTS', duration: 7500, position: 'bottom-center' });
+                throw new Error('Rate limit exceeded');
+            } else {
+                return response.json();
+            }
+        })
         .then((results) => {
+            //console.log(results);
             if(results.data) {
                 let products = results.data;
                 console.log(products);
@@ -219,6 +229,8 @@ function Content() {
                     setCurrentPage(maxPage);
                 }
             }
+        }).catch(e => {
+            console.log(e.message);
         });
 
     }, [
