@@ -1,9 +1,9 @@
-var app = require("../app");
-var debug = require("debug")("server:server");
-var http = require("http");
-var axios = require("axios");
-var os = require("os");
-const { connectToDatabase } = require("../db");
+import app from "../app.js";
+import debug from "debug";
+import http from "http";
+import axios from "axios";
+import os from "os";
+import { connectToDatabase } from "../db.js";
 
 /**
  * Normalize a port into a number, string, or false.

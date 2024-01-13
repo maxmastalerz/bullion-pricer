@@ -1,6 +1,6 @@
-const { parse } = require("node-html-parser");
-const { fetchDataWithExponentialBackoff } = require('../scrape-helpers/requests.js');
-const { adjustPricingIfBox } = require('../scrape-helpers/pricing.js');
+import { parse } from 'node-html-parser';
+import { fetchDataWithExponentialBackoff } from '../scrape-helpers/requests.js';
+import { adjustPricingIfBox } from '../scrape-helpers/pricing.js';
 
 const notMints = ['Maple Leaf', 'Hand Poured', '9999'];
 const listOfMints = {
@@ -291,6 +291,4 @@ async function scrapeProductPage(url) {
 	return { purities, issuance, weight, mint, pricing, boxSize };
 };
 
-module.exports = {
-	scrapeProductPage
-};
+export { scrapeProductPage };

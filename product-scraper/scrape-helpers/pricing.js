@@ -15,11 +15,11 @@ const adjustPricingIfBox = (pricing, boxSize) => {
 				entry.qtyRange[1] = pricing[method][i + 1].qtyRange[0] - 1;
 			}
 
-			for(currency in entry.price) {
+			for(let currency in entry.price) {
 				entry.price[currency] = Math.round((entry.price[currency] / boxSize) * 100) / 100;
 			}
 		}
 	}
 };
 
-module.exports = { adjustPricingIfBox };
+export { adjustPricingIfBox };

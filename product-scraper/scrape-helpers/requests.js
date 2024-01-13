@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 async function fetchDataWithExponentialBackoff(url, headers, maxRetries = 6) {
 	let retries = 0;
@@ -38,4 +38,4 @@ async function fetchDataWithExponentialBackoff(url, headers, maxRetries = 6) {
 	return res;
 }
 
-module.exports = { fetchDataWithExponentialBackoff };
+export { fetchDataWithExponentialBackoff };

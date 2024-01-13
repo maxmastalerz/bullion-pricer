@@ -4,8 +4,11 @@ Whatever you do in this file, do it also in scraper-map.js in ./cron
 =IMPORTANT=
 */
 
-module.exports = {
-	CanadianPMX: require("./scrapers/canadianPMX.js"),
-	"Border Gold": require("./scrapers/borderGold.js"),
-	//add other scrapers here
+import * as CanadianPMX from "./scrapers/canadianPMX.js";
+import * as BorderGold from "./scrapers/borderGold.js";
+
+export default {
+  "CanadianPMX": CanadianPMX,
+  "Border Gold": BorderGold,
+  // add other scrapers here
 };

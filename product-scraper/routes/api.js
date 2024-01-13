@@ -1,8 +1,9 @@
-const express = require("express");
-const os = require('os');
-const axios = require('axios');
-const scrapers = require('../scraper-map');
-var router = express.Router();
+import express from 'express';
+import os from 'os';
+import axios from 'axios';
+import pLimit from 'p-limit';
+import scrapers from '../scraper-map.js';
+const router = express.Router();
 
 //Set to whatever job id we've been assigned.
 const hostname = os.hostname();
@@ -62,27 +63,34 @@ function generateChunkNotifications(chunks) {
 }
 
 async function scrapeProductsAsync(productsToScrape) {
-	for(product of productsToScrape) {
-		let productId = product._id;
-		let scraperName = product.dealer;
-		let scraper = scrapers[scraperName];
+	const limit = pLimit(5); // Set concurrency limit to 5
 
-		try {
-			let scrapeResults = await scraper.scrapeProductPage(product.url);
-			product.purities = scrapeResults.purities;
-			product.issuance = scrapeResults.issuance;
-			product.weight = scrapeResults.weight;
-			product.mint = scrapeResults.mint;
-			product.pricing = scrapeResults.pricing;
-			product.pricing_last_updated = new Date().getTime();
-			product.boxSize = scrapeResults.boxSize;
+	const scrapePromises = productsToScrape.map((product) => {
+    	return limit(async () => {
+			let productId = product._id;
+			let scraperName = product.dealer;
+			let scraper = scrapers[scraperName];
 
-		} catch (err) {
-			console.error(`Scraping failed for base url: ${product.url}.`);
-			failedBaseURLS.push(product.url); //BP-TODO: We don't do anything with these yet.
-			console.error(err);
-		}
-	}
+			try {
+				let scrapeResults = await scraper.scrapeProductPage(product.url);
+				product.purities = scrapeResults.purities;
+				product.issuance = scrapeResults.issuance;
+				product.weight = scrapeResults.weight;
+				product.mint = scrapeResults.mint;
+				product.pricing = scrapeResults.pricing;
+				product.pricing_last_updated = new Date().getTime();
+				product.boxSize = scrapeResults.boxSize;
+
+			} catch (err) {
+				console.error(`Scraping failed for base url: ${product.url}.`);
+				failedBaseURLS.push(product.url); //BP-TODO: We don't do anything with these yet.
+				console.error(err);
+			}
+		});
+	});
+
+	await Promise.all(scrapePromises);
+
 	const scrapedProducts = productsToScrape; //Scraping finished. Renaming for clarity.
 
 	//For our part of the scraping process, we report our progress (in chunks under 100kb).
@@ -120,4 +128,4 @@ router.post("/submitProductsForScraping", function (req, res, next) {
 
 //more routes.
 
-module.exports = router;
+export default router;
