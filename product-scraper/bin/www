@@ -76,17 +76,15 @@ server.on("listening", async () => {
 	await addSelfToAvailableWorkers(port);
 });
 
-process.on('exit', async () => {
-	const db = await connectToDatabase();
-	const clusterWorkers = db.collection('clusterWorkers');
+process.on('SIGTERM', async () => {
+    const db = await connectToDatabase();
+    const clusterWorkers = db.collection('clusterWorkers');
 
-	await clusterWorkers.deleteOne({
-		hostname: os.hostname(),
-		port: port
-	});
+    await clusterWorkers.deleteOne({
+        hostname: os.hostname(),
+        port: port
+    });
 
-	console.log('Worker node removed from the cluster on process exit.');
+    console.log('Worker node removed from the cluster on SIGTERM.');
+    process.exit(0);
 });
-
-
-
