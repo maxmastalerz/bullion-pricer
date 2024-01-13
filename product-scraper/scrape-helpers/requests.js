@@ -20,6 +20,17 @@ async function fetchDataWithExponentialBackoff(url, headers, maxRetries = 6) {
 	}
 
 	if (retries === maxRetries) {
+		if(process.env.SCRAPEOPS_API_KEY) { //If we have access to a scrape ops proxy like we do in prod, try one last request.
+			console.log('Trying request with proxy as a final attempt.');
+			const proxyUrl = `https://proxy.scrapeops.io/v1/?api_key=${process.env.SCRAPEOPS_API_KEY}&url=${encodeURIComponent(url)}&keep_headers=true`;
+			try {
+				res = await axios.get(proxyUrl, { headers: headers, body: null, method: 'GET' });
+				return res; //our last retry worked, don't error.
+			} catch (error) {
+				err = error;
+			}
+		}
+
 		console.error("Max retries reached. Unable to fetch data.");
 		throw err;
 	}

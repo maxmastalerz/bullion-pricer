@@ -70,6 +70,7 @@ services:
             - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
             - LEADER_HOST=bp-cron
             - LEADER_PORT=8000
+            - SCRAPEOPS_API_KEY=${CRON_SCRAPEOPS_API_KEY}
         expose:
             - 8000
         depends_on:
