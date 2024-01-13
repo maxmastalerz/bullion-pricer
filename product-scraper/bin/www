@@ -58,12 +58,6 @@ async function addSelfToAvailableWorkers(port) {
 	};
 
 	const clusterWorkers = db.collection('clusterWorkers');
-
-	const hostnameIndexExists = await clusterWorkers.indexExists('hostname_1');
-	if (!hostnameIndexExists) {
-		await clusterWorkers.createIndex({ hostname: 1 }, { unique: true });
-	}
-
 	const result = await clusterWorkers.insertOne(clusterWorker);
 }
 
