@@ -1,4 +1,4 @@
-const axios = require('axios');
+import { fetchDataWithExponentialBackoff } from '../scrape-helpers/requests';
 const { parse } = require("node-html-parser");
 const { adjustPricingIfBox } = require('../scraper-helpers.js');
 
@@ -136,35 +136,7 @@ function getPricingLinksFromHTML(document) {
 	}
 }
 
-async function fetchDataWithExponentialBackoff(url, headers, maxRetries = 6) {
-	let retries = 0;
-	let res;
 
-	while (retries < maxRetries) {
-		try {
-			res = await axios.get(url, { headers: headers, body: null, method: "GET" });
-			break; // Break the loop if the request is successful
-		} catch (error) {
-			if (error.response && error.response.status === 503) {
-				// Retry the request with exponential backoff
-				const delay = Math.pow(2, retries) * 1000; // Exponential backoff formula
-				console.log(`Retrying after ${delay / 1000} seconds...`);
-				await new Promise(resolve => setTimeout(resolve, delay));
-				retries++;
-			} else {
-				console.error("Error fetching data:", error.message);
-				throw error; // Throw an error if it's not a 503 status
-			}
-		}
-	}
-
-	if (retries === maxRetries) {
-		console.error("Max retries reached. Unable to fetch data.");
-		// You can choose to throw an error or handle this case as per your requirements
-	}
-
-	return res;
-}
 
 /*
 Gets the same pricing a user would see visiting the website.
@@ -196,8 +168,8 @@ async function getPricingFromPages(pages) {
 			const [url, headers] = page;
 
 			const res = await fetchDataWithExponentialBackoff(url, headers);
-			let json = res.data;
-			let html = json.data;
+			const json = res.data;
+			const html = json.data;
 			document = parse(html);
 		} else {
 			document = page;
@@ -268,8 +240,8 @@ const getBoxSizeIfBox = (productTitle) => {
 async function scrapeProductPage(url) {
 	console.log("Scraping: " + url);
 
-	let res = await fetchDataWithExponentialBackoff(url, getHeaders('USD'));
-	let html = res.data;
+	const res = await fetchDataWithExponentialBackoff(url, getHeaders('USD'));
+	const html = res.data;
 
 	let purities='MANUAL_REVIEW',issuance='MANUAL_REVIEW',weight='MANUAL_REVIEW',mint='MANUAL_REVIEW',pricing='MANUAL_REVIEW';
 

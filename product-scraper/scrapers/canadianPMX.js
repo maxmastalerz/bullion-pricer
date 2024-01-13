@@ -1,4 +1,4 @@
-const axios = require('axios');
+import { fetchDataWithExponentialBackoff } from '../scrape-helpers/requests';
 const { parse } = require("node-html-parser");
 const { adjustPricingIfBox } = require('../scraper-helpers.js');
 
@@ -180,8 +180,8 @@ async function getPricingFromPages(pages) {
 		if(Array.isArray(page)) {
 			const [url, headers] = page;
 
-			const res = await axios.get(url, { headers: headers, body: null, method: "GET" });
-			let html = res.data;
+			const res = await fetchDataWithExponentialBackoff(url, headers);
+			const html = res.data;
 			document = parse(html);
 		} else {
 			document = page;
@@ -255,14 +255,8 @@ const getBoxSizeIfBox = (productTitle) => {
 async function scrapeProductPage(url) {
 	console.log("Scraping: " + url);
 
-	let html;
-	try {
-		const response = await axios.get(url, { headers: getHeaders('USD') });
-		html = response.data;
-	} catch (error) {
-		console.error("Error fetching data:", error.message);
-		throw error;
-	}
+	const res = await fetchDataWithExponentialBackoff(url, getHeaders('USD'));
+	const html = res.data;
 	
 	let purities = 'MANUAL_REVIEW',issuance='MANUAL_REVIEW',weight='MANUAL_REVIEW',mint='MANUAL_REVIEW',pricing='MANUAL_REVIEW';
 
