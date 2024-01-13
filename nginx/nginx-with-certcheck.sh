@@ -14,9 +14,6 @@ update_cloudflare_ips() {
 	# Update nginx.conf with the new set_real_ip_from values
 	sed -i '/set_real_ip_from/d' /etc/nginx/nginx.conf
 	sed -i "/real_ip_header/c\    ${set_real_ip_lines}real_ip_header X-Forwarded-For;" /etc/nginx/nginx.conf
-
-	echo "Updated set_real_ip_from in nginx.conf:"
-	cat /etc/nginx/nginx.conf
 }
 
 # Wait for Certbot to generate certificates
