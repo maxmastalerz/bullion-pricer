@@ -242,7 +242,7 @@ const getNewNodes = (oldNodes, newNodes) => {
 	return newNodes.filter(node => !oldNodes.includes(node));
 };
 
-const updateWorkerNodes = () => {
+const updateWorkerNodes = async () => {
 	const db = connectToDatabase();
 	const clusterWorkers = db.collection('clusterWorkers');
 	const workerNodes = await clusterWorkers.find({}).toArray();
@@ -261,7 +261,7 @@ async function initCron() {
 
 	const cronJob = new CronJob({ //Every 10 seconds.
 		cronTime: '*/10 * * * * *',
-		onTick: updateWorkerNodes,
+		onTick: async () => { await updateWorkerNodes() },
 		start: true,
 		timeZone: "UTC",
 		runOnInit: true,
