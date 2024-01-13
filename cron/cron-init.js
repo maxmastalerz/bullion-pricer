@@ -233,13 +233,10 @@ async function divideAndConquerProductSubmitter(productList) {
 	}
 }
 
-
-const arraysEqual = (arr1, arr2) => {
-	return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
-};
-
-const getNewNodes = (oldNodes, newNodes) => {
-	return newNodes.filter(node => !oldNodes.includes(node));
+const getNewAndRemovedNodes = (oldNodes, newNodes) => {
+	const newJoinedNodes = newNodes.filter(node => !oldNodes.includes(node));
+	const removedNodes = oldNodes.filter(node => !newNodes.includes(node));
+	return { newJoinedNodes, removedNodes };
 };
 
 const updateWorkerNodes = async () => {
@@ -249,11 +246,18 @@ const updateWorkerNodes = async () => {
 
 	const newProductScraperNodes = workerNodes.map((node) => `${node.hostname}:${node.port}`);
 
-	if (!arraysEqual(productScraperNodes, newProductScraperNodes)) {
-		console.log('New node(s) joined:', getNewNodes(productScraperNodes, newProductScraperNodes));
-		productScraperNodes = newProductScraperNodes;
-		numProductScraperNodes = productScraperNodes.length;
+	const { newJoinedNodes, removedNodes } = getNewAndRemovedNodes(productScraperNodes, newProductScraperNodes);
+
+	if(newJoinedNodes.length > 0) {
+		console.log('New node(s) joined:', newJoinedNodes);
 	}
+
+	if(removedNodes.length > 0) {
+		console.log('Node(s) left:', removedNodes);
+	}
+
+	productScraperNodes = newProductScraperNodes;
+	numProductScraperNodes = productScraperNodes.length;
 }
 
 async function initCron() {
