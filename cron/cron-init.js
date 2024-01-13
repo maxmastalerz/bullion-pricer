@@ -293,7 +293,11 @@ async function initCron() {
 			//Best case we scrape products every hour. Exceptions:
 			//Will shift/delay product scraping schedule 1hr each time if there is an existing product scraper running.
 			//Will shift/delay product scraping schedule 1hr each time if there is an existing product-list scraper running.
+			console.log('scrapingProductList: '+scrapingProductList);
+			console.log('productList.length:'+productList.length);
+			console.log('scrapingProducts: '+scrapingProducts);
 			if(!scrapingProductList && productList.length && !scrapingProducts) {
+				console.log("DIVIDE AND CONQUER");
 				scrapingProducts = true;//this will later change state after the product scrapers all return.
 				await divideAndConquerProductSubmitter(productList);
 			}
