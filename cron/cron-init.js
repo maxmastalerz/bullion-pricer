@@ -160,11 +160,11 @@ const syncProducts = async (mostRecentProducts) => {
 					}
 				}
 			);
-			console.log('Updated product:', recentProduct);
+			console.log('Updated product:', recentProduct.url);
 		} else {
 			// Insert new product
 			await productsCollection.insertOne(recentProduct);
-			console.log('Inserted new product:', recentProduct);
+			console.log('Inserted new product:', recentProduct.url);
 		}
 	}
 };
