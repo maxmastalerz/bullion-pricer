@@ -93,6 +93,9 @@ async function scrapeProductsAsync(productsToScrape) {
 		console.log('Sent back my part of the scraping process (Transferred in '+chunks.length+' chunks)');
 		currentJob = null;
 	}, (error) => {
+		console.log("Was trying to send:");
+		console.log(chunks);
+		console.log(error);
 		throw Error("Couldn't communicate with leader.");
 		//Incomplete job. The scraper now becomes inoperable.
 		//Eventually the leader should realise that the scraper node is not communicative. This is a BP-TODO .
