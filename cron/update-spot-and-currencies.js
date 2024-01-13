@@ -20,17 +20,24 @@ const getRandomUserAgent = async function() {
 };
 
 async function updateCurrencies() {
+	console.log("=[COLLECTING CURRENCY DATA]=");
 	const db = client.db();
 	const currencies = db.collection("currencies");
 
 	let rates = null;
-	const currencyBeaconResponse = await axios.get(`https://api.currencybeacon.com/v1/latest`, { params: {
-		base: 'USD',
-		api_key: process.env.CURRENCY_BEACON_API_TOKEN
-	}});
-	const jsonResponse = currencyBeaconResponse.data;
-	if(jsonResponse.meta.code === 200) {
-		rates = jsonResponse.response.rates;
+	try {
+		const currencyBeaconResponse = await axios.get(`https://api.currencybeacon.com/v1/latest`, { params: {
+			base: 'USD',
+			api_key: process.env.CURRENCY_BEACON_API_TOKEN
+		}});
+		const jsonResponse = currencyBeaconResponse.data;
+		
+		if(jsonResponse.meta.code === 200) {
+			rates = jsonResponse.response.rates;
+		}
+	} catch(error) {
+		err = error;
+		console.error(`Errored when getting currency data:`, error.message);
 	}
 
 	if(rates === null) {
@@ -89,7 +96,7 @@ const currencyConvertObj = async function(usdAmounts) {
 };
 
 async function updateSpotPrices() {
-	console.log("== COLLECTING SPOT DATA ==");
+	console.log("=[COLLECTING SPOT DATA]=");
 	const db = client.db();
 	const spotCollection = db.collection("spot");
 	let err = false;

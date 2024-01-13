@@ -1,7 +1,7 @@
 const scrapers = require('./scraper-map');
 
 module.exports = async function() {
-	console.log("== Getting updated list of products ==");
+	console.log("=[COLLECTING UPDATED PRODUCTS FROM CATEGORIES]=");
 	
 	let mostRecentProductState = [];
 	for(scraperName in scrapers) {
