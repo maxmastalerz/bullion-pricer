@@ -157,6 +157,7 @@ const syncProducts = async (mostRecentProducts) => {
 			console.log('Inserted new product:', recentProduct.url);
 		}
 	}
+	console.log('Done syncing products');
 };
 
 //Random shuffle an array. Fisher-Yates algorithm.
