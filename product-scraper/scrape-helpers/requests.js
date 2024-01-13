@@ -27,5 +27,4 @@ async function fetchDataWithExponentialBackoff(url, headers, maxRetries = 6) {
 	return res;
 }
 
-
-export { fetchDataWithExponentialBackoff };
+module.exports = { fetchDataWithExponentialBackoff };

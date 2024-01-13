@@ -1,6 +1,6 @@
-import { fetchDataWithExponentialBackoff } from '../scrape-helpers/requests';
 const { parse } = require("node-html-parser");
-const { adjustPricingIfBox } = require('../scraper-helpers.js');
+const { fetchDataWithExponentialBackoff } = require('../scrape-helpers/requests.js');
+const { adjustPricingIfBox } = require('../scrape-helpers/pricing.js');
 
 function getHeaders(currency) {
 	return {
