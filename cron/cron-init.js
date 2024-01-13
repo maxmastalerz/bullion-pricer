@@ -233,13 +233,27 @@ async function divideAndConquerProductSubmitter(productList) {
 	}
 }
 
+
+const arraysEqual = (arr1, arr2) => {
+	return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+};
+
+const getNewNodes = (oldNodes, newNodes) => {
+	return newNodes.filter(node => !oldNodes.includes(node));
+};
+
 const updateWorkerNodes = () => {
 	const db = connectToDatabase();
 	const clusterWorkers = db.collection('clusterWorkers');
 	const workerNodes = await clusterWorkers.find({}).toArray();
 
-	productScraperNodes = workerNodes.map((node) => `${node.hostname}:${node.port}`);
-	numProductScraperNodes = productScraperNodes.length;
+	const newProductScraperNodes = workerNodes.map((node) => `${node.hostname}:${node.port}`);
+
+	if (!arraysEqual(productScraperNodes, newProductScraperNodes)) {
+		console.log('New node(s) joined:', getNewNodes(productScraperNodes, newProductScraperNodes));
+		productScraperNodes = newProductScraperNodes;
+		numProductScraperNodes = productScraperNodes.length;
+	}
 }
 
 async function initCron() {
