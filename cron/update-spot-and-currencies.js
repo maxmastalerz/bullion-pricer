@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { parse } = require("node-html-parser");
 const { getCountryList } = require("country-data-codes");
-const { client } = require('./db');
+const { connectToDatabase } = require('./db');
 
 let countries = getCountryList().filter((value, index, self) => { // get unique currency codes.
     return self.findIndex(v => v.currency.code === value.currency.code && v.currency.code !== "No Universal Currency") === index;
@@ -21,7 +21,7 @@ const getRandomUserAgent = async function() {
 
 async function updateCurrencies() {
 	console.log("=[COLLECTING CURRENCY DATA]=");
-	const db = client.db();
+	const db = await connectToDatabase();
 	const currencies = db.collection("currencies");
 
 	let rates = null;
@@ -62,10 +62,9 @@ async function updateCurrencies() {
 Takes amounts in USD and returns them with all currencies.
 */
 const currencyConvertObj = async function(usdAmounts) {
+	const db = await connectToDatabase();
 	let rates = null;
 
-	// Assuming you have a MongoDB client and connection available in your code
-	const db = client.db();
 	const currencies = db.collection("currencies");
 
 	// Fetch all currency data from MongoDB
@@ -98,7 +97,7 @@ const currencyConvertObj = async function(usdAmounts) {
 
 async function updateSpotPrices() {
 	console.log("=[COLLECTING SPOT DATA]=");
-	const db = client.db();
+	const db = await connectToDatabase();
 	const spotCollection = db.collection("spot");
 	let err = false;
 

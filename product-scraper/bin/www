@@ -3,6 +3,7 @@ var debug = require("debug")("server:server");
 var http = require("http");
 var axios = require("axios");
 var os = require("os");
+const { connectToDatabase } = require("../db");
 
 /**
  * Normalize a port into a number, string, or false.
@@ -48,18 +49,25 @@ function onError(error) {
 	}
 }
 
-async function joinClusterRequest() {
-	var requestData = {
+async function addSelfToAvailableWorkers(port) {
+	const db = await connectToDatabase();
+
+	let clusterWorker = {
 		hostname: os.hostname(),
 		port: port
 	};
 
-	// Make a POST request to register ourselves with the leader in the cluster.
-	var response = await axios.post('http://bp-cron:8000/joinCluster', requestData);
-	console.log(response.data);
+	const clusterWorkers = db.collection('clusterWorkers');
+
+	const hostnameIndexExists = await clusterWorkers.indexExists('hostname_1');
+	if (!hostnameIndexExists) {
+		await clusterWorkers.createIndex({ hostname: 1 }, { unique: true });
+	}
+
+	const result = await clusterWorkers.insertOne(clusterWorker);
 }
 
-var port = normalizePort(process.env.PORT || "8000");
+const port = normalizePort(process.env.PORT || "8000");
 app.set("port", port);
 var server = http.createServer(app);
 server.listen(port);
@@ -70,8 +78,20 @@ server.on("listening", async () => {
 	debug("Listening on " + bind);
 	console.log("Listening on " + bind);
 
-	//Now that I myself am able to receive jobs, lets join me in to the cluster as a viable worker node.
-	await joinClusterRequest();
+	//Now that I myself am able to receive jobs, lets add me into the list of cluster worker nodes available.
+	await addSelfToAvailableWorkers(port);
+});
+
+process.on('exit', async () => {
+	const db = await connectToDatabase();
+	const clusterWorkers = db.collection('clusterWorkers');
+
+	await clusterWorkers.deleteOne({
+		hostname: os.hostname(),
+		port: port
+	});
+
+	console.log('Worker node removed from the cluster on process exit.');
 });
 
 

@@ -4,10 +4,6 @@ const axios = require('axios');
 const scrapers = require('../scraper-map');
 var router = express.Router();
 
-//const { MongoClient } = require("mongodb");
-
-// BP-TODO: For all the routes that use the database, see if closing the db connection is explicitly required.
-
 //Set to whatever job id we've been assigned.
 const hostname = os.hostname();
 let currentJob = null;

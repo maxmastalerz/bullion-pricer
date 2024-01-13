@@ -89,6 +89,7 @@ services:
             dockerfile: ./docker/product-scraper/Dockerfile
         image: bp-product-scraper
         environment:
+            - MONGODB_CONNECTION_STRING=${API_MONGODB_CONNECTION_STRING}
             - LEADER_HOST=bp-cron
             - LEADER_PORT=8000
         volumes:
@@ -97,7 +98,8 @@ services:
         expose:
             - 8000
         depends_on:
-            - bp-cron #because bp-cron is our cluster leader.
+        #    - bp-cron #because bp-cron is our cluster leader.
+            - bp-db #to save oneself in the db as a viable scraper.
     bp-db:
         restart: unless-stopped
         build:

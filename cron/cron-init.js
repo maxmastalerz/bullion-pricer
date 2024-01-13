@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const os = require('os');
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
-const { connectToDatabase, client } = require('./db');
+const { connectToDatabase } = require('./db');
 const { updateSpotPrices, updateCurrencies } = require('./update-spot-and-currencies');
 const getUpdatedProductList = require('./get-updated-product-list');
 
@@ -107,19 +107,9 @@ app.post('/submitJobChunk', (req, res) => {
 	});
 });
 
-// This route lets a worker node register into the cluster
-app.post('/joinCluster', (req, res) => {
-	const { hostname, port } = req.body;
-	console.log(`Received cluster join request from ${hostname}:${port}.`);
-	productScraperNodes.push(`${hostname}:${port}`);
-	numProductScraperNodes++;
-	//actually add the node and see if we can communicate later(elsewhere)
-	res.status(200).json({ message: `Worker registered successfully.` });
-});
-
 // Fetch current products from the database
 async function getCurrentProducts() {
-	const db = client.db();
+	const db = connectToDatabase();
 	const productsCollection = db.collection('products');
 
 	return await productsCollection.find({}, { projection: { _id: 1, url: 1 } }).toArray();
@@ -131,7 +121,7 @@ Deletes old products if url is no longer found
 Creates new product if new url is found
 */
 const syncProducts = async (mostRecentProducts) => {
-	const db = client.db();
+	const db = connectToDatabase();
 	const productsCollection = db.collection('products');
 
 	const currentProducts = await getCurrentProducts();
@@ -201,11 +191,6 @@ function distributeProductsByDomainEvenlyToScrapers(productListByDomain) {
 	let productScrapeDistribution = {};
 	let productI = 0;
 
-	if(numProductScraperNodes === 0) {
-		console.log("No Product Scrapers Found. Never received join requests. Restart the scrapers or wait to see if they join.");
-		return productScrapeDistribution;
-	}
-
 	for(let productListForDomain of productListByDomain) {
 		productListForDomain.forEach((product, i) => {
 			if(!productScrapeDistribution[productScraperNodes[productI%numProductScraperNodes]]) {//to avoid index not found
@@ -246,13 +231,27 @@ async function divideAndConquerProductSubmitter(productList) {
 		}
 
 	}
-	//collect the job results.
-	//save results to db.
+}
+
+const updateWorkerNodes = () => {
+	const db = connectToDatabase();
+	const clusterWorkers = db.collection('clusterWorkers');
+	const workerNodes = await clusterWorkers.find({}).toArray();
+
+	productScraperNodes = workerNodes.map((node) => `${node.hostname}:${node.port}`);
+	numProductScraperNodes = productScraperNodes.length;
 }
 
 async function initCron() {
 	console.log("INITIALIZING CRON");
-	await connectToDatabase();
+
+	const cronJob = new CronJob({ //Every 10 seconds.
+		cronTime: '*/10 * * * * *',
+		onTick: updateWorkerNodes,
+		start: true,
+		timeZone: "UTC",
+		runOnInit: true,
+	});
 
 	new CronJob({
 		cronTime: "0 0 * * * *", // Every hour, on the hour
@@ -294,7 +293,7 @@ async function initCron() {
 			//Best case we scrape products every hour. Exceptions:
 			//Will shift/delay product scraping schedule 1hr each time if there is an existing product scraper running.
 			//Will shift/delay product scraping schedule 1hr each time if there is an existing product-list scraper running.
-			if(!scrapingProductList && productList.length && !scrapingProducts) {
+			if(!scrapingProductList && productList.length && !scrapingProducts && numProductScraperNodes !== 0) {
 				scrapingProducts = true;//this will later change state after the product scrapers all return.
 				await divideAndConquerProductSubmitter(productList);
 			}
