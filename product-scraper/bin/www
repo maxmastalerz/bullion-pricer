@@ -85,6 +85,8 @@ process.on('SIGTERM', async () => {
         port: port
     });
 
+    //BP-TODO: If currently processing a job, send it back to the leader to re-assign since I can't finish it.
+
     console.log('Worker node removed from the cluster on SIGTERM.');
     process.exit(0);
 });
