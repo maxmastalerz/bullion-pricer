@@ -109,7 +109,7 @@ app.post('/submitJobChunk', (req, res) => {
 
 // Fetch current products from the database
 async function getCurrentProducts() {
-	const db = connectToDatabase();
+	const db = await connectToDatabase();
 	const productsCollection = db.collection('products');
 
 	return await productsCollection.find({}, { projection: { _id: 1, url: 1 } }).toArray();
@@ -121,7 +121,7 @@ Deletes old products if url is no longer found
 Creates new product if new url is found
 */
 const syncProducts = async (mostRecentProducts) => {
-	const db = connectToDatabase();
+	const db = await connectToDatabase();
 	const productsCollection = db.collection('products');
 
 	const currentProducts = await getCurrentProducts();
@@ -243,7 +243,7 @@ const getNewNodes = (oldNodes, newNodes) => {
 };
 
 const updateWorkerNodes = async () => {
-	const db = connectToDatabase();
+	const db = await connectToDatabase();
 	const clusterWorkers = db.collection('clusterWorkers');
 	const workerNodes = await clusterWorkers.find({}).toArray();
 
