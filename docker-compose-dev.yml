@@ -98,7 +98,6 @@ services:
         expose:
             - 8000
         depends_on:
-        #    - bp-cron #because bp-cron is our cluster leader.
             - bp-db #to save oneself in the db as a viable scraper.
     bp-db:
         restart: unless-stopped
