@@ -25,7 +25,7 @@ while [ ! -f /etc/letsencrypt/live/bullionpricer.com/fullchain.pem ]; do
 	sleep 5
 done
 
-#update_cloudflare_ips
+update_cloudflare_ips
 
 # Start Nginx
 echo "Letsencrypt certificate found. Starting Nginx..."
@@ -35,7 +35,7 @@ NGINX_PID=$!
 reload_nginx() {
 	while true; do
 		sleep 6h
-#		update_cloudflare_ips
+		update_cloudflare_ips
 		echo "Reloading Nginx..."
 		nginx -s reload
 		echo "Nginx reloaded."
