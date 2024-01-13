@@ -236,6 +236,7 @@ async function divideAndConquerProductSubmitter(productList) {
 	for(productScraperNode in distributionToScrapers) { //Send out the products a scraper has been assigned.
 		let productsAssignedToScraper = distributionToScrapers[productScraperNode];
 		const scrapeJobId = uuidv4();
+		console.log(`Submitting ${productsAssignedToScraper.length} products (Job: ${scrapeJobId}) to ${productScraperNode}`);
 		const tookJob = await axios.post(`http://${productScraperNode}/submitProductsForScraping`, { scrapeJobId, products: productsAssignedToScraper });
 
 		if(!tookJob) {

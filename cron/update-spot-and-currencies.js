@@ -34,6 +34,7 @@ async function updateCurrencies() {
 		
 		if(jsonResponse.meta.code === 200) {
 			rates = jsonResponse.response.rates;
+			console.log('Received currency data.');
 		}
 	} catch(error) {
 		err = error;
@@ -164,7 +165,7 @@ async function updateSpotPrices() {
 			}
 		}
 
-		console.log(JSON.stringify(spotBidPrices));
+		console.log('Received spot data.' + JSON.stringify(spotBidPrices));
 		var USDSpotAG = spotBidPrices.Silver;
 		var USDSpotAU = spotBidPrices.Gold;
 		var USDSpotPD = spotBidPrices.Palladium;
