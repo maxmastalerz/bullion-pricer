@@ -27,6 +27,8 @@ FROM nginx:stable-alpine as dev-nginx
 COPY ./nginx/nginx-with-certcheck.sh /usr/sbin
 RUN chmod +x /usr/sbin/nginx-with-certcheck.sh
 COPY ./nginx/default.conf /etc/nginx/conf.d/
+# Replacing with our custom nginx.conf file
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 RUN rm /usr/share/nginx/html/index.html
 ENTRYPOINT ["/usr/sbin/nginx-with-certcheck.sh"]
 
@@ -44,4 +46,6 @@ COPY ./nginx/nginx-with-certcheck.sh /usr/sbin
 RUN chmod +x /usr/sbin/nginx-with-certcheck.sh
 COPY --from=build-prod /app/react/build /usr/share/nginx/html
 COPY ./nginx/default.conf /etc/nginx/conf.d/
+# Replacing with our custom nginx.conf file
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 ENTRYPOINT ["/usr/sbin/nginx-with-certcheck.sh"]
