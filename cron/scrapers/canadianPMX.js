@@ -27,7 +27,7 @@ function scrapeProductsFromHtml(htmlContent, productType) {
 			}
 		}
 
-		products.push({url, title, productType, pricing: null, pricing_last_updated: 0});
+		products.push({url, title, productType, pricing: null, pricing_last_updated: 0, error: null});
 	});
 
 	return products;
@@ -61,6 +61,10 @@ async function scrapeProductsFromCategory(categoryStart) {
 	return products;
 }
 
+/*
+Returns barebones products that look like this:
+[{url, title, productType, pricing: null, pricing_last_updated: 0, error: null, dealer: 'CanadianPMX'}, ...]
+*/
 async function scrapeProductsFromCategories() {
 	const startingCategories = [
 		{url: 'https://canadianpmx.com/product-category/gold/gold-bars/', productType: ['gold']},

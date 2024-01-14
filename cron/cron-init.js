@@ -73,6 +73,8 @@ app.post('/couldntCompleteScrapePart', (req, res) => {
 
 /*
 If you submit all your job chunks, you're done your job!
+The products can come back fully filled in,
+or with an error property like: [{url, title, productType, pricing: null, pricing_last_updated: 0, error: <SOME_ERROR>, dealer: 'CanadianPMX'}, ...]
 */
 app.post('/submitJobChunk', (req, res) => {
 	const { jobId, hostname, chunk, totalChunksAtStart } = req.body; //the node that completed its chunk.
@@ -115,6 +117,16 @@ async function getCurrentProducts() {
 	return await productsCollection.find({}, { projection: { _id: 1, url: 1 } }).toArray();
 }
 
+async function saveErroringProductsToFailed(erroringProducts) {
+	//BP-TODO: Make sure failedProducts aren't duplicates when inserting.
+	if(erroringProducts.length > 0) {
+		const db = await connectToDatabase();
+		const failedProductsCollection = db.collection('failedProducts');
+		await failedProductsCollection.insertMany(erroringProducts);
+		console.log('Saved erroring products to failedProducts collection:', erroringProducts);
+	}
+}
+
 /*
 Sync products database to the most recent products.
 Deletes old products if url is no longer found
@@ -126,20 +138,42 @@ const syncProducts = async (mostRecentProducts) => {
 
 	const currentProducts = await getCurrentProducts();
 
-	// Find products to delete
-	const productsToDelete = currentProducts.filter(product => !mostRecentProducts.map((prod) => prod.url).includes(product.url));
-	// Delete old products
-	if (productsToDelete.length > 0) {
-		const productIdsToDelete = productsToDelete.map(product => product._id);
-		await productsCollection.deleteMany({ _id: { $in: productIdsToDelete } });
-		console.log('Deleted old products:', productsToDelete);
+	// Delete products that are no longer being listed in the category pages
+	const deletedByDealer = currentProducts.filter((product) => {
+		const nowNotAProductInCat = !mostRecentProducts.map((prod) => prod.url).includes(product.url);
+		return nowNotAProductInCat; // Return true if the product should be deleted
+	});
+	const existingWhichErrored = currentProducts.filter((product) => {
+		const nowErroring = mostRecentProducts.filter((el) => el.error).map((prod) => prod.url).includes(product.url);
+		return nowErroring; // Return true if the product should be deleted
+	});
+	const newWhichErrored = mostRecentProducts.filter((el) => el.error)
+											  .filter((el) => !existingWhichErrored.map((prod) => prod.url).includes(el.url));
+
+	// Delete products the dealer deleted or those that we couldn't process due to erroring
+	const existingProductsToDelete = [...deletedByDealer, ...existingWhichErrored];
+	if (existingProductsToDelete.length > 0) {
+		const productIdsToDelete = existingProductsToDelete.map(product => product._id);
+		if (productIdsToDelete.length > 0) {
+			await productsCollection.deleteMany({ _id: { $in: productIdsToDelete } });
+			console.log('Deleted old products:', existingProductsToDelete);
+		}
 	}
 
+	await saveErroringProductsToFailed([...existingWhichErrored, ...newWhichErrored]);
+
 	// Update or insert products
+	//TODO: Just do this for products that didn't fail.
 	for (const recentProduct of mostRecentProducts) {
 		const existingProduct = currentProducts.find(product => product.url === recentProduct.url);
 
-		if (existingProduct) {
+		// Don't insert an errored product.
+		// For existing errored products, they are no longer in the products collection and can't be updated anyways.
+		if(recentProduct.error) {
+			continue;
+		}
+
+		if(existingProduct) {
 			// Update existing product
 			await productsCollection.updateOne(
 				{ _id: existingProduct._id },

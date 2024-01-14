@@ -8,7 +8,6 @@ const router = express.Router();
 //Set to whatever job id we've been assigned.
 const hostname = os.hostname();
 let currentJob = null;
-let failedBaseURLS = [];
 
 async function retryablePromiseAll(requestPromises, maxRetries, successCallback, errorCallback) {
 	for (let tries = 0; tries < maxRetries; tries++) {
@@ -67,7 +66,7 @@ async function scrapeProductsAsync(productsToScrape) {
 
 	const scrapePromises = productsToScrape.map((product) => {
     	return limit(async () => {
-			let productId = product._id;
+			//let productId = product._id;
 			let scraperName = product.dealer;
 			let scraper = scrapers[scraperName];
 
@@ -80,11 +79,9 @@ async function scrapeProductsAsync(productsToScrape) {
 				product.pricing = scrapeResults.pricing;
 				product.pricing_last_updated = new Date().getTime();
 				product.boxSize = scrapeResults.boxSize;
-
-			} catch (err) {
+			} catch (error) {
 				console.error(`Scraping failed for base url: ${product.url}.`);
-				failedBaseURLS.push(product.url); //BP-TODO: We don't do anything with these yet.
-				console.error(err);
+				product.error = error;
 			}
 		});
 	});

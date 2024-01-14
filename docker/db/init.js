@@ -35,5 +35,6 @@ db.spot.insertMany([
 
 db.createCollection("subscriptions");
 db.createCollection("products");
-db.createCollection('clusterWorkers');
+db.createCollection("failedProducts")
+db.createCollection("clusterWorkers");
 db.clusterWorkers.createIndex({ hostname: 1 }, { unique: true });

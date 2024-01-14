@@ -31,7 +31,7 @@ function scrapeProductsFromHtml(htmlContent, productType) {
 			}
 		}
 
-		products.push({url, title, productType, pricing: null, pricing_last_updated: 0});
+		products.push({url, title, productType, pricing: null, pricing_last_updated: 0, error: null});
 	});
 
 	return products;
@@ -49,6 +49,10 @@ async function scrapeProductsFromCategory(categoryStart) {
 	return products;
 }
 
+/*
+Returns barebones products that look like this:
+[{url, title, productType, pricing: null, pricing_last_updated: 0, error: null, dealer: 'Border Gold'}, ...]
+*/
 async function scrapeProductsFromCategories() {
 	const startingCategories = [
 		{url: 'https://bordergold.com/product-category/gold/', productType: ['gold']},
