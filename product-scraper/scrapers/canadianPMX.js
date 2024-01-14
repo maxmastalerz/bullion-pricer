@@ -55,29 +55,6 @@ function parsePrice(strPrice) {
 	return parseFloat(strPrice.replace(/^\$|(\sUSD)$|,/g, ""));
 }
 
-function parseMint(tags) {
-	//Removing tags that we know for sure aren't dealers. We are not interested in them.
-	tags = tags.filter(tag => !notMints.includes(tag));
-
-	let matchingMints = [];
-
-	for (const category in listOfMints) {
-		matchingMints = matchingMints.concat(listOfMints[category].filter(entry =>
-			entry[0].some(tag => tags.includes(tag))
-		));
-	}
-
-	if (tags.some(tag => !matchingMints.some(entry => entry[0].includes(tag)))) { // Unknown tag found	
-		return 'Various';
-	} else if (matchingMints.length === 1) { // Single matching mint found
-		return matchingMints[0][1];
-	} else if (matchingMints.length > 1) { // Multiple matching mints found
-		return 'Various';//BP-TODO: If the multiple mints like Argentia/Canadian PMX are all not_government_issued, we could try to store info like that versus leaving it as MANUAL_REVIEW
-	} else { // No matching mint found
-		return false;
-	}
-}
-
 /*Tries to parse the weight from the weight string*/
 function parseWeight({weight, title}) {
 	const wordsToGramMap = [
@@ -88,7 +65,7 @@ function parseWeight({weight, title}) {
 		[["0.25 tr oz"],7.78],
 		[["0.3215 tr oz"],10],
 		[["0.50 tr oz"],15.55],
-		[["1 tr oz"],31.1],
+		[["1 tr oz", "1 oz"],31.1],
 		[["5 Tr Oz","5 oz"],155.52],
 		[["10 Tr Oz","10 oz"],311.04],
 		[["32.15 tr oz"],1000],
@@ -142,20 +119,61 @@ function getTags(document) {
 	return tags;
 }
 
-function parseIssuance(mintToSearch) {
-	for (const [tags, mint] of listOfMints.government_issued) { // Check government-issued mints
-		if (mint === mintToSearch) {
-			return ['government_issued'];
+function parseMint(tags) {
+	//Removing tags that we know for sure aren't dealers. We are not interested in them.
+	tags = tags.filter(tag => !notMints.includes(tag));
+
+	let matchingMints = [];
+
+	for (const category in listOfMints) {
+		matchingMints = matchingMints.concat(listOfMints[category].filter(entry =>
+			entry[0].some(tag => tags.includes(tag))
+		));
+	}
+
+	if (tags.some(tag => !matchingMints.some(entry => entry[0].includes(tag)))) { // Found a tag that could be a new mint, or it's a tag we should exclude in notMints
+		return 'Unknown'; // will become a MANUAL_REVIEW
+	} else if (matchingMints.length === 1) { // Single matching mint found
+		return [matchingMints[0][1]]; //['someMint']
+	} else if (matchingMints.length > 1) { // Multiple matching mints found
+		return matchingMints.map((matchingMint) => matchingMint[1]); //['someMintA','someMintB',..]
+	} else { // No mint is listed in the tags.
+		return false; // will become a MANUAL_REVIEW
+	}
+}
+
+//We get an array of known mints that we matched and return the issuance.
+function parseIssuance(foundMints) {
+	let numGovernmentIssued = 0;
+	let numNotGovernmentIssued = 0;
+
+	for(let i=0; i<foundMints.length; i++) {
+		let mintToSearch = foundMints[i];
+
+		let foundType = false;
+		for (const [tags, mint] of listOfMints.government_issued) { // Check government-issued mints
+			if (mint === mintToSearch) {
+				numGovernmentIssued++;
+				foundType = true;
+				break;
+			}
+		}
+		if(foundType) { continue; }
+
+		for (const [tags, mint] of listOfMints.not_government_issued) { // Check not government-issued mints
+			if (mint === mintToSearch) {
+				numNotGovernmentIssued++;
+				break;
+			}
 		}
 	}
 
-	for (const [tags, mint] of listOfMints.not_government_issued) { // Check not government-issued mints
-		if (mint === mintToSearch) {
-			return ['not_government_issued'];
-		}
+	if(numGovernmentIssued === foundMints.length) {
+		return ['government_issued'];
+	} else if(numNotGovernmentIssued === foundMints.length){
+		return ['not_government_issued'];
 	}
-
-	return 'MANUAL_REVIEW';
+	return ['government_issued', 'not_government_issued'];
 }
 
 async function getPricingFromPages(pages) {
@@ -266,8 +284,11 @@ async function scrapeProductPage(url) {
 	const boxSize = getBoxSizeIfBox(productTitle); //Set for items like monster boxes/tubes. Example: boxSize is usually 25 for tubes.
 	let tags = getTags(document);
 
-	let foundMint = parseMint(tags);
-	if(foundMint) { mint=foundMint; issuance = parseIssuance(foundMint); }
+	let foundMints = parseMint(tags);
+	if(foundMints && foundMints !== 'Unknown') {
+		mint = foundMints.length === 1 ? foundMints[0] : 'Various';
+		issuance = parseIssuance(foundMints);
+	}
 
 	let foundWeight = parseWeight({weight: null, title: productTitle}); //could be overwritten below by the weight table as that is pretty accurate if its there
 	if(foundWeight) { weight=foundWeight; }
