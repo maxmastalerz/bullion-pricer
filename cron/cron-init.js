@@ -138,6 +138,9 @@ const syncProducts = async (mostRecentProducts) => {
 
 	const currentProducts = await getCurrentProducts();
 
+	console.log(`currentProducts: ${JSON.stringify(currentProducts)}`);
+	console.log(`mostRecentProducts: ${JSON.stringify(mostRecentProducts)}`);
+
 	// Delete products that are no longer being listed in the category pages
 	const deletedByDealer = currentProducts.filter((product) => {
 		const nowNotAProductInCat = !mostRecentProducts.map((prod) => prod.url).includes(product.url);
