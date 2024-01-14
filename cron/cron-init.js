@@ -61,16 +61,6 @@ function clearJob(jobId) {
 	jobChunksReceived[jobId] = [];
 }
 
-//BP-TODO: Programatically trigger this as well after a certain time that a scraper hasn't complete their scrape part.
-//They might've become uncommunicative.
-app.post('/couldntCompleteScrapePart', (req, res) => {
-	const { jobId/*, hostname*/ } = req.body;
-
-	//Maybe log which scrape parts couldn't be completed.
-
-	clearJob(jobId); //Clear their progress because we'll just reset their state.
-});
-
 /*
 If you submit all your job chunks, you're done your job!
 The products can come back fully filled in,
