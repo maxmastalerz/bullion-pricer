@@ -3,7 +3,7 @@ import CountUp from "react-countup";
 import VisibilitySensor from "react-visibility-sensor";
 
 const counterposts = [
-    { icon: 'flaticon-menu-1', number: '79', title: 'Classified Products' },
+    { icon: 'flaticon-menu-1', number: '99', title: 'Non-combo Products' },
     { icon: 'flaticon-globe', number: '2', title: 'Supported Dealer Sites' },
     { icon: 'flaticon-search', number: '6', title: 'Unique Filters' },
 ];

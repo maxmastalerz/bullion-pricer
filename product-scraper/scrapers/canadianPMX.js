@@ -173,7 +173,9 @@ function parseIssuance(foundMints) {
 	} else if(numNotGovernmentIssued === foundMints.length){
 		return ['not_government_issued'];
 	}
-	return ['government_issued', 'not_government_issued'];
+	
+	return "MANUAL_REVIEW";
+	//return ['government_issued', 'not_government_issued']; //BP-TODO: Returning this would've classified it as a combo product which would be wrong for Misc products as those are a single product.
 }
 
 async function getPricingFromPages(pages) {

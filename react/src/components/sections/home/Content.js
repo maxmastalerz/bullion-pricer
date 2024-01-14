@@ -32,7 +32,7 @@ const issuance = [
 ];
 
 const paymentPreferences = [
-    { id: 'check', text: 'Check'},
+    { id: 'check', text: 'Any/Check'},
     { id: 'wire', text: 'Wire'},
     { id: 'cash', text: 'Physical Cash'},
     { id: 'billpayment', text: 'Bill Payment'},
