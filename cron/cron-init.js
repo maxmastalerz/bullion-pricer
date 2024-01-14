@@ -114,7 +114,7 @@ async function getCurrentProducts() {
 	const db = await connectToDatabase();
 	const productsCollection = db.collection('products');
 
-	return await productsCollection.find({}, { projection: { _id: 1, url: 1 } }).toArray();
+	return await productsCollection.find({}).toArray();
 }
 
 async function saveErroringProductsToFailed(erroringProducts) {
@@ -137,9 +137,6 @@ const syncProducts = async (mostRecentProducts) => {
 	const productsCollection = db.collection('products');
 
 	const currentProducts = await getCurrentProducts();
-
-	console.log(`currentProducts: ${JSON.stringify(currentProducts)}`);
-	console.log(`mostRecentProducts: ${JSON.stringify(mostRecentProducts)}`);
 
 	// Delete products that are no longer being listed in the category pages
 	const deletedByDealer = currentProducts.filter((product) => {
